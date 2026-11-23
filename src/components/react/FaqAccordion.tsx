@@ -33,7 +33,7 @@ export default function FaqAccordion({
   asideDescription = 'Собрали честные ответы на вопросы о смете, сроках, закупках и приёмке этапов. Если у вас нестандартная планировка или особые требования — разберём их на консультации.',
   asideSpecs = DEFAULT_ASIDE_SPECS,
   ctaLabel = 'Рассчитать стоимость',
-  ctaHref = '/#quiz',
+  ctaHref = '/remont#quiz',
   ctaLeadTrigger,
   ctaNote = 'Предварительный расчёт займёт меньше минуты',
 }: FaqAccordionProps) {

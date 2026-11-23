@@ -43,20 +43,60 @@ export interface SiteConfig {
   readonly legalLinks: readonly LegalLink[];
 }
 
+export type PageSwitchId = 'hub' | 'repair' | 'landscaping';
+
 export interface PageSwitchItem {
-  readonly id: 'repair' | 'landscaping';
+  readonly id: PageSwitchId;
   readonly label: string;
   readonly shortLabel: string;
   readonly href: string;
   readonly description: string;
 }
 
+export interface HubDirectionCard {
+  readonly id: 'remont' | 'blagoustrojstvo';
+  readonly href: string;
+  readonly eyebrow: string;
+  readonly titlePrefix: string;
+  readonly titleAccent: string;
+  readonly subtitle: string;
+  readonly actionLabel: string;
+  readonly imagePath: string;
+  readonly imageAlt: string;
+}
+
+export interface HubConfig {
+  readonly title: string;
+  readonly description: string;
+  readonly subtitle: string;
+  readonly phoneDisplay: string;
+  readonly phoneHref: string;
+  readonly address: string;
+  readonly keyFact: string;
+  readonly requisites: string;
+  readonly privacyLink: LegalLink;
+  readonly messengers: readonly {
+    readonly id: 'telegram' | 'max';
+    readonly label: string;
+    readonly shortLabel: string;
+    readonly href: string;
+  }[];
+  readonly cards: readonly HubDirectionCard[];
+}
+
 export const DIRECTION_PAGES: readonly PageSwitchItem[] = [
+  {
+    id: 'hub',
+    label: 'Главная',
+    shortLabel: 'Главная',
+    href: '/',
+    description: 'Выбор направления компании МОНОЛИТ',
+  },
   {
     id: 'repair',
     label: 'Ремонт квартир',
     shortLabel: 'Ремонт',
-    href: '/',
+    href: '/remont',
     description: 'Дизайн-проекты и комплексный ремонт квартир под ключ',
   },
   {
@@ -69,20 +109,20 @@ export const DIRECTION_PAGES: readonly PageSwitchItem[] = [
 ] as const;
 
 export const MAIN_NAV_ITEMS: readonly NavItem[] = [
-  { label: 'Главная', href: '/#hero', number: '01' },
-  { label: 'О компании', href: '/#about', number: '02' },
-  { label: 'Цены и услуги', href: '/#services', number: '03' },
-  { label: 'Отзывы', href: '/#reviews', number: '04' },
-  { label: 'Портфолио', href: '/#portfolio', number: '05' },
-  { label: 'Контакты', href: '/#contacts', number: '06' },
+  { label: 'Цены и услуги', href: '/remont#services', number: '01' },
+  { label: 'Портфолио', href: '/remont#portfolio', number: '02' },
+  { label: 'До / После', href: '/remont#before-after', number: '03' },
+  { label: 'Вопросы', href: '/remont#faq', number: '04' },
+  { label: 'Калькулятор', href: '/remont#quiz', number: '05' },
+  { label: 'Контакты', href: '/remont#contacts', number: '06' },
 ] as const;
 
 export const SECONDARY_NAV_ITEMS: readonly SecondaryNavItem[] = [
-  { label: 'Дизайн-проект', href: '/#design-project' },
-  { label: 'Пакетное предложение', href: '/#package-offer' },
-  { label: 'Калькулятор сметы', href: '/#quiz' },
-  { label: 'Видео-обзоры', href: '/#video-reviews' },
-  { label: 'Частые вопросы', href: '/#faq' },
+  { label: 'Цены и услуги', href: '/remont#services' },
+  { label: 'Портфолио объектов', href: '/remont#portfolio' },
+  { label: 'Калькулятор сметы', href: '/remont#quiz' },
+  { label: 'Частые вопросы', href: '/remont#faq' },
+  { label: 'Обсудить проект', href: '/remont#contact-form' },
 ] as const;
 
 export const SOCIAL_LINKS: readonly SocialLink[] = [
@@ -102,6 +142,64 @@ export const SOCIAL_LINKS: readonly SocialLink[] = [
     href: 'https://vk.com/monolit_tyumen',
   },
 ] as const;
+
+export const HUB_CONFIG: HubConfig = {
+  title: 'МОНОЛИТ — Ремонт квартир под ключ и благоустройство участков в Тюмени',
+  description:
+    'Два ключевых направления компании МОНОЛИТ в Тюмени с 2021 года: комплексный ремонт квартир с дизайн-проектом и благоустройство загородных участков под ключ.',
+  subtitle: 'Тюмень · С 2021 года',
+  phoneDisplay: '8 (919) 950-77-22',
+  phoneHref: 'tel:+79199507722',
+  address: 'г. Тюмень, ул. Депутатская, 129',
+  keyFact: 'Более 300 сданных объектов',
+  requisites: 'ИП Ерамасов В.Н. · ИНН 723011554086 · ОГРНИП 323723200019722',
+  privacyLink: {
+    label: 'Политика обработки ПД',
+    href: '/privacy',
+  },
+  messengers: [
+    {
+      id: 'telegram',
+      label: 'Написать в Telegram',
+      shortLabel: 'Telegram',
+      href: 'https://t.me/+79199507722',
+    },
+    {
+      id: 'max',
+      label: 'Написать в Max',
+      shortLabel: 'Max',
+      href: 'https://max.ru',
+    },
+  ],
+  cards: [
+    {
+      id: 'remont',
+      href: '/remont',
+      eyebrow: '01 · Интерьеры',
+      titlePrefix: 'Ремонт квартир ',
+      titleAccent: 'под\u00A0ключ',
+      subtitle:
+        'Дизайн-проект, инженерия и чистовая отделка с фиксированной сметой.',
+      actionLabel: 'Перейти к ремонту',
+      imagePath: 'hub/remont-card',
+      imageAlt:
+        'Современный интерьер квартиры после комплексного ремонта под ключ в Тюмени',
+    },
+    {
+      id: 'blagoustrojstvo',
+      href: '/blagoustrojstvo',
+      eyebrow: '02 · Территория',
+      titlePrefix: 'Благоустройство ',
+      titleAccent: 'участков',
+      subtitle:
+        'Брусчатка, асфальтирование, отмостки и дренаж от прямых производителей.',
+      actionLabel: 'Перейти к благоустройству',
+      imagePath: 'hub/landscaping-card',
+      imageAlt:
+        'Благоустроенный загородный участок с брусчаткой, отмосткой и газоном в Тюмени',
+    },
+  ],
+} as const;
 
 export const SITE_CONFIG: SiteConfig = {
   brandName: 'МОНОЛИТ',

@@ -147,6 +147,18 @@
   transform: scale(1.03);
 }
 
+/* Плавный CSS-зум (scale 1.03 за 1000ms) фоновой картинки карточек разводящей страницы Hub */
+.hub-card-image {
+  transform: scale(1);
+  transition: transform 1000ms var(--ease-editorial);
+  will-change: transform;
+}
+
+.hub-card:hover .hub-card-image,
+.hub-card:focus-visible .hub-card-image {
+  transform: scale(1.03);
+}
+
 /* Редакционные модальные окна на нативном <dialog> */
 dialog.editorial-dialog::backdrop {
   background-color: color-mix(in srgb, var(--color-bg-primary) 84%, transparent);
@@ -303,9 +315,11 @@ dialog.editorial-dialog[open] {
     transition: none !important;
   }
 
-  .portfolio-card-image {
+  .portfolio-card-image,
+  .hub-card-image {
     transition: none !important;
     transform: scale(1) !important;
+    will-change: auto !important;
   }
 
   dialog.editorial-dialog[open] {

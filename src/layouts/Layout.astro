@@ -12,6 +12,7 @@ export interface Props {
   currentPath?: string;
   showHeader?: boolean;
   showFooter?: boolean;
+  compact?: boolean;
 }
 
 const {
@@ -20,6 +21,7 @@ const {
   currentPath = Astro.url.pathname,
   showHeader = true,
   showFooter = true,
+  compact = false,
 } = Astro.props;
 ---
 
@@ -44,15 +46,15 @@ const {
   </head>
   <body
     id="top"
-    class="flex min-h-screen flex-col bg-bg-primary font-sans text-text-primary antialiased"
+    class="flex min-h-dvh flex-col bg-bg-primary font-sans text-text-primary antialiased"
   >
-    {showHeader && <Header currentPath={currentPath} />}
+    {showHeader && <Header currentPath={currentPath} compact={compact} />}
 
-    <main class="flex-1">
+    <main class:list={['flex-1', compact && 'flex flex-col']}>
       <slot />
     </main>
 
-    {showFooter && <Footer currentPath={currentPath} />}
+    {showFooter && <Footer currentPath={currentPath} compact={compact} />}
 
     <!-- Универсальное модальное окно захвата лидов и компактный Cookie-баннер -->
     <LeadModal client:load />

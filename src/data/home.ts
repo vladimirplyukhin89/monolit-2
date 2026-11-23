@@ -175,6 +175,6 @@ export const SERVICES_OFFER: ServicesOfferData = {
     { label: 'Фиксация условий на 14 дней' },
   ],
   ctaLabel: 'Записаться на выезд',
-  ctaHref: '/#contact-form',
+  ctaHref: '/remont#contact-form',
   note: 'Ответим в течение 15 минут в рабочее время',
 } as const;

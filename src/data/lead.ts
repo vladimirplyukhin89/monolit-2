@@ -113,6 +113,14 @@ export const CONSULTATION_STEPS = [
 ] as const;
 
 export const LEAD_MODAL_PRESETS: Record<string, LeadModalPreset> = {
+  'hub-header-cta': {
+    eyebrow: 'МОНОЛИТ · Тюмень',
+    titlePrefix: 'Начнём ',
+    titleAccent: 'с\u00A0разговора',
+    subtitle:
+      'Подскажем по ремонту квартиры или благоустройству участка, сориентируем по бюджету и согласуем бесплатный выезд инженера.',
+    submitLabel: 'Отправить заявку',
+  },
   'header-cta': {
     eyebrow: 'Личная консультация',
     titlePrefix: 'Начнём ',

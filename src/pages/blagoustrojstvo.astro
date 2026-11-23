@@ -1,18 +1,13 @@
 ---
-import { Image, getImage } from 'astro:assets';
+import { getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import Layout from '../layouts/Layout.astro';
+import SafeImage from '../components/astro/SafeImage.astro';
 import BeforeAfterSlider from '../components/react/BeforeAfterSlider';
 import TabbedGallery, { type GalleryTab } from '../components/react/TabbedGallery';
 import FaqAccordion from '../components/react/FaqAccordion';
 import ConsultationSection from '../components/react/ConsultationSection';
-
-import beforeLandscapingImage from '../assets/images/landscaping/before-after/before.jpeg';
-import afterLandscapingImage from '../assets/images/landscaping/before-after/after.jpeg';
-import asphaltWorkImage from '../assets/images/landscaping/works/asphalt/asphalt.JPG';
-import path1WorkImage from '../assets/images/landscaping/works/paths/path-1.png';
-import path2WorkImage from '../assets/images/landscaping/works/paths/path-2.png';
-import materialsSupplyImage from '../assets/images/landscaping/materials/объект-3.png';
+import { getFirstImageInDir, getImageAsset } from '../utils/images';
 
 import {
   LANDSCAPING_ABOUT_DATA,
@@ -33,7 +28,19 @@ import {
   type LandscapingWorkImageKey,
 } from '../data/landscaping';
 
-const WORK_IMAGE_ASSETS: Record<LandscapingWorkImageKey, ImageMetadata> = {
+const beforeLandscapingImage = getImageAsset('landscaping/before-after/before');
+const afterLandscapingImage = getImageAsset('landscaping/before-after/after');
+const heroLandscapingImage =
+  getFirstImageInDir('landscaping/hero', { useFallback: false }) ??
+  afterLandscapingImage;
+const asphaltWorkImage = getImageAsset('landscaping/works/asphalt/asphalt');
+const path1WorkImage = getImageAsset('landscaping/works/paths/path-1');
+const path2WorkImage = getImageAsset('landscaping/works/paths/path-2');
+const materialsSupplyImage =
+  getImageAsset('landscaping/materials/объект-3', { useFallback: false }) ??
+  getFirstImageInDir('landscaping/materials');
+
+const WORK_IMAGE_ASSETS: Record<LandscapingWorkImageKey, ImageMetadata | null> = {
   after: afterLandscapingImage,
   asphalt: asphaltWorkImage,
   'path-1': path1WorkImage,
@@ -41,28 +48,44 @@ const WORK_IMAGE_ASSETS: Record<LandscapingWorkImageKey, ImageMetadata> = {
   materials: materialsSupplyImage,
 };
 
+async function resolveOptimizedSrc(
+  asset: ImageMetadata | null,
+  quality: number,
+): Promise<string> {
+  if (!asset) {
+    return '';
+  }
+  const optimized = await getImage({
+    src: asset,
+    width: 1280,
+    format: 'webp',
+    quality,
+  });
+  return optimized.src;
+}
+
 const [
-  optimizedBefore,
-  optimizedAfter,
-  optimizedAsphalt,
-  optimizedPath1,
-  optimizedPath2,
-  optimizedMaterials,
+  optimizedBeforeSrc,
+  optimizedAfterSrc,
+  optimizedAsphaltSrc,
+  optimizedPath1Src,
+  optimizedPath2Src,
+  optimizedMaterialsSrc,
 ] = await Promise.all([
-  getImage({ src: beforeLandscapingImage, width: 1280, format: 'webp', quality: 86 }),
-  getImage({ src: afterLandscapingImage, width: 1280, format: 'webp', quality: 86 }),
-  getImage({ src: asphaltWorkImage, width: 1280, format: 'webp', quality: 84 }),
-  getImage({ src: path1WorkImage, width: 1280, format: 'webp', quality: 84 }),
-  getImage({ src: path2WorkImage, width: 1280, format: 'webp', quality: 84 }),
-  getImage({ src: materialsSupplyImage, width: 1280, format: 'webp', quality: 84 }),
+  resolveOptimizedSrc(beforeLandscapingImage, 86),
+  resolveOptimizedSrc(afterLandscapingImage, 86),
+  resolveOptimizedSrc(asphaltWorkImage, 84),
+  resolveOptimizedSrc(path1WorkImage, 84),
+  resolveOptimizedSrc(path2WorkImage, 84),
+  resolveOptimizedSrc(materialsSupplyImage, 84),
 ]);
 
 const OPTIMIZED_WORK_SRC: Record<LandscapingWorkImageKey, string> = {
-  after: optimizedAfter.src,
-  asphalt: optimizedAsphalt.src,
-  'path-1': optimizedPath1.src,
-  'path-2': optimizedPath2.src,
-  materials: optimizedMaterials.src,
+  after: optimizedAfterSrc,
+  asphalt: optimizedAsphaltSrc,
+  'path-1': optimizedPath1Src,
+  'path-2': optimizedPath2Src,
+  materials: optimizedMaterialsSrc,
 };
 
 const workGalleryTabs: readonly GalleryTab[] = LANDSCAPING_WORK_CATEGORIES.map(
@@ -132,8 +155,8 @@ const landscapingConsultationContactInfo = {
     class="relative overflow-hidden border-b border-border-subtle bg-bg-primary"
   >
     <div class="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none">
-      <Image
-        src={WORK_IMAGE_ASSETS.after}
+      <SafeImage
+        src={heroLandscapingImage}
         alt="Благоустроенный загородный участок с мощением брусчаткой, ступенями, газоном и подсветкой в Тюмени"
         widths={[768, 1280, 1920]}
         sizes="100vw"
@@ -501,8 +524,8 @@ const landscapingConsultationContactInfo = {
         <div class="reveal reveal-delay-100 lg:col-span-7">
           <BeforeAfterSlider
             client:visible
-            beforeSrc={optimizedBefore.src}
-            afterSrc={optimizedAfter.src}
+            beforeSrc={optimizedBeforeSrc}
+            afterSrc={optimizedAfterSrc}
             beforeAlt={LANDSCAPING_BEFORE_AFTER.beforeAlt}
             afterAlt={LANDSCAPING_BEFORE_AFTER.afterAlt}
             beforeLabel={LANDSCAPING_BEFORE_AFTER.beforeLabel}
@@ -562,7 +585,7 @@ const landscapingConsultationContactInfo = {
       <div class="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-center lg:gap-12">
         <div class="reveal lg:col-span-6">
           <div class="relative aspect-[4/3] overflow-hidden border border-border-subtle bg-bg-secondary">
-            <Image
+            <SafeImage
               src={WORK_IMAGE_ASSETS.materials}
               alt={LANDSCAPING_MATERIALS_DATA.imageAlt}
               widths={[640, 960, 1280]}

@@ -1,0 +1,80 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/astro/Hero.astro';
+import Services from '../components/astro/Services.astro';
+import Portfolio from '../components/astro/Portfolio.astro';
+import FaqAccordion from '../components/react/FaqAccordion';
+import QuizCalculator from '../components/react/QuizCalculator';
+import ConsultationSection from '../components/react/ConsultationSection';
+---
+
+<Layout currentPath="/remont">
+  <Hero />
+  <Services />
+  <Portfolio />
+
+  <!-- Блок FAQ («Отвечаем на самые популярные вопросы» — React client:visible) -->
+  <section
+    id="faq"
+    class="scroll-mt-20 border-b border-border-subtle bg-bg-primary py-20 sm:py-28 lg:py-32"
+  >
+    <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+      <div class="flex flex-col justify-between gap-6 border-b border-border-subtle pb-10 lg:flex-row lg:items-end lg:pb-12">
+        <div class="reveal max-w-2xl">
+          <p class="mb-4 cursor-default text-xs uppercase tracking-[0.22em] text-text-muted">
+            Частые вопросы · 01 — 10
+          </p>
+          <h2 class="text-3xl font-normal leading-[1.12] tracking-tight text-text-primary sm:text-4xl lg:text-5xl">
+            Отвечаем на самые{' '}
+            <span class="font-serif text-[1.12em] font-medium italic text-text-primary">
+              популярные вопросы
+            </span>
+          </h2>
+        </div>
+
+        <p class="reveal reveal-delay-100 max-w-md text-sm leading-relaxed text-text-secondary sm:text-base">
+          Прозрачные условия по составу работ, срокам, закупке материалов, гарантии и поэтапной
+          оплате — без мелкого шрифта и скрытых доплат.
+        </p>
+      </div>
+
+      <div class="mt-12 lg:mt-14">
+        <FaqAccordion client:visible />
+      </div>
+    </div>
+  </section>
+
+  <!-- Интерактивный Квиз-калькулятор («Рассчитаем стоимость работ» — React client:visible) -->
+  <section
+    id="quiz"
+    class="scroll-mt-20 border-b border-border-subtle bg-bg-primary py-20 sm:py-28 lg:py-32"
+  >
+    <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+      <div class="flex flex-col justify-between gap-6 border-b border-border-subtle pb-10 lg:flex-row lg:items-end lg:pb-12">
+        <div class="reveal max-w-2xl">
+          <p class="mb-4 cursor-default text-xs uppercase tracking-[0.22em] text-text-muted">
+            Калькулятор сметы · Онлайн-расчёт
+          </p>
+          <h2 class="text-3xl font-normal leading-[1.12] tracking-tight text-text-primary sm:text-4xl lg:text-5xl">
+            Рассчитаем{' '}
+            <span class="font-serif text-[1.12em] font-medium italic text-text-primary">
+              стоимость работ
+            </span>
+          </h2>
+        </div>
+
+        <p class="reveal reveal-delay-100 max-w-md text-sm leading-relaxed text-text-secondary sm:text-base">
+          Ответьте на несколько вопросов о вашем объекте — покажем ориентировочную ставку за м²,
+          срок реализации и закрепим условия под вашу планировку.
+        </p>
+      </div>
+
+      <div class="mt-12 lg:mt-14">
+        <QuizCalculator client:visible />
+      </div>
+    </div>
+  </section>
+
+  <!-- Блок спокойной формы обратной связи («Начнём с разговора» — React client:visible) -->
+  <ConsultationSection client:visible />
+</Layout>

@@ -1,10 +1,13 @@
 ---
+import BrandLogo from './BrandLogo.astro';
 import {
   DIRECTION_PAGES,
+  HUB_CONFIG,
   MAIN_NAV_ITEMS,
   SECONDARY_NAV_ITEMS,
   SITE_CONFIG,
   SOCIAL_LINKS,
+  type PageSwitchId,
 } from '../../data/navigation';
 import {
   LANDSCAPING_CONTACTS,
@@ -13,10 +16,24 @@ import {
 
 export interface Props {
   currentPath?: string;
+  compact?: boolean;
 }
 
-const { currentPath = '/' } = Astro.props;
-const isLandscaping = currentPath.startsWith('/blagoustrojstvo');
+const { currentPath = '/', compact = false } = Astro.props;
+
+const normalizedPath =
+  currentPath.length > 1 && currentPath.endsWith('/')
+    ? currentPath.slice(0, -1)
+    : currentPath;
+
+const isLandscaping = normalizedPath.startsWith('/blagoustrojstvo');
+const isRepair = normalizedPath.startsWith('/remont');
+const activePageId: PageSwitchId = isLandscaping
+  ? 'landscaping'
+  : isRepair
+    ? 'repair'
+    : 'hub';
+
 const currentYear = new Date().getFullYear();
 
 const regionMeta = isLandscaping
@@ -44,313 +61,384 @@ const mapExternalUrl = isLandscaping
   : SITE_CONFIG.mapExternalUrl;
 ---
 
-<footer
-  id="contacts"
-  class="border-t border-border-subtle bg-bg-primary text-text-primary"
->
-  <div class="mx-auto max-w-7xl px-5 pt-20 pb-10 sm:px-8 lg:px-10 lg:pt-28 lg:pb-12">
-    <!-- Редакционный верхний акцент (Verelle Private aesthetic) -->
-    <div class="reveal flex flex-col justify-between gap-8 border-b border-border-subtle pb-14 lg:flex-row lg:items-end lg:pb-16">
-      <div class="max-w-2xl">
-        <p class="mb-4 text-xs uppercase tracking-[0.22em] text-text-muted">
-          {regionMeta}
-        </p>
-        <h2 class="text-3xl font-normal leading-[1.15] tracking-tight text-text-primary sm:text-4xl lg:text-5xl">
-          {isLandscaping ? 'Участок,' : 'Пространство,'}{' '}
-          <span class="font-serif text-[1.12em] font-medium italic text-text-primary">
-            в которое хочется возвращаться
-          </span>
-        </h2>
-      </div>
-
-      <div class="flex shrink-0 flex-col items-start gap-3 sm:flex-row sm:items-center">
-        <a
-          href={isLandscaping ? '#contact-form' : '/#contact-form'}
-          data-lead-trigger={isLandscaping ? 'landscaping-footer-cta' : 'footer-cta'}
-          class="inline-flex items-center justify-center rounded-sm bg-accent px-6 py-3.5 text-sm font-medium text-text-primary transition-colors duration-300 hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
-        >
-          Начать с разговора
-        </a>
-        <a
-          href={isLandscaping ? '#services' : '/#quiz'}
-          class="inline-flex items-center justify-center rounded-sm border border-border-subtle bg-bg-secondary px-6 py-3.5 text-sm font-normal text-text-primary transition-colors duration-300 hover:border-border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-        >
-          {isLandscaping ? 'Смотреть цены и услуги' : 'Рассчитать смету'}
-        </a>
-      </div>
-    </div>
-
-    <!-- Основная сетка: бренд, навигация, направления компании, контакты -->
-    <div class="grid grid-cols-1 gap-12 border-b border-border-subtle py-14 md:grid-cols-2 lg:grid-cols-12 lg:gap-10 lg:py-16">
-      <!-- Колонка 1: Бренд и мессенджеры -->
-      <div class="reveal lg:col-span-4">
-        <a
-          href={isLandscaping ? '#hero' : '/#hero'}
-          class="group inline-flex items-center gap-3 rounded-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-        >
-          <span
-            class="flex h-9 w-9 items-center justify-center border border-border-subtle bg-bg-secondary font-serif text-lg italic leading-none text-text-primary transition-colors duration-300 group-hover:border-border-accent group-hover:text-accent"
-            aria-hidden="true"
+{
+  compact ? (
+    <footer
+      id="contacts"
+      class="border-t border-border-subtle bg-bg-primary text-text-primary"
+    >
+      <div class="mx-auto flex max-w-7xl flex-col gap-3 px-5 py-4 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:gap-6 lg:px-10 lg:py-4">
+        <!-- Левая группа: компактный логотип, адрес и ключевой факт -->
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-text-secondary">
+          <a
+            href="/"
+            aria-label={`${SITE_CONFIG.brandName} — на главную`}
+            class="group inline-flex shrink-0 items-center rounded-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
           >
-            М
-          </span>
-          <span class="text-sm font-semibold tracking-[0.22em] text-text-primary transition-colors duration-300 group-hover:text-accent">
-            {SITE_CONFIG.brandName}
-          </span>
-        </a>
+            <BrandLogo size="sm" />
+          </a>
 
-        <p class="mt-5 max-w-sm text-sm leading-relaxed text-text-secondary">
-          {isLandscaping
-            ? 'Благоустройство участков, асфальтирование, укладка брусчатки, отмостка и дренаж под ключ в Тюмени и области. Свой парк техники и прямые поставки материалов.'
-            : 'Один договор, одна смета и одна команда для комплексного ремонта и дизайн-проектов квартир и домов под ключ. Спокойный процесс с личным контролем качества.'}
-        </p>
+          <span
+            aria-hidden="true"
+            class="hidden h-3.5 w-px bg-border-subtle sm:inline-block"
+          />
 
-        {isLandscaping ? (
-          <div class="mt-6 flex flex-wrap items-center gap-2.5" aria-label="Мессенджеры">
-            {LANDSCAPING_CONTACTS.messengers.map((messenger) => (
+          <address class="cursor-default not-italic text-text-secondary">
+            {HUB_CONFIG.address}
+          </address>
+
+          <span
+            aria-hidden="true"
+            class="hidden h-3.5 w-px bg-border-subtle sm:inline-block"
+          />
+
+          <span class="inline-flex cursor-default items-center gap-2 text-text-primary">
+            <span class="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
+            <span>{HUB_CONFIG.keyFact}</span>
+          </span>
+        </div>
+
+        <!-- Контакты на мобильных (до lg, где в шапке скрыты телефон и мессенджеры) -->
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-border-subtle pt-3 text-xs lg:hidden">
+          <a
+            href={HUB_CONFIG.phoneHref}
+            class="font-medium text-text-primary transition-colors duration-300 hover:text-accent"
+          >
+            {HUB_CONFIG.phoneDisplay}
+          </a>
+          <div class="flex items-center gap-3 text-text-secondary">
+            {HUB_CONFIG.messengers.map((messenger) => (
               <a
                 href={messenger.href}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={messenger.label}
-                class="inline-flex h-10 items-center justify-center rounded-sm border border-border-subtle bg-bg-secondary px-4 text-xs font-medium text-text-secondary transition-colors duration-300 hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                class="underline decoration-border-subtle underline-offset-4 transition-colors duration-300 hover:text-text-primary"
               >
                 {messenger.shortLabel}
               </a>
             ))}
           </div>
-        ) : (
-          <div class="mt-6 flex items-center gap-2.5" aria-label="Социальные сети и мессенджеры">
-            {SOCIAL_LINKS.map((social) => (
-              <a
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={social.label}
-                class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border-subtle bg-bg-secondary text-text-secondary transition-colors duration-300 hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-              >
-                {social.id === 'telegram' && (
-                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M21.5 4.5 2.5 11.8l6.8 2.4 2.4 6.3 3.4-3.7 4.9 3.2L21.5 4.5Z" />
-                    <path d="M9.3 14.2 17.5 8" />
-                  </svg>
-                )}
-                {social.id === 'whatsapp' && (
-                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M20.5 11.7a8.5 8.5 0 0 1-12.4 7.5L3.5 20.5l1.3-4.4a8.5 8.5 0 1 1 15.7-4.4Z" />
-                    <path d="M9.2 9.4c.2-.4.5-.5.8-.5h.5c.2 0 .4.1.5.4l.7 1.7c.1.2.1.5-.1.7l-.5.6c-.1.1-.1.3 0 .5.4.8 1.2 1.5 2 1.9.2.1.4.1.5 0l.6-.6c.2-.2.5-.2.7-.1l1.7.8c.3.1.4.3.4.5v.5c0 .4-.2.8-.6 1-1 .4-2.5.3-4.2-.6-1.8-.9-3.1-2.3-3.9-4-.6-1.2-.6-2.1-.1-2.8Z" />
-                  </svg>
-                )}
-                {social.id === 'vk' && (
-                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M3 7.5c.2 5.4 3.4 9 8.7 9h.5v-3.2c1.8.2 3.1 1.5 3.7 3.2H19c-.8-2.6-2.8-4.1-4.1-4.6 1.3-.7 3.1-2.4 3.5-4.4h-2.8c-.6 1.8-2.1 3.5-3.4 3.7V7.5H9.6v6.5c-1.4-.3-3.1-2-3.2-6.5H3Z" />
-                  </svg>
-                )}
-              </a>
-            ))}
+        </div>
+
+        <!-- Правая группа: реквизиты ИП и ссылка на политику ПД -->
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] text-text-muted lg:justify-end">
+          <span class="cursor-default">{HUB_CONFIG.requisites}</span>
+          <span
+            aria-hidden="true"
+            class="hidden h-3 w-px bg-border-subtle sm:inline-block"
+          />
+          <a
+            href={HUB_CONFIG.privacyLink.href}
+            class="whitespace-nowrap transition-colors duration-300 hover:text-text-secondary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+          >
+            {HUB_CONFIG.privacyLink.label}
+          </a>
+        </div>
+      </div>
+    </footer>
+  ) : (
+    <footer
+      id="contacts"
+      class="border-t border-border-subtle bg-bg-primary text-text-primary"
+    >
+      <div class="mx-auto max-w-7xl px-5 pt-20 pb-10 sm:px-8 lg:px-10 lg:pt-28 lg:pb-12">
+        <!-- Редакционный верхний акцент (Verelle Private aesthetic) -->
+        <div class="reveal flex flex-col justify-between gap-8 border-b border-border-subtle pb-14 lg:flex-row lg:items-end lg:pb-16">
+          <div class="max-w-2xl">
+            <p class="mb-4 text-xs uppercase tracking-[0.22em] text-text-muted">
+              {regionMeta}
+            </p>
+            <h2 class="text-3xl font-normal leading-[1.15] tracking-tight text-text-primary sm:text-4xl lg:text-5xl">
+              {isLandscaping ? 'Участок,' : 'Пространство,'}{' '}
+              <span class="font-serif text-[1.12em] font-medium italic text-text-primary">
+                в которое хочется возвращаться
+              </span>
+            </h2>
           </div>
-        )}
-      </div>
 
-      <!-- Колонка 2: Дублирование основного меню текущей страницы -->
-      <div class="reveal reveal-delay-100 lg:col-span-2">
-        <h3 class="text-xs font-medium uppercase tracking-[0.2em] text-text-muted">
-          Навигация
-        </h3>
-        <ul class="mt-5 space-y-3">
-          {navItems.map((item) => (
-            <li>
-              <a
-                href={item.href}
-                class="text-sm text-text-secondary transition-colors duration-300 hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-              >
-                {item.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <!-- Колонка 3: Переключатель направлений + разделы -->
-      <div class="reveal reveal-delay-200 lg:col-span-2">
-        <h3 class="text-xs font-medium uppercase tracking-[0.2em] text-text-muted">
-          Направления
-        </h3>
-        <ul class="mt-5 space-y-2.5">
-          {DIRECTION_PAGES.map((page) => {
-            const isActive =
-              page.id === 'landscaping' ? isLandscaping : !isLandscaping;
-            return (
-              <li>
-                <a
-                  href={page.href}
-                  aria-current={isActive ? 'page' : undefined}
-                  class:list={[
-                    'inline-flex items-center gap-2 text-sm transition-colors duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
-                    isActive
-                      ? 'font-medium text-accent'
-                      : 'text-text-secondary hover:text-text-primary',
-                  ]}
-                >
-                  <span
-                    class:list={[
-                      'h-1.5 w-1.5 rounded-full',
-                      isActive ? 'bg-accent' : 'bg-border-subtle',
-                    ]}
-                    aria-hidden="true"
-                  ></span>
-                  <span>{page.label}</span>
-                </a>
-              </li>
-            );
-          })}
-        </ul>
-
-        {!isLandscaping && (
-          <ul class="mt-5 space-y-2.5 border-t border-border-subtle pt-4">
-            {SECONDARY_NAV_ITEMS.slice(0, 3).map((item) => (
-              <li>
-                <a
-                  href={item.href}
-                  class="text-xs text-text-muted transition-colors duration-300 hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-
-      <!-- Колонка 4: Контакты, адрес офиса и режим работы -->
-      <div class="reveal reveal-delay-300 lg:col-span-4">
-        <h3 class="text-xs font-medium uppercase tracking-[0.2em] text-text-muted">
-          Офис и контакты
-        </h3>
-
-        <div class="mt-5 space-y-5">
-          <div>
+          <div class="flex shrink-0 flex-col items-start gap-3 sm:flex-row sm:items-center">
             <a
-              href={phoneHref}
-              class="inline-block text-xl font-medium tracking-tight text-text-primary transition-colors duration-300 hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+              href={isLandscaping ? '#contact-form' : '/remont#contact-form'}
+              data-lead-trigger={isLandscaping ? 'landscaping-footer-cta' : 'footer-cta'}
+              class="inline-flex items-center justify-center rounded-sm bg-accent px-6 py-3.5 text-sm font-medium text-text-primary transition-colors duration-300 hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
             >
-              {phoneDisplay}
+              Начать с разговора
             </a>
-            <div class="mt-1">
-              <a
-                href={`mailto:${email}`}
-                class="text-sm text-text-secondary transition-colors duration-300 hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-              >
-                {email}
-              </a>
+            <a
+              href={isLandscaping ? '#services' : '/remont#quiz'}
+              class="inline-flex items-center justify-center rounded-sm border border-border-subtle bg-bg-secondary px-6 py-3.5 text-sm font-normal text-text-primary transition-colors duration-300 hover:border-border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+            >
+              {isLandscaping ? 'Смотреть цены и услуги' : 'Рассчитать смету'}
+            </a>
+          </div>
+        </div>
+
+        <!-- Основная сетка: бренд, навигация, направления компании, контакты -->
+        <div class="grid grid-cols-1 gap-12 border-b border-border-subtle py-14 md:grid-cols-2 lg:grid-cols-12 lg:gap-10 lg:py-16">
+          <!-- Колонка 1: Бренд и мессенджеры -->
+          <div class="reveal lg:col-span-4">
+            <a
+              href="/"
+              aria-label={`${SITE_CONFIG.brandName} — на главную`}
+              class="group inline-flex items-center rounded-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+            >
+              <BrandLogo size="md" />
+            </a>
+
+            <p class="mt-5 max-w-sm text-sm leading-relaxed text-text-secondary">
+              {isLandscaping
+                ? 'Благоустройство участков, асфальтирование, укладка брусчатки, отмостка и дренаж под ключ в Тюмени и области. Свой парк техники и прямые поставки материалов.'
+                : 'Один договор, одна смета и одна команда для комплексного ремонта и дизайн-проектов квартир и домов под ключ. Спокойный процесс с личным контролем качества.'}
+            </p>
+
+            {isLandscaping ? (
+              <div class="mt-6 flex flex-wrap items-center gap-2.5" aria-label="Мессенджеры">
+                {LANDSCAPING_CONTACTS.messengers.map((messenger) => (
+                  <a
+                    href={messenger.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={messenger.label}
+                    class="inline-flex h-10 items-center justify-center rounded-sm border border-border-subtle bg-bg-secondary px-4 text-xs font-medium text-text-secondary transition-colors duration-300 hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                  >
+                    {messenger.shortLabel}
+                  </a>
+                ))}
+              </div>
+            ) : (
+              <div class="mt-6 flex items-center gap-2.5" aria-label="Социальные сети и мессенджеры">
+                {SOCIAL_LINKS.map((social) => (
+                  <a
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={social.label}
+                    class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border-subtle bg-bg-secondary text-text-secondary transition-colors duration-300 hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                  >
+                    {social.id === 'telegram' && (
+                      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M21.5 4.5 2.5 11.8l6.8 2.4 2.4 6.3 3.4-3.7 4.9 3.2L21.5 4.5Z" />
+                        <path d="M9.3 14.2 17.5 8" />
+                      </svg>
+                    )}
+                    {social.id === 'whatsapp' && (
+                      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20.5 11.7a8.5 8.5 0 0 1-12.4 7.5L3.5 20.5l1.3-4.4a8.5 8.5 0 1 1 15.7-4.4Z" />
+                        <path d="M9.2 9.4c.2-.4.5-.5.8-.5h.5c.2 0 .4.1.5.4l.7 1.7c.1.2.1.5-.1.7l-.5.6c-.1.1-.1.3 0 .5.4.8 1.2 1.5 2 1.9.2.1.4.1.5 0l.6-.6c.2-.2.5-.2.7-.1l1.7.8c.3.1.4.3.4.5v.5c0 .4-.2.8-.6 1-1 .4-2.5.3-4.2-.6-1.8-.9-3.1-2.3-3.9-4-.6-1.2-.6-2.1-.1-2.8Z" />
+                      </svg>
+                    )}
+                    {social.id === 'vk' && (
+                      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M3 7.5c.2 5.4 3.4 9 8.7 9h.5v-3.2c1.8.2 3.1 1.5 3.7 3.2H19c-.8-2.6-2.8-4.1-4.1-4.6 1.3-.7 3.1-2.4 3.5-4.4h-2.8c-.6 1.8-2.1 3.5-3.4 3.7V7.5H9.6v6.5c-1.4-.3-3.1-2-3.2-6.5H3Z" />
+                      </svg>
+                    )}
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <!-- Колонка 2: Дублирование основного меню текущей страницы -->
+          <div class="reveal reveal-delay-100 lg:col-span-2">
+            <h3 class="text-xs font-medium uppercase tracking-[0.2em] text-text-muted">
+              Навигация
+            </h3>
+            <ul class="mt-5 space-y-3">
+              {navItems.map((item) => (
+                <li>
+                  <a
+                    href={item.href}
+                    class="text-sm text-text-secondary transition-colors duration-300 hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <!-- Колонка 3: Переключатель разделов (Главная / Ремонт квартир / Благоустройство) -->
+          <div class="reveal reveal-delay-200 lg:col-span-2">
+            <h3 class="text-xs font-medium uppercase tracking-[0.2em] text-text-muted">
+              Направления
+            </h3>
+            <ul class="mt-5 space-y-2.5">
+              {DIRECTION_PAGES.map((page) => {
+                const isActive = page.id === activePageId;
+                return (
+                  <li>
+                    <a
+                      href={page.href}
+                      aria-current={isActive ? 'page' : undefined}
+                      class:list={[
+                        'inline-flex items-center gap-2 text-sm transition-colors duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
+                        isActive
+                          ? 'font-medium text-accent'
+                          : 'text-text-secondary hover:text-text-primary',
+                      ]}
+                    >
+                      <span
+                        class:list={[
+                          'h-1.5 w-1.5 rounded-full',
+                          isActive ? 'bg-accent' : 'bg-border-subtle',
+                        ]}
+                        aria-hidden="true"
+                      />
+                      <span>{page.label}</span>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+
+            {!isLandscaping && (
+              <ul class="mt-5 space-y-2.5 border-t border-border-subtle pt-4">
+                {SECONDARY_NAV_ITEMS.slice(0, 3).map((item) => (
+                  <li>
+                    <a
+                      href={item.href}
+                      class="text-xs text-text-muted transition-colors duration-300 hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          <!-- Колонка 4: Контакты, адрес офиса и режим работы -->
+          <div class="reveal reveal-delay-300 lg:col-span-4">
+            <h3 class="text-xs font-medium uppercase tracking-[0.2em] text-text-muted">
+              Офис и контакты
+            </h3>
+
+            <div class="mt-5 space-y-5">
+              <div>
+                <a
+                  href={phoneHref}
+                  class="inline-block text-xl font-medium tracking-tight text-text-primary transition-colors duration-300 hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                >
+                  {phoneDisplay}
+                </a>
+                <div class="mt-1">
+                  <a
+                    href={`mailto:${email}`}
+                    class="text-sm text-text-secondary transition-colors duration-300 hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                  >
+                    {email}
+                  </a>
+                </div>
+              </div>
+
+              <address class="not-italic text-sm leading-relaxed text-text-secondary">
+                {address}
+              </address>
+
+              <dl class="space-y-1.5 border-t border-border-subtle pt-4 text-sm">
+                {schedule.map((row) => (
+                  <div class="flex items-baseline justify-between gap-4">
+                    <dt class="text-text-muted">{row.days}</dt>
+                    <dd class="text-text-secondary">{row.hours}</dd>
+                  </div>
+                ))}
+              </dl>
             </div>
           </div>
+        </div>
 
-          <address class="not-italic text-sm leading-relaxed text-text-secondary">
-            {address}
-          </address>
+        <!-- Интерактивная карта офиса (темная редакционная подача) -->
+        <div class="reveal border-b border-border-subtle py-12">
+          <div class="mb-5 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+            <div>
+              <p class="text-xs uppercase tracking-[0.2em] text-text-muted">
+                Личная встреча в офисе
+              </p>
+              <p class="mt-1.5 text-sm text-text-secondary">
+                {isLandscaping
+                  ? 'Обсудим ваш участок, покажем образцы брусчатки и бордюров, составим график работ.'
+                  : 'Приезжайте посмотреть образцы материалов и обсудить планировку за чашкой кофе.'}
+              </p>
+            </div>
 
-          <dl class="space-y-1.5 border-t border-border-subtle pt-4 text-sm">
-            {schedule.map((row) => (
-              <div class="flex items-baseline justify-between gap-4">
-                <dt class="text-text-muted">{row.days}</dt>
-                <dd class="text-text-secondary">{row.hours}</dd>
-              </div>
+            <a
+              href={mapExternalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex shrink-0 items-center gap-2 text-sm text-text-primary transition-colors duration-300 hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+            >
+              <span>Построить маршрут</span>
+              <svg
+                class="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M7 17 17 7" />
+                <path d="M8 7h9v9" />
+              </svg>
+            </a>
+          </div>
+
+          <div class="relative h-64 w-full overflow-hidden border border-border-subtle bg-bg-secondary sm:h-72 lg:h-80">
+            <iframe
+              src={mapEmbedUrl}
+              title={`Карта расположения офиса ${SITE_CONFIG.brandName}`}
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              class="editorial-map-frame h-full w-full border-0"
+            />
+          </div>
+        </div>
+
+        <!-- Нижняя правовая строка (статичный футер, никаких фиксированных полос) -->
+        <div class="flex flex-col justify-between gap-4 pt-8 text-xs text-text-muted sm:flex-row sm:items-center">
+          <div class="space-y-1">
+            <p>&copy; {currentYear} {SITE_CONFIG.brandName}. Все права защищены.</p>
+            {isLandscaping && (
+              <p class="text-[11px] text-text-muted">
+                {LANDSCAPING_CONTACTS.requisites}
+              </p>
+            )}
+          </div>
+
+          <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
+            {SITE_CONFIG.legalLinks.map((link) => (
+              <a
+                href={link.href}
+                class="transition-colors duration-300 hover:text-text-secondary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+              >
+                {link.label}
+              </a>
             ))}
-          </dl>
+
+            <a
+              href="#top"
+              class="inline-flex items-center gap-1.5 text-text-secondary transition-colors duration-300 hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+            >
+              <span>Наверх</span>
+              <svg
+                class="h-3.5 w-3.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M12 19V5" />
+                <path d="m6 11 6-6 6 6" />
+              </svg>
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-
-    <!-- Интерактивная карта офиса (темная редакционная подача) -->
-    <div class="reveal border-b border-border-subtle py-12">
-      <div class="mb-5 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
-        <div>
-          <p class="text-xs uppercase tracking-[0.2em] text-text-muted">
-            Личная встреча в офисе
-          </p>
-          <p class="mt-1.5 text-sm text-text-secondary">
-            {isLandscaping
-              ? 'Обсудим ваш участок, покажем образцы брусчатки и бордюров, составим график работ.'
-              : 'Приезжайте посмотреть образцы материалов и обсудить планировку за чашкой кофе.'}
-          </p>
-        </div>
-
-        <a
-          href={mapExternalUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex shrink-0 items-center gap-2 text-sm text-text-primary transition-colors duration-300 hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-        >
-          <span>Построить маршрут</span>
-          <svg
-            class="h-4 w-4"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.6"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M7 17 17 7" />
-            <path d="M8 7h9v9" />
-          </svg>
-        </a>
-      </div>
-
-      <div class="relative h-64 w-full overflow-hidden border border-border-subtle bg-bg-secondary sm:h-72 lg:h-80">
-        <iframe
-          src={mapEmbedUrl}
-          title={`Карта расположения офиса ${SITE_CONFIG.brandName}`}
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-          class="editorial-map-frame h-full w-full border-0"
-        ></iframe>
-      </div>
-    </div>
-
-    <!-- Нижняя правовая строка (статичный футер, никаких фиксированных полос) -->
-    <div class="flex flex-col justify-between gap-4 pt-8 text-xs text-text-muted sm:flex-row sm:items-center">
-      <div class="space-y-1">
-        <p>&copy; {currentYear} {SITE_CONFIG.brandName}. Все права защищены.</p>
-        {isLandscaping && (
-          <p class="text-[11px] text-text-muted">
-            {LANDSCAPING_CONTACTS.requisites}
-          </p>
-        )}
-      </div>
-
-      <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
-        {SITE_CONFIG.legalLinks.map((link) => (
-          <a
-            href={link.href}
-            class="transition-colors duration-300 hover:text-text-secondary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-          >
-            {link.label}
-          </a>
-        ))}
-
-        <a
-          href="#top"
-          class="inline-flex items-center gap-1.5 text-text-secondary transition-colors duration-300 hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-        >
-          <span>Наверх</span>
-          <svg
-            class="h-3.5 w-3.5"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.6"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M12 19V5" />
-            <path d="m6 11 6-6 6 6" />
-          </svg>
-        </a>
-      </div>
-    </div>
-  </div>
-</footer>
+    </footer>
+  )
+}

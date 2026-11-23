@@ -322,7 +322,8 @@ export default function LeadModal() {
 
   const preset = getLeadModalPreset(context?.source);
   const isLandscapingContext = Boolean(
-    context?.source?.startsWith('landscaping-'),
+    context?.source?.startsWith('landscaping-') ||
+      context?.source?.startsWith('hub-'),
   );
   const activeChannels: readonly PreferredContactChannelOption[] =
     isLandscapingContext
