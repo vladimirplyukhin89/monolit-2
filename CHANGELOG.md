@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.15](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.14...v0.0.15) (2026-11-23)
+
+
+### Bug Fixes
+
+* **mobile:** поправить вёрстку и тач-зоны на экранах 360–430px ([dca4038](https://github.com/vladimirplyukhin89/monolit-2/commit/dca4038f4ac5647ae13219ef9b3e581366faa72c))
+
 ### [0.0.14](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.13...v0.0.14) (2026-11-23)
 
 
