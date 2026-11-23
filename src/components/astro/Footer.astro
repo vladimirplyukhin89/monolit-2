@@ -1,5 +1,6 @@
 ---
 import BrandLogo from './BrandLogo.astro';
+import SocialLinks from './SocialLinks.astro';
 import {
   COMPANY_CONTACTS,
   DIRECTION_PAGES,
@@ -61,89 +62,81 @@ const messengers = COMPANY_CONTACTS.messengers;
       id="contacts"
       class="border-t border-border-subtle bg-bg-primary text-text-primary"
     >
-      <div class="mx-auto flex max-w-7xl flex-col gap-3 px-5 py-4 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:gap-6 lg:px-10 lg:py-4">
-        <!-- Левая группа: компактный логотип, адрес и ключевой факт -->
-        <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-text-secondary">
-          <a
-            href="/"
-            aria-label={`${SITE_CONFIG.brandName} — на главную`}
-            class="group inline-flex shrink-0 items-center rounded-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-          >
-            <BrandLogo size="sm" />
-          </a>
+      <div class="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-5 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:gap-6 lg:px-10 lg:py-4">
+        <!-- Левая группа: компактный логотип, адрес, ключевой факт и быстрые контакты -->
+        <div class="flex flex-col gap-3">
+          <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-text-secondary">
+            <a
+              href="/"
+              aria-label={`${SITE_CONFIG.brandName} — на главную`}
+              class="group inline-flex shrink-0 items-center rounded-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+            >
+              <BrandLogo size="sm" />
+            </a>
 
-          <span
-            aria-hidden="true"
-            class="hidden h-3.5 w-px bg-border-subtle sm:inline-block"
-          />
+            <span
+              aria-hidden="true"
+              class="hidden h-3.5 w-px bg-border-subtle sm:inline-block"
+            />
 
-          <address class="cursor-default not-italic text-text-secondary">
-            {HUB_CONFIG.address}
-          </address>
+            <address class="cursor-default not-italic text-text-secondary">
+              {HUB_CONFIG.address}
+            </address>
 
-          <span
-            aria-hidden="true"
-            class="hidden h-3.5 w-px bg-border-subtle sm:inline-block"
-          />
+            <span
+              aria-hidden="true"
+              class="hidden h-3.5 w-px bg-border-subtle sm:inline-block"
+            />
 
-          <span class="inline-flex cursor-default items-center gap-2 text-text-primary">
-            <span class="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
-            <span>{HUB_CONFIG.keyFact}</span>
-          </span>
-        </div>
-
-        <!-- Контакты на мобильных (до lg, где в шапке скрыты телефон и мессенджеры) -->
-        <div class="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-border-subtle pt-3 text-xs lg:hidden">
-          <a
-            href={HUB_CONFIG.phoneHref}
-            class="font-medium text-text-primary transition-colors duration-300 hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-          >
-            {HUB_CONFIG.phoneDisplay}
-          </a>
-          <a
-            href={HUB_CONFIG.emailHref}
-            class="text-text-secondary transition-colors duration-300 hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-          >
-            {HUB_CONFIG.email}
-          </a>
-          <div class="flex items-center gap-3 text-text-secondary" aria-label="Мессенджеры">
-            {HUB_CONFIG.messengers.map((messenger) => (
-              <a
-                href={messenger.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={messenger.label}
-                class="underline decoration-border-subtle underline-offset-4 transition-colors duration-300 hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-              >
-                {messenger.shortLabel}
-              </a>
-            ))}
+            <span class="inline-flex cursor-default items-center gap-2 text-text-primary">
+              <span class="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
+              <span>{HUB_CONFIG.keyFact}</span>
+            </span>
           </div>
+
+          <SocialLinks ariaLabel="Социальные сети и быстрая связь" />
         </div>
 
-        <!-- Правая группа: email (десктоп), реквизиты ИП и ссылка на политику ПД -->
-        <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] text-text-muted lg:justify-end">
-          <a
-            href={HUB_CONFIG.emailHref}
-            class="hidden whitespace-nowrap text-text-secondary transition-colors duration-300 hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent lg:inline"
-          >
-            {HUB_CONFIG.email}
-          </a>
-          <span
-            aria-hidden="true"
-            class="hidden h-3 w-px bg-border-subtle lg:inline-block"
-          />
-          <span class="cursor-default">{HUB_CONFIG.requisites}</span>
-          <span
-            aria-hidden="true"
-            class="hidden h-3 w-px bg-border-subtle sm:inline-block"
-          />
-          <a
-            href={HUB_CONFIG.privacyLink.href}
-            class="whitespace-nowrap transition-colors duration-300 hover:text-text-secondary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-          >
-            {HUB_CONFIG.privacyLink.label}
-          </a>
+        <!-- Правая группа: контакты на мобильных, email (десктоп), реквизиты ИП и ссылка на политику ПД -->
+        <div class="flex flex-col gap-2 border-t border-border-subtle pt-3 lg:items-end lg:border-t-0 lg:pt-0">
+          <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs lg:hidden">
+            <a
+              href={HUB_CONFIG.phoneHref}
+              class="font-medium text-text-primary transition-colors duration-300 hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+            >
+              {HUB_CONFIG.phoneDisplay}
+            </a>
+            <a
+              href={HUB_CONFIG.emailHref}
+              class="text-text-secondary transition-colors duration-300 hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+            >
+              {HUB_CONFIG.email}
+            </a>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] text-text-muted lg:justify-end">
+            <a
+              href={HUB_CONFIG.emailHref}
+              class="hidden whitespace-nowrap text-text-secondary transition-colors duration-300 hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent lg:inline"
+            >
+              {HUB_CONFIG.email}
+            </a>
+            <span
+              aria-hidden="true"
+              class="hidden h-3 w-px bg-border-subtle lg:inline-block"
+            />
+            <span class="cursor-default">{HUB_CONFIG.requisites}</span>
+            <span
+              aria-hidden="true"
+              class="hidden h-3 w-px bg-border-subtle sm:inline-block"
+            />
+            <a
+              href={HUB_CONFIG.privacyLink.href}
+              class="whitespace-nowrap transition-colors duration-300 hover:text-text-secondary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+            >
+              {HUB_CONFIG.privacyLink.label}
+            </a>
+          </div>
         </div>
       </div>
     </footer>
@@ -313,6 +306,8 @@ const messengers = COMPANY_CONTACTS.messengers;
               <address class="not-italic text-sm leading-relaxed text-text-secondary">
                 {address}
               </address>
+
+              <SocialLinks ariaLabel="Социальные сети и быстрая связь" />
 
               <dl class="space-y-1.5 border-t border-border-subtle pt-4 text-sm">
                 {schedule.map((row) => (

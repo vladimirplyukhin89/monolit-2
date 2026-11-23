@@ -18,6 +18,24 @@ export interface MessengerLink {
   readonly href: string;
 }
 
+export type SocialChannelId = 'phone' | 'email' | 'telegram' | 'max' | 'vk';
+
+export interface SocialLinkItem {
+  readonly id: SocialChannelId;
+  readonly href: string;
+  readonly ariaLabel: string;
+  readonly title?: string;
+  readonly external?: boolean;
+}
+
+export interface CompanySocialLinksConfig {
+  readonly phoneHref: string;
+  readonly emailHref: string;
+  readonly telegramHref: string;
+  readonly maxHref?: string;
+  readonly vkHref?: string;
+}
+
 export interface ScheduleRow {
   readonly days: string;
   readonly hours: string;
@@ -41,6 +59,7 @@ export interface CompanyContacts {
   readonly mapEmbedUrl: string;
   readonly mapExternalUrl: string;
   readonly messengers: readonly MessengerLink[];
+  readonly socialLinks: CompanySocialLinksConfig;
 }
 
 export interface SiteConfig extends CompanyContacts {
@@ -145,12 +164,20 @@ export const MESSENGER_LINKS: readonly MessengerLink[] = [
   },
 ] as const;
 
+export const COMPANY_SOCIAL_LINKS: CompanySocialLinksConfig = {
+  phoneHref: 'tel:+79199507722',
+  emailHref: 'mailto:monolittmn@mail.ru',
+  telegramHref: 'https://t.me/+79199507722',
+  maxHref: 'https://max.ru',
+  vkHref: undefined,
+} as const;
+
 export const COMPANY_CONTACTS: CompanyContacts = {
   brandName: 'МОНОЛИТ',
   phoneDisplay: '8 (919) 950-77-22',
-  phoneHref: 'tel:+79199507722',
+  phoneHref: COMPANY_SOCIAL_LINKS.phoneHref,
   email: 'monolittmn@mail.ru',
-  emailHref: 'mailto:monolittmn@mail.ru',
+  emailHref: COMPANY_SOCIAL_LINKS.emailHref,
   address: 'г. Тюмень, ул. Депутатская, 129',
   requisites: 'ИП Ерамасов В.Н. · ИНН 723011554086 · ОГРНИП 323723200019722',
   schedule: [
@@ -164,6 +191,7 @@ export const COMPANY_CONTACTS: CompanyContacts = {
   mapExternalUrl:
     'https://yandex.ru/maps/?text=%D0%A2%D1%8E%D0%BC%D0%B5%D0%BD%D1%8C%2C%20%D1%83%D0%BB.%20%D0%94%D0%B5%D0%BF%D1%83%D1%82%D0%B0%D1%82%D1%81%D0%BA%D0%B0%D1%8F%2C%20129',
   messengers: MESSENGER_LINKS,
+  socialLinks: COMPANY_SOCIAL_LINKS,
 } as const;
 
 export const HUB_CONFIG: HubConfig = {

@@ -1,5 +1,6 @@
 ---
 import BrandLogo from './BrandLogo.astro';
+import SocialLinks from './SocialLinks.astro';
 import {
   COMPANY_CONTACTS,
   DIRECTION_PAGES,
@@ -114,6 +115,121 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
           >
             Связаться
           </button>
+
+          <!-- Кнопка мобильного меню (строго экраны меньше lg) -->
+          <button
+            id="mobile-menu-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="mobile-menu-panel"
+            aria-label="Открыть меню навигации"
+            class="inline-flex h-11 w-11 cursor-pointer items-center justify-center border border-border-subtle bg-bg-secondary text-text-primary transition-colors duration-300 hover:border-border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent lg:hidden"
+          >
+            <span class="sr-only">Меню</span>
+            <svg
+              data-icon-open
+              class="h-5 w-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <line x1="4" y1="7" x2="20" y2="7" />
+              <line x1="4" y1="12" x2="20" y2="12" />
+              <line x1="4" y1="17" x2="14" y2="17" />
+            </svg>
+            <svg
+              data-icon-close
+              class="hidden h-5 w-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <line x1="5" y1="5" x2="19" y2="19" />
+              <line x1="19" y1="5" x2="5" y2="19" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Мобильная шторка навигации для разводящей страницы (строго меньше lg) -->
+      <div
+        id="mobile-menu-panel"
+        aria-hidden="true"
+        class="hidden max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-border-subtle bg-bg-primary sm:max-h-[calc(100dvh-72px)] lg:hidden"
+      >
+        <div class="animate-fade-in mx-auto max-w-7xl px-5 py-8 sm:px-8">
+          <p class="mb-4 text-xs uppercase tracking-[0.2em] text-text-muted">
+            {HUB_CONFIG.subtitle}
+          </p>
+
+          <nav
+            aria-label="Направления компании"
+            class="divide-y divide-border-subtle border-y border-border-subtle"
+          >
+            {DIRECTION_PAGES.map((page, index) => {
+              const isActive = page.id === activePageId;
+              return (
+                <a
+                  href={page.href}
+                  data-mobile-nav-link
+                  aria-current={isActive ? 'page' : undefined}
+                  class:list={[
+                    'flex items-baseline justify-between py-4 text-base font-normal transition-colors duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
+                    isActive
+                      ? 'text-accent'
+                      : 'text-text-primary hover:text-accent',
+                  ]}
+                >
+                  <span>{page.label}</span>
+                  <span class="font-serif text-sm italic text-text-muted">
+                    {`0${index + 1}`}
+                  </span>
+                </a>
+              );
+            })}
+          </nav>
+
+          <div class="mt-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+            <div class="flex flex-col gap-2">
+              <a
+                href={phoneHref}
+                class="text-base font-medium text-text-primary transition-colors duration-300 hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+              >
+                {phoneDisplay}
+              </a>
+
+              <a
+                href={emailHref}
+                class="text-sm text-text-secondary transition-colors duration-300 hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+              >
+                {email}
+              </a>
+
+              <address class="not-italic text-xs text-text-muted">
+                {HUB_CONFIG.address}
+              </address>
+
+              <SocialLinks
+                class="pt-2"
+                ariaLabel="Быстрая связь и мессенджеры"
+              />
+            </div>
+
+            <button
+              type="button"
+              data-mobile-nav-link
+              data-lead-trigger="hub-header-cta"
+              class="inline-flex cursor-pointer items-center justify-center rounded-sm bg-accent px-6 py-3 text-sm font-medium text-text-primary transition-colors duration-300 hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
+            >
+              Обсудить проект
+            </button>
+          </div>
         </div>
       </div>
     </header>
@@ -209,7 +325,7 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
           aria-expanded="false"
           aria-controls="mobile-menu-panel"
           aria-label="Открыть меню навигации"
-          class="inline-flex h-10 w-10 cursor-pointer items-center justify-center border border-border-subtle bg-bg-secondary text-text-primary transition-colors duration-300 hover:border-border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent lg:hidden"
+          class="inline-flex h-11 w-11 cursor-pointer items-center justify-center border border-border-subtle bg-bg-secondary text-text-primary transition-colors duration-300 hover:border-border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent lg:hidden"
         >
           <span class="sr-only">Меню</span>
           <svg
@@ -313,19 +429,10 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
                 {email}
               </a>
 
-              <div class="flex items-center gap-2.5 pt-1" aria-label="Мессенджеры">
-                {messengers.map((messenger) => (
-                  <a
-                    href={messenger.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={messenger.label}
-                    class="inline-flex h-9 items-center justify-center rounded-sm border border-border-subtle bg-bg-secondary px-3.5 text-xs font-medium text-text-secondary transition-colors duration-300 hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-                  >
-                    {messenger.shortLabel}
-                  </a>
-                ))}
-              </div>
+              <SocialLinks
+                class="pt-2"
+                ariaLabel="Быстрая связь и мессенджеры"
+              />
             </div>
 
             <a
@@ -359,7 +466,7 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
 
     const openIcon = toggleBtn.querySelector<SVGElement>('[data-icon-open]');
     const closeIcon = toggleBtn.querySelector<SVGElement>('[data-icon-close]');
-    const navLinks = panel.querySelectorAll<HTMLAnchorElement>('[data-mobile-nav-link]');
+    const navLinks = panel.querySelectorAll<HTMLElement>('[data-mobile-nav-link]');
     const desktopMq = window.matchMedia('(min-width: 1024px)');
 
     const setMenuOpen = (isOpen: boolean): void => {
