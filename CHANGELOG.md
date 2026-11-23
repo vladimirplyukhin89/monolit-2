@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.7](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.6...v0.0.7) (2026-11-23)
+
+
+### Features
+
+* **landscaping:** добавить страницу благоустройства и переключатель направлений ([7c78b9a](https://github.com/vladimirplyukhin89/monolit-2/commit/7c78b9a3289748effb4d9be20759282e8d75ff64))
+
 ### [0.0.6](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.5...v0.0.6) (2026-11-23)
 
 
