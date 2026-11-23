@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.12](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.11...v0.0.12) (2026-11-23)
+
+
+### Bug Fixes
+
+* **contacts:** унифицировать контакты, мессенджеры и юридические реквизиты Монолит на всех страницах ([8e10872](https://github.com/vladimirplyukhin89/monolit-2/commit/8e108722b5295c3752ba7b477ada2fe6a41f0db1))
+
 ### [0.0.11](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.10...v0.0.11) (2026-11-23)
 
 
