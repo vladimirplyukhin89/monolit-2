@@ -171,6 +171,61 @@ dialog.editorial-dialog[open] {
   overflow: hidden;
 }
 
+/* Редакционный ползунок площади для квиза (только семантические токены) */
+.editorial-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 2px;
+  background: var(--color-border-subtle);
+  outline: none;
+}
+
+.editorial-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: var(--color-accent);
+  border: 2px solid var(--color-bg-primary);
+  box-shadow: 0 0 0 1px var(--color-border-accent);
+  cursor: pointer;
+  transition:
+    background-color 300ms var(--ease-editorial),
+    transform 300ms var(--ease-editorial);
+}
+
+.editorial-range::-webkit-slider-thumb:hover {
+  background: var(--color-accent-hover);
+  transform: scale(1.08);
+}
+
+.editorial-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: var(--color-accent);
+  border: 2px solid var(--color-bg-primary);
+  box-shadow: 0 0 0 1px var(--color-border-accent);
+  cursor: pointer;
+  transition:
+    background-color 300ms var(--ease-editorial),
+    transform 300ms var(--ease-editorial);
+}
+
+.editorial-range::-moz-range-thumb:hover {
+  background: var(--color-accent-hover);
+  transform: scale(1.08);
+}
+
+.editorial-range:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px var(--color-accent-muted), 0 0 0 1px var(--color-accent);
+}
+
+.editorial-range:focus-visible::-moz-range-thumb {
+  box-shadow: 0 0 0 3px var(--color-accent-muted), 0 0 0 1px var(--color-accent);
+}
+
 /* Темная редакционная подача встроенной карты офиса */
 .editorial-map-frame {
   filter: grayscale(100%) invert(92%) contrast(90%) brightness(92%);
@@ -211,5 +266,10 @@ dialog.editorial-dialog[open] {
 
   dialog.editorial-dialog[open] {
     animation: none !important;
+  }
+
+  .editorial-range::-webkit-slider-thumb,
+  .editorial-range::-moz-range-thumb {
+    transition: none !important;
   }
 }
