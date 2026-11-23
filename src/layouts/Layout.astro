@@ -52,7 +52,7 @@ const {
       <slot />
     </main>
 
-    {showFooter && <Footer />}
+    {showFooter && <Footer currentPath={currentPath} />}
 
     <!-- Универсальное модальное окно захвата лидов и компактный Cookie-баннер -->
     <LeadModal client:load />

@@ -14,7 +14,9 @@ import {
   getPreferredChannelLabel,
   validateLeadContact,
   type PreferredContactChannelId,
+  type PreferredContactChannelOption,
 } from '../../data/lead';
+import { LANDSCAPING_CONTACT_CHANNELS } from '../../data/landscaping';
 import {
   closeLeadModal,
   leadModalOpen,
@@ -319,6 +321,13 @@ export default function LeadModal() {
   }
 
   const preset = getLeadModalPreset(context?.source);
+  const isLandscapingContext = Boolean(
+    context?.source?.startsWith('landscaping-'),
+  );
+  const activeChannels: readonly PreferredContactChannelOption[] =
+    isLandscapingContext
+      ? LANDSCAPING_CONTACT_CHANNELS
+      : PREFERRED_CONTACT_CHANNELS;
   const stateAttr = isVisible ? 'open' : 'closed';
   const hasProjectContext = Boolean(context?.projectComplex);
   const projectLabel = context?.projectArea
@@ -422,7 +431,7 @@ export default function LeadModal() {
                     aria-label="Удобный способ связи"
                     className="mt-2.5 flex flex-wrap gap-2"
                   >
-                    {PREFERRED_CONTACT_CHANNELS.map((channel) => {
+                    {activeChannels.map((channel) => {
                       const isActive = form.channel === channel.id;
 
                       return (
@@ -648,8 +657,8 @@ export default function LeadModal() {
                 className="mt-2.5 text-sm leading-relaxed text-text-secondary"
               >
                 Инженер-сметчик напишет или перезвонит через выбранный способ
-                связи ({getPreferredChannelLabel(form.channel)}) в течение 15
-                минут в рабочее время.
+                связи ({getPreferredChannelLabel(form.channel, activeChannels)})
+                в течение 15 минут в рабочее время.
               </p>
 
               {hasProjectContext && projectLabel && (

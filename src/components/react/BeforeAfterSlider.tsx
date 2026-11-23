@@ -258,7 +258,7 @@ export default function BeforeAfterSlider({
           aria-valuemin={MIN_POSITION}
           aria-valuemax={MAX_POSITION}
           aria-valuenow={roundedPosition}
-          aria-valuetext={`${roundedPosition}% до ремонта, ${100 - roundedPosition}% после ремонта`}
+          aria-valuetext={`${roundedPosition}% ${beforeLabel.toLowerCase()}, ${100 - roundedPosition}% ${afterLabel.toLowerCase()}`}
           onKeyDown={handleKeyDown}
           onPointerDown={handleRailPointerDown}
           onPointerMove={handlePointerMove}

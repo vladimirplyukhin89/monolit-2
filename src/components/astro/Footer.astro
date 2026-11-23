@@ -1,12 +1,47 @@
 ---
 import {
+  DIRECTION_PAGES,
   MAIN_NAV_ITEMS,
   SECONDARY_NAV_ITEMS,
   SITE_CONFIG,
   SOCIAL_LINKS,
 } from '../../data/navigation';
+import {
+  LANDSCAPING_CONTACTS,
+  LANDSCAPING_NAV_ITEMS,
+} from '../../data/landscaping';
 
+export interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = '/' } = Astro.props;
+const isLandscaping = currentPath.startsWith('/blagoustrojstvo');
 const currentYear = new Date().getFullYear();
+
+const regionMeta = isLandscaping
+  ? LANDSCAPING_CONTACTS.regionMeta
+  : SITE_CONFIG.regionMeta;
+const navItems = isLandscaping ? LANDSCAPING_NAV_ITEMS : MAIN_NAV_ITEMS;
+const phoneDisplay = isLandscaping
+  ? LANDSCAPING_CONTACTS.phoneDisplay
+  : SITE_CONFIG.phoneDisplay;
+const phoneHref = isLandscaping
+  ? LANDSCAPING_CONTACTS.phoneHref
+  : SITE_CONFIG.phoneHref;
+const email = isLandscaping ? LANDSCAPING_CONTACTS.email : SITE_CONFIG.email;
+const address = isLandscaping
+  ? LANDSCAPING_CONTACTS.address
+  : SITE_CONFIG.address;
+const schedule = isLandscaping
+  ? LANDSCAPING_CONTACTS.schedule
+  : SITE_CONFIG.schedule;
+const mapEmbedUrl = isLandscaping
+  ? LANDSCAPING_CONTACTS.mapEmbedUrl
+  : SITE_CONFIG.mapEmbedUrl;
+const mapExternalUrl = isLandscaping
+  ? LANDSCAPING_CONTACTS.mapExternalUrl
+  : SITE_CONFIG.mapExternalUrl;
 ---
 
 <footer
@@ -18,10 +53,10 @@ const currentYear = new Date().getFullYear();
     <div class="reveal flex flex-col justify-between gap-8 border-b border-border-subtle pb-14 lg:flex-row lg:items-end lg:pb-16">
       <div class="max-w-2xl">
         <p class="mb-4 text-xs uppercase tracking-[0.22em] text-text-muted">
-          {SITE_CONFIG.regionMeta}
+          {regionMeta}
         </p>
         <h2 class="text-3xl font-normal leading-[1.15] tracking-tight text-text-primary sm:text-4xl lg:text-5xl">
-          Пространство,{' '}
+          {isLandscaping ? 'Участок,' : 'Пространство,'}{' '}
           <span class="font-serif text-[1.12em] font-medium italic text-text-primary">
             в которое хочется возвращаться
           </span>
@@ -30,27 +65,27 @@ const currentYear = new Date().getFullYear();
 
       <div class="flex shrink-0 flex-col items-start gap-3 sm:flex-row sm:items-center">
         <a
-          href="/#contact-form"
-          data-lead-trigger="footer-cta"
+          href={isLandscaping ? '#contact-form' : '/#contact-form'}
+          data-lead-trigger={isLandscaping ? 'landscaping-footer-cta' : 'footer-cta'}
           class="inline-flex items-center justify-center rounded-sm bg-accent px-6 py-3.5 text-sm font-medium text-text-primary transition-colors duration-300 hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
         >
           Начать с разговора
         </a>
         <a
-          href="/#quiz"
+          href={isLandscaping ? '#services' : '/#quiz'}
           class="inline-flex items-center justify-center rounded-sm border border-border-subtle bg-bg-secondary px-6 py-3.5 text-sm font-normal text-text-primary transition-colors duration-300 hover:border-border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
         >
-          Рассчитать смету
+          {isLandscaping ? 'Смотреть цены и услуги' : 'Рассчитать смету'}
         </a>
       </div>
     </div>
 
-    <!-- Основная сетка: бренд, навигация, контакты, режим работы -->
+    <!-- Основная сетка: бренд, навигация, направления компании, контакты -->
     <div class="grid grid-cols-1 gap-12 border-b border-border-subtle py-14 md:grid-cols-2 lg:grid-cols-12 lg:gap-10 lg:py-16">
-      <!-- Колонка 1: Бренд и соцсети -->
+      <!-- Колонка 1: Бренд и мессенджеры -->
       <div class="reveal lg:col-span-4">
         <a
-          href="/#hero"
+          href={isLandscaping ? '#hero' : '/#hero'}
           class="group inline-flex items-center gap-3 rounded-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
         >
           <span
@@ -65,48 +100,65 @@ const currentYear = new Date().getFullYear();
         </a>
 
         <p class="mt-5 max-w-sm text-sm leading-relaxed text-text-secondary">
-          Один договор, одна смета и одна команда для комплексного ремонта и дизайн-проектов
-          квартир и домов под ключ. Спокойный процесс с личным контролем качества.
+          {isLandscaping
+            ? 'Благоустройство участков, асфальтирование, укладка брусчатки, отмостка и дренаж под ключ в Тюмени и области. Свой парк техники и прямые поставки материалов.'
+            : 'Один договор, одна смета и одна команда для комплексного ремонта и дизайн-проектов квартир и домов под ключ. Спокойный процесс с личным контролем качества.'}
         </p>
 
-        <div class="mt-6 flex items-center gap-2.5" aria-label="Социальные сети и мессенджеры">
-          {SOCIAL_LINKS.map((social) => (
-            <a
-              href={social.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={social.label}
-              class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border-subtle bg-bg-secondary text-text-secondary transition-colors duration-300 hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-            >
-              {social.id === 'telegram' && (
-                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M21.5 4.5 2.5 11.8l6.8 2.4 2.4 6.3 3.4-3.7 4.9 3.2L21.5 4.5Z" />
-                  <path d="M9.3 14.2 17.5 8" />
-                </svg>
-              )}
-              {social.id === 'whatsapp' && (
-                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M20.5 11.7a8.5 8.5 0 0 1-12.4 7.5L3.5 20.5l1.3-4.4a8.5 8.5 0 1 1 15.7-4.4Z" />
-                  <path d="M9.2 9.4c.2-.4.5-.5.8-.5h.5c.2 0 .4.1.5.4l.7 1.7c.1.2.1.5-.1.7l-.5.6c-.1.1-.1.3 0 .5.4.8 1.2 1.5 2 1.9.2.1.4.1.5 0l.6-.6c.2-.2.5-.2.7-.1l1.7.8c.3.1.4.3.4.5v.5c0 .4-.2.8-.6 1-1 .4-2.5.3-4.2-.6-1.8-.9-3.1-2.3-3.9-4-.6-1.2-.6-2.1-.1-2.8Z" />
-                </svg>
-              )}
-              {social.id === 'vk' && (
-                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M3 7.5c.2 5.4 3.4 9 8.7 9h.5v-3.2c1.8.2 3.1 1.5 3.7 3.2H19c-.8-2.6-2.8-4.1-4.1-4.6 1.3-.7 3.1-2.4 3.5-4.4h-2.8c-.6 1.8-2.1 3.5-3.4 3.7V7.5H9.6v6.5c-1.4-.3-3.1-2-3.2-6.5H3Z" />
-                </svg>
-              )}
-            </a>
-          ))}
-        </div>
+        {isLandscaping ? (
+          <div class="mt-6 flex flex-wrap items-center gap-2.5" aria-label="Мессенджеры">
+            {LANDSCAPING_CONTACTS.messengers.map((messenger) => (
+              <a
+                href={messenger.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={messenger.label}
+                class="inline-flex h-10 items-center justify-center rounded-sm border border-border-subtle bg-bg-secondary px-4 text-xs font-medium text-text-secondary transition-colors duration-300 hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+              >
+                {messenger.shortLabel}
+              </a>
+            ))}
+          </div>
+        ) : (
+          <div class="mt-6 flex items-center gap-2.5" aria-label="Социальные сети и мессенджеры">
+            {SOCIAL_LINKS.map((social) => (
+              <a
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={social.label}
+                class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border-subtle bg-bg-secondary text-text-secondary transition-colors duration-300 hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+              >
+                {social.id === 'telegram' && (
+                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M21.5 4.5 2.5 11.8l6.8 2.4 2.4 6.3 3.4-3.7 4.9 3.2L21.5 4.5Z" />
+                    <path d="M9.3 14.2 17.5 8" />
+                  </svg>
+                )}
+                {social.id === 'whatsapp' && (
+                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M20.5 11.7a8.5 8.5 0 0 1-12.4 7.5L3.5 20.5l1.3-4.4a8.5 8.5 0 1 1 15.7-4.4Z" />
+                    <path d="M9.2 9.4c.2-.4.5-.5.8-.5h.5c.2 0 .4.1.5.4l.7 1.7c.1.2.1.5-.1.7l-.5.6c-.1.1-.1.3 0 .5.4.8 1.2 1.5 2 1.9.2.1.4.1.5 0l.6-.6c.2-.2.5-.2.7-.1l1.7.8c.3.1.4.3.4.5v.5c0 .4-.2.8-.6 1-1 .4-2.5.3-4.2-.6-1.8-.9-3.1-2.3-3.9-4-.6-1.2-.6-2.1-.1-2.8Z" />
+                  </svg>
+                )}
+                {social.id === 'vk' && (
+                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M3 7.5c.2 5.4 3.4 9 8.7 9h.5v-3.2c1.8.2 3.1 1.5 3.7 3.2H19c-.8-2.6-2.8-4.1-4.1-4.6 1.3-.7 3.1-2.4 3.5-4.4h-2.8c-.6 1.8-2.1 3.5-3.4 3.7V7.5H9.6v6.5c-1.4-.3-3.1-2-3.2-6.5H3Z" />
+                  </svg>
+                )}
+              </a>
+            ))}
+          </div>
+        )}
       </div>
 
-      <!-- Колонка 2: Дублирование основного меню -->
+      <!-- Колонка 2: Дублирование основного меню текущей страницы -->
       <div class="reveal reveal-delay-100 lg:col-span-2">
         <h3 class="text-xs font-medium uppercase tracking-[0.2em] text-text-muted">
           Навигация
         </h3>
         <ul class="mt-5 space-y-3">
-          {MAIN_NAV_ITEMS.map((item) => (
+          {navItems.map((item) => (
             <li>
               <a
                 href={item.href}
@@ -119,23 +171,55 @@ const currentYear = new Date().getFullYear();
         </ul>
       </div>
 
-      <!-- Колонка 3: Разделы услуг -->
+      <!-- Колонка 3: Переключатель направлений + разделы -->
       <div class="reveal reveal-delay-200 lg:col-span-2">
         <h3 class="text-xs font-medium uppercase tracking-[0.2em] text-text-muted">
-          Услуги и разделы
+          Направления
         </h3>
-        <ul class="mt-5 space-y-3">
-          {SECONDARY_NAV_ITEMS.map((item) => (
-            <li>
-              <a
-                href={item.href}
-                class="text-sm text-text-secondary transition-colors duration-300 hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-              >
-                {item.label}
-              </a>
-            </li>
-          ))}
+        <ul class="mt-5 space-y-2.5">
+          {DIRECTION_PAGES.map((page) => {
+            const isActive =
+              page.id === 'landscaping' ? isLandscaping : !isLandscaping;
+            return (
+              <li>
+                <a
+                  href={page.href}
+                  aria-current={isActive ? 'page' : undefined}
+                  class:list={[
+                    'inline-flex items-center gap-2 text-sm transition-colors duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
+                    isActive
+                      ? 'font-medium text-accent'
+                      : 'text-text-secondary hover:text-text-primary',
+                  ]}
+                >
+                  <span
+                    class:list={[
+                      'h-1.5 w-1.5 rounded-full',
+                      isActive ? 'bg-accent' : 'bg-border-subtle',
+                    ]}
+                    aria-hidden="true"
+                  ></span>
+                  <span>{page.label}</span>
+                </a>
+              </li>
+            );
+          })}
         </ul>
+
+        {!isLandscaping && (
+          <ul class="mt-5 space-y-2.5 border-t border-border-subtle pt-4">
+            {SECONDARY_NAV_ITEMS.slice(0, 3).map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  class="text-xs text-text-muted transition-colors duration-300 hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       <!-- Колонка 4: Контакты, адрес офиса и режим работы -->
@@ -147,27 +231,27 @@ const currentYear = new Date().getFullYear();
         <div class="mt-5 space-y-5">
           <div>
             <a
-              href={SITE_CONFIG.phoneHref}
+              href={phoneHref}
               class="inline-block text-xl font-medium tracking-tight text-text-primary transition-colors duration-300 hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             >
-              {SITE_CONFIG.phoneDisplay}
+              {phoneDisplay}
             </a>
             <div class="mt-1">
               <a
-                href={`mailto:${SITE_CONFIG.email}`}
+                href={`mailto:${email}`}
                 class="text-sm text-text-secondary transition-colors duration-300 hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
               >
-                {SITE_CONFIG.email}
+                {email}
               </a>
             </div>
           </div>
 
           <address class="not-italic text-sm leading-relaxed text-text-secondary">
-            {SITE_CONFIG.address}
+            {address}
           </address>
 
           <dl class="space-y-1.5 border-t border-border-subtle pt-4 text-sm">
-            {SITE_CONFIG.schedule.map((row) => (
+            {schedule.map((row) => (
               <div class="flex items-baseline justify-between gap-4">
                 <dt class="text-text-muted">{row.days}</dt>
                 <dd class="text-text-secondary">{row.hours}</dd>
@@ -179,19 +263,21 @@ const currentYear = new Date().getFullYear();
     </div>
 
     <!-- Интерактивная карта офиса (темная редакционная подача) -->
-    <div class="reveal py-12 border-b border-border-subtle">
+    <div class="reveal border-b border-border-subtle py-12">
       <div class="mb-5 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
         <div>
           <p class="text-xs uppercase tracking-[0.2em] text-text-muted">
             Личная встреча в офисе
           </p>
           <p class="mt-1.5 text-sm text-text-secondary">
-            Приезжайте посмотреть образцы материалов и обсудить планировку за чашкой кофе.
+            {isLandscaping
+              ? 'Обсудим ваш участок, покажем образцы брусчатки и бордюров, составим график работ.'
+              : 'Приезжайте посмотреть образцы материалов и обсудить планировку за чашкой кофе.'}
           </p>
         </div>
 
         <a
-          href={SITE_CONFIG.mapExternalUrl}
+          href={mapExternalUrl}
           target="_blank"
           rel="noopener noreferrer"
           class="inline-flex shrink-0 items-center gap-2 text-sm text-text-primary transition-colors duration-300 hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
@@ -215,7 +301,7 @@ const currentYear = new Date().getFullYear();
 
       <div class="relative h-64 w-full overflow-hidden border border-border-subtle bg-bg-secondary sm:h-72 lg:h-80">
         <iframe
-          src={SITE_CONFIG.mapEmbedUrl}
+          src={mapEmbedUrl}
           title={`Карта расположения офиса ${SITE_CONFIG.brandName}`}
           loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"
@@ -226,7 +312,14 @@ const currentYear = new Date().getFullYear();
 
     <!-- Нижняя правовая строка (статичный футер, никаких фиксированных полос) -->
     <div class="flex flex-col justify-between gap-4 pt-8 text-xs text-text-muted sm:flex-row sm:items-center">
-      <p>&copy; {currentYear} {SITE_CONFIG.brandName}. Все права защищены.</p>
+      <div class="space-y-1">
+        <p>&copy; {currentYear} {SITE_CONFIG.brandName}. Все права защищены.</p>
+        {isLandscaping && (
+          <p class="text-[11px] text-text-muted">
+            {LANDSCAPING_CONTACTS.requisites}
+          </p>
+        )}
+      </div>
 
       <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
         {SITE_CONFIG.legalLinks.map((link) => (

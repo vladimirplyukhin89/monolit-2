@@ -1,14 +1,41 @@
 import { useId, useRef, useState, type KeyboardEvent } from 'react';
 import { FAQ_ITEMS, type FaqItem } from '../../data/faq';
 
+export interface FaqAsideSpec {
+  readonly label: string;
+  readonly value: string;
+}
+
 export interface FaqAccordionProps {
   readonly items?: readonly FaqItem[];
   readonly defaultOpenId?: string | null;
+  readonly asideBadge?: string;
+  readonly asideQuote?: string;
+  readonly asideDescription?: string;
+  readonly asideSpecs?: readonly FaqAsideSpec[];
+  readonly ctaLabel?: string;
+  readonly ctaHref?: string;
+  readonly ctaLeadTrigger?: string;
+  readonly ctaNote?: string;
 }
+
+const DEFAULT_ASIDE_SPECS: readonly FaqAsideSpec[] = [
+  { label: 'Смета', value: 'Фиксация за 24 часа' },
+  { label: 'Оплата', value: 'По факту этапов' },
+  { label: 'Гарантия', value: '2 года по договору' },
+] as const;
 
 export default function FaqAccordion({
   items = FAQ_ITEMS,
-  defaultOpenId = FAQ_ITEMS[0]?.id ?? null,
+  defaultOpenId = items[0]?.id ?? null,
+  asideBadge,
+  asideQuote = 'Спокойный ремонт начинается с\u00A0ясных договорённостей до\u00A0старта работ.',
+  asideDescription = 'Собрали честные ответы на вопросы о смете, сроках, закупках и приёмке этапов. Если у вас нестандартная планировка или особые требования — разберём их на консультации.',
+  asideSpecs = DEFAULT_ASIDE_SPECS,
+  ctaLabel = 'Рассчитать стоимость',
+  ctaHref = '/#quiz',
+  ctaLeadTrigger,
+  ctaNote = 'Предварительный расчёт займёт меньше минуты',
 }: FaqAccordionProps) {
   const baseId = useId();
   const [openId, setOpenId] = useState<string | null>(defaultOpenId);
@@ -55,40 +82,39 @@ export default function FaqAccordion({
       <aside className="lg:col-span-4">
         <div className="cursor-default border border-border-subtle bg-bg-secondary p-6 sm:p-8 lg:sticky lg:top-28">
           <span className="inline-flex cursor-default items-center bg-accent-muted px-3 py-1.5 text-[11px] font-medium uppercase leading-none tracking-[0.18em] text-accent select-none">
-            {items.length} ключевых ответов
+            {asideBadge ?? `${items.length} ключевых ответов`}
           </span>
 
           <p className="mt-5 font-serif text-2xl italic leading-snug text-text-primary sm:text-[1.75rem]">
-            Спокойный ремонт начинается с&nbsp;ясных договорённостей до&nbsp;старта работ.
+            {asideQuote}
           </p>
 
           <p className="mt-4 text-sm leading-relaxed text-text-secondary">
-            Собрали честные ответы на вопросы о смете, сроках, закупках и приёмке этапов. Если у
-            вас нестандартная планировка или особые требования — разберём их на консультации.
+            {asideDescription}
           </p>
 
           <dl className="mt-6 space-y-3 border-t border-border-subtle pt-5 text-xs">
-            <div className="flex items-baseline justify-between gap-4">
-              <dt className="uppercase tracking-[0.14em] text-text-muted">Смета</dt>
-              <dd className="font-medium text-text-primary">Фиксация за 24 часа</dd>
-            </div>
-            <div className="flex items-baseline justify-between gap-4">
-              <dt className="uppercase tracking-[0.14em] text-text-muted">Оплата</dt>
-              <dd className="font-medium text-text-primary">По факту этапов</dd>
-            </div>
-            <div className="flex items-baseline justify-between gap-4">
-              <dt className="uppercase tracking-[0.14em] text-text-muted">Гарантия</dt>
-              <dd className="font-medium text-text-primary">2 года по договору</dd>
-            </div>
+            {asideSpecs.map((spec) => (
+              <div
+                key={spec.label}
+                className="flex items-baseline justify-between gap-4"
+              >
+                <dt className="uppercase tracking-[0.14em] text-text-muted">
+                  {spec.label}
+                </dt>
+                <dd className="font-medium text-text-primary">{spec.value}</dd>
+              </div>
+            ))}
           </dl>
 
           {/* Кликабельна и имеет hover-эффект только кнопка внутри статичной карточки */}
           <div className="mt-7 border-t border-border-subtle pt-6">
             <a
-              href="/#quiz"
+              href={ctaHref}
+              data-lead-trigger={ctaLeadTrigger}
               className="inline-flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-sm bg-accent px-6 py-3.5 text-sm font-medium text-text-primary transition-colors duration-[350ms] ease-[var(--ease-editorial)] hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-secondary"
             >
-              <span>Рассчитать стоимость</span>
+              <span>{ctaLabel}</span>
               <svg
                 className="h-4 w-4"
                 viewBox="0 0 24 24"
@@ -104,7 +130,7 @@ export default function FaqAccordion({
               </svg>
             </a>
             <p className="mt-3 cursor-default text-center text-xs text-text-muted">
-              Предварительный расчёт займёт меньше минуты
+              {ctaNote}
             </p>
           </div>
         </div>

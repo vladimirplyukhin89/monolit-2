@@ -43,6 +43,31 @@ export interface SiteConfig {
   readonly legalLinks: readonly LegalLink[];
 }
 
+export interface PageSwitchItem {
+  readonly id: 'repair' | 'landscaping';
+  readonly label: string;
+  readonly shortLabel: string;
+  readonly href: string;
+  readonly description: string;
+}
+
+export const DIRECTION_PAGES: readonly PageSwitchItem[] = [
+  {
+    id: 'repair',
+    label: 'Ремонт квартир',
+    shortLabel: 'Ремонт',
+    href: '/',
+    description: 'Дизайн-проекты и комплексный ремонт квартир под ключ',
+  },
+  {
+    id: 'landscaping',
+    label: 'Благоустройство',
+    shortLabel: 'Благоустройство',
+    href: '/blagoustrojstvo',
+    description: 'Асфальтирование, брусчатка, отмостка и дренаж участков',
+  },
+] as const;
+
 export const MAIN_NAV_ITEMS: readonly NavItem[] = [
   { label: 'Главная', href: '/#hero', number: '01' },
   { label: 'О компании', href: '/#about', number: '02' },

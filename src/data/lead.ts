@@ -3,12 +3,18 @@ export type ConsultationTopicId =
   | 'design'
   | 'package'
   | 'estimate'
-  | 'supervision';
+  | 'supervision'
+  | 'asphalt'
+  | 'paving'
+  | 'blind-area'
+  | 'complex'
+  | 'visit-discount';
 
 export type PreferredContactChannelId =
   | 'phone'
   | 'telegram'
   | 'whatsapp'
+  | 'max'
   | 'meeting';
 
 export interface ConsultationTopicOption {
@@ -159,6 +165,58 @@ export const LEAD_MODAL_PRESETS: Record<string, LeadModalPreset> = {
       'Ответим в течение 15 минут в рабочее время, обсудим ваш объект и предложим понятный план действий.',
     submitLabel: 'Отправить заявку',
   },
+  'landscaping-header-cta': {
+    eyebrow: 'Благоустройство · Консультация',
+    titlePrefix: 'Обсудим ',
+    titleAccent: 'ваш участок',
+    subtitle:
+      'Оставьте контакты — инженер по благоустройству спокойно сориентирует по технологии, срокам и стоимости работ в Тюмени и области.',
+    submitLabel: 'Заказать консультацию',
+  },
+  'landscaping-hero-cta': {
+    eyebrow: 'Бесплатный выезд инженера',
+    titlePrefix: 'Рассчитаем ',
+    titleAccent: 'благоустройство',
+    subtitle:
+      'Приедем на участок с нивелиром, оценим грунты и уклоны, подготовим детализированную смету с прямыми ценами на материалы.',
+    submitLabel: 'Получить расчёт сметы',
+    defaultTopic: 'visit-discount',
+  },
+  'landscaping-offer': {
+    eyebrow: 'Специальные условия · −5%',
+    titlePrefix: 'Выезд на участок и ',
+    titleAccent: 'скидка\u00A05%',
+    subtitle:
+      'Инженер выполнит точный замер участка бесплатно, подготовит прозрачную смету и закрепит скидку 5% на комплекс работ при заключении договора.',
+    submitLabel: 'Закрепить скидку 5%',
+    defaultTopic: 'visit-discount',
+  },
+  'landscaping-before-after': {
+    eyebrow: 'Ориентир «До / После»',
+    titlePrefix: 'Рассчитаем похожий ',
+    titleAccent: 'проект участка',
+    subtitle:
+      'Подготовим смету и план работ под вашу площадь, тип грунта и желаемое покрытие — от дорожек и отмостки до комплексного благоустройства.',
+    submitLabel: 'Рассчитать под мой участок',
+    defaultTopic: 'complex',
+  },
+  'landscaping-gallery': {
+    eyebrow: 'Ориентир из галереи работ',
+    titlePrefix: 'Смета на похожее ',
+    titleAccent: 'решение',
+    subtitle:
+      'Рассчитаем стоимость материалов и монтажа для вашего участка с учётом рельефа, нагрузки и прямых поставок с заводов.',
+    submitLabel: 'Получить расчёт',
+    defaultTopic: 'paving',
+  },
+  'landscaping-footer-cta': {
+    eyebrow: 'Благоустройство · Монолит',
+    titlePrefix: 'Начнём ',
+    titleAccent: 'с\u00A0разговора',
+    subtitle:
+      'Свяжемся удобным способом в рабочее время, ответим на вопросы и согласуем бесплатный выезд специалиста на участок.',
+    submitLabel: 'Отправить заявку',
+  },
 };
 
 export const DEFAULT_LEAD_MODAL_PRESET: LeadModalPreset =
@@ -171,8 +229,12 @@ export function getLeadModalPreset(source?: string): LeadModalPreset {
   return LEAD_MODAL_PRESETS[source] ?? DEFAULT_LEAD_MODAL_PRESET;
 }
 
-export function getConsultationTopicLabel(id: ConsultationTopicId): string {
+export function getConsultationTopicLabel(
+  id: ConsultationTopicId,
+  topics: readonly ConsultationTopicOption[] = CONSULTATION_TOPICS,
+): string {
   return (
+    topics.find((topic) => topic.id === id)?.label ??
     CONSULTATION_TOPICS.find((topic) => topic.id === id)?.label ??
     'Консультация'
   );
@@ -180,11 +242,21 @@ export function getConsultationTopicLabel(id: ConsultationTopicId): string {
 
 export function getPreferredChannelLabel(
   id: PreferredContactChannelId,
+  channels: readonly PreferredContactChannelOption[] = PREFERRED_CONTACT_CHANNELS,
 ): string {
-  return (
-    PREFERRED_CONTACT_CHANNELS.find((channel) => channel.id === id)?.label ??
-    'Звонок'
-  );
+  const found =
+    channels.find((channel) => channel.id === id) ??
+    PREFERRED_CONTACT_CHANNELS.find((channel) => channel.id === id);
+
+  if (found) {
+    return found.label;
+  }
+
+  if (id === 'max') {
+    return 'Max';
+  }
+
+  return 'Звонок';
 }
 
 export function validateLeadContact(

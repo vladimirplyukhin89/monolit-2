@@ -1,0 +1,856 @@
+---
+import { Image, getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Layout from '../layouts/Layout.astro';
+import BeforeAfterSlider from '../components/react/BeforeAfterSlider';
+import TabbedGallery, { type GalleryTab } from '../components/react/TabbedGallery';
+import FaqAccordion from '../components/react/FaqAccordion';
+import ConsultationSection from '../components/react/ConsultationSection';
+
+import beforeLandscapingImage from '../assets/images/landscaping/before-after/before.jpeg';
+import afterLandscapingImage from '../assets/images/landscaping/before-after/after.jpeg';
+import asphaltWorkImage from '../assets/images/landscaping/works/asphalt/asphalt.JPG';
+import path1WorkImage from '../assets/images/landscaping/works/paths/path-1.png';
+import path2WorkImage from '../assets/images/landscaping/works/paths/path-2.png';
+import materialsSupplyImage from '../assets/images/landscaping/materials/объект-3.png';
+
+import {
+  LANDSCAPING_ABOUT_DATA,
+  LANDSCAPING_BEFORE_AFTER,
+  LANDSCAPING_CONSULTATION_STEPS,
+  LANDSCAPING_CONSULTATION_TOPICS,
+  LANDSCAPING_CONTACT_CHANNELS,
+  LANDSCAPING_CONTACTS,
+  LANDSCAPING_FAQ_ITEMS,
+  LANDSCAPING_HERO_TAGS,
+  LANDSCAPING_MATERIALS_DATA,
+  LANDSCAPING_OFFER,
+  LANDSCAPING_PAGE_META,
+  LANDSCAPING_REVIEWS,
+  LANDSCAPING_SERVICES,
+  LANDSCAPING_TRUST_REASONS,
+  LANDSCAPING_WORK_CATEGORIES,
+  type LandscapingWorkImageKey,
+} from '../data/landscaping';
+
+const WORK_IMAGE_ASSETS: Record<LandscapingWorkImageKey, ImageMetadata> = {
+  after: afterLandscapingImage,
+  asphalt: asphaltWorkImage,
+  'path-1': path1WorkImage,
+  'path-2': path2WorkImage,
+  materials: materialsSupplyImage,
+};
+
+const [
+  optimizedBefore,
+  optimizedAfter,
+  optimizedAsphalt,
+  optimizedPath1,
+  optimizedPath2,
+  optimizedMaterials,
+] = await Promise.all([
+  getImage({ src: beforeLandscapingImage, width: 1280, format: 'webp', quality: 86 }),
+  getImage({ src: afterLandscapingImage, width: 1280, format: 'webp', quality: 86 }),
+  getImage({ src: asphaltWorkImage, width: 1280, format: 'webp', quality: 84 }),
+  getImage({ src: path1WorkImage, width: 1280, format: 'webp', quality: 84 }),
+  getImage({ src: path2WorkImage, width: 1280, format: 'webp', quality: 84 }),
+  getImage({ src: materialsSupplyImage, width: 1280, format: 'webp', quality: 84 }),
+]);
+
+const OPTIMIZED_WORK_SRC: Record<LandscapingWorkImageKey, string> = {
+  after: optimizedAfter.src,
+  asphalt: optimizedAsphalt.src,
+  'path-1': optimizedPath1.src,
+  'path-2': optimizedPath2.src,
+  materials: optimizedMaterials.src,
+};
+
+const workGalleryTabs: readonly GalleryTab[] = LANDSCAPING_WORK_CATEGORIES.map(
+  (category) => ({
+    id: category.id,
+    number: category.number,
+    label: category.label,
+    slides: category.slides.map((slide) => ({
+      id: slide.id,
+      imageSrc: OPTIMIZED_WORK_SRC[slide.imageKey],
+      imageAlt: slide.imageAlt,
+      title: slide.title,
+      location: slide.location,
+      description: slide.description,
+      specs: slide.specs,
+    })),
+  }),
+);
+
+const reviewGalleryTabs: readonly GalleryTab[] = [
+  {
+    id: 'client-reviews',
+    number: '01',
+    label: 'Проверенные отзывы клиентов · 8 объектов',
+    slides: LANDSCAPING_REVIEWS.map((review) => ({
+      id: review.id,
+      imageSrc: OPTIMIZED_WORK_SRC[review.imageKey],
+      imageAlt: review.imageAlt,
+      title: review.author,
+      author: review.author,
+      location: review.location,
+      service: review.service,
+      date: review.date,
+      source: review.source,
+      rating: review.rating,
+      description: review.quote,
+      resultNote: review.resultNote,
+    })),
+  },
+];
+
+const landscapingFaqAsideSpecs = [
+  { label: 'Замер', value: 'Выезд с нивелиром 0 ₽' },
+  { label: 'Оплата', value: 'По факту этапов' },
+  { label: 'Гарантия', value: 'До 5 лет по договору' },
+] as const;
+
+const landscapingConsultationContactInfo = {
+  eyebrow: 'Прямая связь · Благоустройство',
+  phoneDisplay: LANDSCAPING_CONTACTS.phoneDisplay,
+  phoneHref: LANDSCAPING_CONTACTS.phoneHref,
+  email: LANDSCAPING_CONTACTS.email,
+  address: LANDSCAPING_CONTACTS.address,
+  scheduleNote: 'Пн — Пт: 08:00 — 20:00 · Сб: 09:00 — 18:00',
+  requisites: LANDSCAPING_CONTACTS.requisites,
+} as const;
+---
+
+<Layout
+  title={LANDSCAPING_PAGE_META.title}
+  description={LANDSCAPING_PAGE_META.description}
+  currentPath="/blagoustrojstvo"
+>
+  <!-- 01. HERO: статичный бейдж и фиксированные теги направлений без анимации при скролле -->
+  <section
+    id="hero"
+    class="relative overflow-hidden border-b border-border-subtle bg-bg-primary"
+  >
+    <div class="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none">
+      <Image
+        src={WORK_IMAGE_ASSETS.after}
+        alt="Благоустроенный загородный участок с мощением брусчаткой, ступенями, газоном и подсветкой в Тюмени"
+        widths={[768, 1280, 1920]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+        class="hero-bg-zoom h-full w-full object-cover object-center opacity-55"
+      />
+      <div
+        aria-hidden="true"
+        class="absolute inset-0 bg-gradient-to-r from-bg-primary via-bg-primary/88 to-bg-primary/45"
+      ></div>
+      <div
+        aria-hidden="true"
+        class="absolute inset-0 bg-gradient-to-t from-bg-primary via-bg-primary/40 to-bg-primary/70"
+      ></div>
+    </div>
+
+    <div class="relative z-10 mx-auto max-w-7xl px-5 pt-12 pb-14 sm:px-8 sm:pt-16 sm:pb-16 lg:px-10 lg:pt-20 lg:pb-18">
+      <div class="max-w-3xl">
+        <!-- Статичный информационный бейдж без scroll-анимации и без hover -->
+        <div class="mb-6 flex flex-wrap items-center gap-3">
+          <span class="inline-flex h-7 cursor-default items-center gap-2 bg-accent-muted px-3 text-[11px] font-medium uppercase leading-none tracking-[0.18em] text-accent select-none">
+            <span class="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true"></span>
+            <span>Тюмень и область · Сезон 2026</span>
+          </span>
+          <span class="cursor-default text-xs uppercase leading-none tracking-[0.2em] text-text-muted select-none">
+            Благоустройство под ключ
+          </span>
+        </div>
+
+        <h1 class="text-4xl font-normal leading-[1.08] tracking-tight text-text-primary sm:text-5xl lg:text-[3.75rem]">
+          Благоустройство участка,
+          <br class="hidden sm:inline" />
+          {' '}в&nbsp;который{' '}
+          <span class="font-serif text-[1.12em] font-medium italic whitespace-nowrap text-text-primary">
+            хочется возвращаться
+          </span>
+        </h1>
+
+        <p class="mt-5 max-w-2xl text-base leading-relaxed text-text-secondary sm:text-lg">
+          Асфальтирование, укладка брусчатки, установка бордюров, утеплённая отмостка и дренаж
+          по&nbsp;технологии СНиП. Своя техника, прямые поставки материалов и гарантия до&nbsp;5&nbsp;лет.
+        </p>
+
+        <!-- Чёткое разделение: кликабельная CTA-кнопка + спокойная статичная заметка -->
+        <div class="mt-8 flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-7">
+          <a
+            href="#contact-form"
+            data-lead-trigger="landscaping-hero-cta"
+            class="inline-flex cursor-pointer items-center justify-center gap-2.5 rounded-sm bg-accent px-7 py-4 text-sm font-medium text-text-primary transition-colors duration-[350ms] ease-[var(--ease-editorial)] hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
+          >
+            <span>Рассчитать стоимость</span>
+            <svg
+              class="h-4 w-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M5 12h14" />
+              <path d="m13 6 6 6-6 6" />
+            </svg>
+          </a>
+
+          <p class="cursor-default border-l border-border-subtle pl-4 text-xs leading-relaxed text-text-muted">
+            Бесплатный выезд инженера с нивелиром
+            <span class="block text-text-secondary">
+              и расчёт точной сметы по вашему участку
+            </span>
+          </p>
+        </div>
+
+        <!-- Быстрая прямая связь: телефон + Telegram / Max -->
+        <div class="mt-7 flex flex-wrap items-center gap-x-6 gap-y-2.5 text-sm">
+          <a
+            href={LANDSCAPING_CONTACTS.phoneHref}
+            class="font-medium tracking-tight text-text-primary transition-colors duration-300 hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+          >
+            {LANDSCAPING_CONTACTS.phoneDisplay}
+          </a>
+          <span class="hidden h-3.5 w-px bg-border-subtle sm:inline-block" aria-hidden="true"></span>
+          <div class="flex items-center gap-4 text-xs text-text-secondary">
+            {LANDSCAPING_CONTACTS.messengers.map((messenger) => (
+              <a
+                href={messenger.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="underline decoration-border-subtle underline-offset-4 transition-colors duration-300 hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+              >
+                Написать в {messenger.shortLabel}
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Фиксированные теги направлений: без анимаций, параллакса, сдвигов и hover-эффектов -->
+      <div
+        class="mt-10 border-t border-border-subtle/80 pt-6 lg:mt-12"
+        aria-label="Направления благоустройства"
+      >
+        <p class="cursor-default text-[11px] uppercase leading-4 tracking-[0.22em] text-text-muted">
+          Направления работ
+        </p>
+        <ul class="mt-3 flex flex-wrap items-center gap-2.5">
+          {LANDSCAPING_HERO_TAGS.map((tag) => (
+            <li class="inline-flex h-8 cursor-default items-center gap-2 border border-border-subtle bg-bg-secondary/90 px-3.5 text-xs font-normal leading-none tracking-wide text-text-secondary whitespace-nowrap select-none">
+              <span
+                class="font-serif text-[13px] italic leading-none text-text-muted"
+                aria-hidden="true"
+              >
+                {tag.number}
+              </span>
+              <span class="leading-none">{tag.label}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02. ПОЧЕМУ НАМ ДОВЕРЯЮТ (статичные карточки без hover-эффектов) -->
+  <section
+    id="why-us"
+    class="scroll-mt-20 border-b border-border-subtle bg-bg-primary py-20 sm:py-28 lg:py-32"
+  >
+    <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+      <div class="flex flex-col justify-between gap-6 border-b border-border-subtle pb-10 lg:flex-row lg:items-end lg:pb-12">
+        <div class="reveal max-w-2xl">
+          <p class="mb-4 cursor-default text-xs uppercase tracking-[0.22em] text-text-muted">
+            Подход к работе · 01 — 06
+          </p>
+          <h2 class="text-3xl font-normal leading-[1.12] tracking-tight text-text-primary sm:text-4xl lg:text-5xl">
+            Почему нам{' '}
+            <span class="font-serif text-[1.12em] font-medium italic text-text-primary">
+              доверяют участки
+            </span>
+          </h2>
+        </div>
+
+        <p class="reveal reveal-delay-100 max-w-md text-sm leading-relaxed text-text-secondary sm:text-base">
+          Строим основания с запасом прочности под сибирские морозы и весенний паводок, фиксируем
+          условия в договоре и сдаём объект точно в срок.
+        </p>
+      </div>
+
+      <div class="mt-12 grid grid-cols-1 gap-px border border-border-subtle bg-border-subtle md:grid-cols-2 lg:mt-14 lg:grid-cols-3">
+        {LANDSCAPING_TRUST_REASONS.map((reason, index) => {
+          const delayClass =
+            index % 3 === 1
+              ? 'reveal-delay-100'
+              : index % 3 === 2
+                ? 'reveal-delay-200'
+                : '';
+
+          return (
+            <article class="flex h-full cursor-default flex-col justify-between bg-bg-secondary p-7 sm:p-8">
+              <div class={`reveal ${delayClass} flex h-full flex-col justify-between`}>
+                <div>
+                  <div class="flex items-center justify-between gap-4">
+                    <span class="font-serif text-lg italic leading-none text-text-muted">
+                      {reason.number}
+                    </span>
+                    <span class="cursor-default text-[11px] uppercase leading-none tracking-[0.18em] text-text-muted select-none">
+                      {reason.category}
+                    </span>
+                  </div>
+
+                  <h3 class="mt-6 text-xl font-normal leading-snug tracking-tight text-text-primary">
+                    {reason.title}
+                  </h3>
+
+                  <p class="mt-3 text-sm leading-relaxed text-text-secondary">
+                    {reason.description}
+                  </p>
+                </div>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- 03. КАТАЛОГ УСЛУГ С ЦЕНАМИ (строго статичные карточки, запрещены hover-эффекты) -->
+  <section
+    id="services"
+    class="scroll-mt-20 border-b border-border-subtle bg-bg-primary py-20 sm:py-28 lg:py-32"
+  >
+    <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+      <div class="flex flex-col justify-between gap-6 border-b border-border-subtle pb-10 lg:flex-row lg:items-end lg:pb-12">
+        <div class="reveal max-w-2xl">
+          <p class="mb-4 cursor-default text-xs uppercase tracking-[0.22em] text-text-muted">
+            Каталог услуг и цены · 01 — 06
+          </p>
+          <h2 class="text-3xl font-normal leading-[1.12] tracking-tight text-text-primary sm:text-4xl lg:text-5xl">
+            Прозрачные расценки — от&nbsp;основания{' '}
+            <span class="font-serif text-[1.12em] font-medium italic text-text-primary">
+              до&nbsp;финишного покрытия
+            </span>
+          </h2>
+        </div>
+
+        <p class="reveal reveal-delay-100 max-w-md text-sm leading-relaxed text-text-secondary sm:text-base">
+          Итоговую стоимость рассчитываем после замера нивелиром с учётом типа грунта, площади и
+          выбранного материала. Цены фиксируются в договоре.
+        </p>
+      </div>
+
+      <div class="mt-12 grid grid-cols-1 gap-px border border-border-subtle bg-border-subtle md:grid-cols-2 lg:mt-14 lg:grid-cols-3">
+        {LANDSCAPING_SERVICES.map((service, index) => {
+          const delayClass =
+            index % 3 === 1
+              ? 'reveal-delay-100'
+              : index % 3 === 2
+                ? 'reveal-delay-200'
+                : '';
+
+          return (
+            <article class="flex h-full cursor-default flex-col justify-between bg-bg-secondary p-7 sm:p-8">
+              <div class={`reveal ${delayClass} flex h-full flex-col justify-between`}>
+                <div>
+                  <div class="flex items-center justify-between gap-4">
+                    <span class="font-serif text-lg italic leading-none text-text-muted">
+                      {service.number}
+                    </span>
+
+                    {service.isFeatured ? (
+                      <span class="inline-flex cursor-default items-center bg-accent-muted px-2.5 py-1 text-[11px] font-medium uppercase leading-none tracking-[0.16em] text-accent select-none">
+                        {service.category}
+                      </span>
+                    ) : (
+                      <span class="cursor-default text-[11px] uppercase leading-none tracking-[0.18em] text-text-muted select-none">
+                        {service.category}
+                      </span>
+                    )}
+                  </div>
+
+                  <h3 class="mt-6 text-xl font-normal leading-snug tracking-tight text-text-primary">
+                    {service.title}
+                  </h3>
+
+                  <p class="mt-3 text-sm leading-relaxed text-text-secondary">
+                    {service.description}
+                  </p>
+
+                  <ul class="mt-6 space-y-2.5 border-t border-border-subtle pt-5">
+                    {service.deliverables.map((point) => (
+                      <li class="flex items-start gap-2.5 text-xs leading-relaxed text-text-secondary">
+                        <span
+                          class="mt-2 h-px w-3 shrink-0 bg-text-muted"
+                          aria-hidden="true"
+                        ></span>
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div class="mt-8 flex items-baseline justify-between gap-4 border-t border-border-subtle pt-5">
+                  <span class="text-base font-medium text-text-primary">
+                    {service.priceLabel}
+                  </span>
+                  <span class="text-xs text-text-muted">
+                    {service.timelineLabel}
+                  </span>
+                </div>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- 04. ИНТЕРАКТИВНЫЙ БЛОК «ДО / ПОСЛЕ» (React client:visible) -->
+  <section
+    id="before-after"
+    class="scroll-mt-20 border-b border-border-subtle bg-bg-primary py-20 sm:py-28 lg:py-32"
+  >
+    <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+      <div class="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-center lg:gap-10">
+        <div class="reveal lg:col-span-5">
+          <span class="inline-flex cursor-default items-center bg-accent-muted px-3 py-1.5 text-[11px] font-medium uppercase leading-none tracking-[0.18em] text-accent select-none">
+            {LANDSCAPING_BEFORE_AFTER.badge}
+          </span>
+
+          <h2 class="mt-5 text-3xl font-normal leading-[1.14] tracking-tight text-text-primary sm:text-4xl">
+            {LANDSCAPING_BEFORE_AFTER.titlePrefix}
+            <span class="font-serif text-[1.12em] font-medium italic text-text-primary">
+              {LANDSCAPING_BEFORE_AFTER.titleAccent}
+            </span>
+          </h2>
+
+          <p class="mt-4 text-sm leading-relaxed text-text-secondary sm:text-base">
+            {LANDSCAPING_BEFORE_AFTER.editorialNote}
+          </p>
+
+          <dl class="mt-6 grid grid-cols-2 gap-px border border-border-subtle bg-border-subtle">
+            <div class="cursor-default bg-bg-secondary px-4 py-3">
+              <dt class="text-[11px] uppercase tracking-[0.16em] text-text-muted">
+                Площадь
+              </dt>
+              <dd class="mt-1 text-sm font-medium text-text-primary">
+                {LANDSCAPING_BEFORE_AFTER.specs.area}
+              </dd>
+            </div>
+            <div class="cursor-default bg-bg-secondary px-4 py-3">
+              <dt class="text-[11px] uppercase tracking-[0.16em] text-text-muted">
+                Срок работ
+              </dt>
+              <dd class="mt-1 text-sm font-medium text-text-primary">
+                {LANDSCAPING_BEFORE_AFTER.specs.timeline}
+              </dd>
+            </div>
+            <div class="cursor-default bg-bg-secondary px-4 py-3">
+              <dt class="text-[11px] uppercase tracking-[0.16em] text-text-muted">
+                Локация
+              </dt>
+              <dd class="mt-1 text-sm font-medium text-text-primary">
+                {LANDSCAPING_BEFORE_AFTER.specs.location}
+              </dd>
+            </div>
+            <div class="cursor-default bg-bg-secondary px-4 py-3">
+              <dt class="text-[11px] uppercase tracking-[0.16em] text-text-muted">
+                Гарантия
+              </dt>
+              <dd class="mt-1 text-sm font-medium text-text-primary">
+                {LANDSCAPING_BEFORE_AFTER.specs.warranty}
+              </dd>
+            </div>
+          </dl>
+
+          <div class="mt-7">
+            <button
+              type="button"
+              data-lead-trigger="landscaping-before-after"
+              data-lead-complex={LANDSCAPING_BEFORE_AFTER.projectComplex}
+              data-lead-title={`${LANDSCAPING_BEFORE_AFTER.titlePrefix}${LANDSCAPING_BEFORE_AFTER.titleAccent}`}
+              data-lead-area={LANDSCAPING_BEFORE_AFTER.specs.area}
+              class="inline-flex cursor-pointer items-center justify-center gap-2.5 rounded-sm bg-accent px-6 py-3.5 text-sm font-medium text-text-primary transition-colors duration-[350ms] ease-[var(--ease-editorial)] hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
+            >
+              <span>{LANDSCAPING_BEFORE_AFTER.ctaLabel}</span>
+              <svg
+                class="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14" />
+                <path d="m13 6 6 6-6 6" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="reveal reveal-delay-100 lg:col-span-7">
+          <BeforeAfterSlider
+            client:visible
+            beforeSrc={optimizedBefore.src}
+            afterSrc={optimizedAfter.src}
+            beforeAlt={LANDSCAPING_BEFORE_AFTER.beforeAlt}
+            afterAlt={LANDSCAPING_BEFORE_AFTER.afterAlt}
+            beforeLabel={LANDSCAPING_BEFORE_AFTER.beforeLabel}
+            afterLabel={LANDSCAPING_BEFORE_AFTER.afterLabel}
+            initialPosition={50}
+            ariaLabel="Сравнение участка до и после благоустройства"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05. ГАЛЕРЕЯ РАБОТ ПО КАТЕГОРИЯМ (TabbedGallery.tsx client:visible) -->
+  <section
+    id="works"
+    class="scroll-mt-20 border-b border-border-subtle bg-bg-primary py-20 sm:py-28 lg:py-32"
+  >
+    <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+      <div class="flex flex-col justify-between gap-6 border-b border-border-subtle pb-10 lg:flex-row lg:items-end lg:pb-12">
+        <div class="reveal max-w-2xl">
+          <p class="mb-4 cursor-default text-xs uppercase tracking-[0.22em] text-text-muted">
+            Выполненные объекты · 01 — 04
+          </p>
+          <h2 class="text-3xl font-normal leading-[1.12] tracking-tight text-text-primary sm:text-4xl lg:text-5xl">
+            Галерея работ{' '}
+            <span class="font-serif text-[1.12em] font-medium italic text-text-primary">
+              по&nbsp;категориям
+            </span>
+          </h2>
+        </div>
+
+        <p class="reveal reveal-delay-100 max-w-md text-sm leading-relaxed text-text-secondary sm:text-base">
+          Переключайте направления, чтобы посмотреть детали мощения, примыканий, бордюров и
+          асфальтовых покрытий на реальных объектах в Тюмени и области.
+        </p>
+      </div>
+
+      <div class="mt-12 lg:mt-14">
+        <TabbedGallery
+          client:visible
+          tabs={workGalleryTabs}
+          variant="works"
+          ariaLabel="Галерея выполненных работ по благоустройству"
+          ctaLabel="Рассчитать похожий объект"
+          leadSource="landscaping-gallery"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- 06. ПРЯМЫЕ ПОСТАВКИ МАТЕРИАЛОВ + АКЦЕНТНАЯ ПЛАШКА «ВЫЕЗД И СКИДКА 5%» -->
+  <section
+    id="materials"
+    class="scroll-mt-20 border-b border-border-subtle bg-bg-primary py-20 sm:py-28 lg:py-32"
+  >
+    <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+      <div class="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-center lg:gap-12">
+        <div class="reveal lg:col-span-6">
+          <div class="relative aspect-[4/3] overflow-hidden border border-border-subtle bg-bg-secondary">
+            <Image
+              src={WORK_IMAGE_ASSETS.materials}
+              alt={LANDSCAPING_MATERIALS_DATA.imageAlt}
+              widths={[640, 960, 1280]}
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              loading="lazy"
+              decoding="async"
+              class="h-full w-full object-cover object-center"
+            />
+            <div
+              aria-hidden="true"
+              class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-bg-primary/75 via-bg-primary/20 to-transparent"
+            ></div>
+            <span class="pointer-events-none absolute bottom-4 left-4 inline-flex cursor-default items-center border border-border-subtle bg-bg-primary/85 px-3 py-1.5 text-[11px] uppercase leading-none tracking-[0.16em] text-text-secondary backdrop-blur-sm select-none">
+              Заводские паспорта качества
+            </span>
+          </div>
+        </div>
+
+        <div class="reveal reveal-delay-100 lg:col-span-6">
+          <p class="mb-4 cursor-default text-xs uppercase tracking-[0.22em] text-text-muted">
+            {LANDSCAPING_MATERIALS_DATA.eyebrow}
+          </p>
+
+          <h2 class="text-3xl font-normal leading-[1.12] tracking-tight text-text-primary sm:text-4xl">
+            {LANDSCAPING_MATERIALS_DATA.titlePrefix}
+            <span class="font-serif text-[1.12em] font-medium italic text-text-primary">
+              {LANDSCAPING_MATERIALS_DATA.titleAccent}
+            </span>
+          </h2>
+
+          <p class="mt-4 text-sm leading-relaxed text-text-secondary sm:text-base">
+            {LANDSCAPING_MATERIALS_DATA.description}
+          </p>
+
+          <!-- Статичный список фактов снабжения: строго без hover -->
+          <div class="mt-8 divide-y divide-border-subtle border-y border-border-subtle">
+            {LANDSCAPING_MATERIALS_DATA.facts.map((fact) => (
+              <div class="flex cursor-default items-start gap-4 py-5">
+                <span
+                  aria-hidden="true"
+                  class="mt-0.5 shrink-0 font-serif text-base italic leading-none text-accent"
+                >
+                  {fact.number}
+                </span>
+                <div>
+                  <h3 class="text-base font-medium leading-snug text-text-primary">
+                    {fact.title}
+                  </h3>
+                  <p class="mt-1.5 text-xs leading-relaxed text-text-secondary sm:text-sm">
+                    {fact.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Спокойная акцентная плашка со скидкой 5%: плашка строго статична, кликабельна только кнопка -->
+      <aside
+        id="offer"
+        aria-labelledby="landscaping-offer-title"
+        class="reveal mt-16 cursor-default border border-border-accent bg-bg-elevated p-7 sm:p-10 lg:mt-20 lg:p-12"
+      >
+        <div class="flex flex-col justify-between gap-8 lg:flex-row lg:items-center lg:gap-12">
+          <div class="max-w-2xl">
+            <span class="inline-flex cursor-default items-center bg-accent-muted px-3 py-1.5 text-[11px] font-medium uppercase leading-none tracking-[0.18em] text-accent select-none">
+              {LANDSCAPING_OFFER.badge}
+            </span>
+
+            <h3
+              id="landscaping-offer-title"
+              class="mt-5 text-2xl font-normal leading-[1.18] tracking-tight text-text-primary sm:text-3xl"
+            >
+              {LANDSCAPING_OFFER.titlePrefix}
+              <span class="font-serif text-[1.12em] font-medium italic text-text-primary">
+                {LANDSCAPING_OFFER.titleAccent}
+              </span>
+            </h3>
+
+            <p class="mt-3.5 text-sm leading-relaxed text-text-secondary sm:text-base">
+              {LANDSCAPING_OFFER.description}
+            </p>
+
+            <ul class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2.5 text-xs text-text-muted">
+              {LANDSCAPING_OFFER.highlights.map((item) => (
+                <li class="inline-flex cursor-default items-center gap-2">
+                  <span class="h-1 w-1 rounded-full bg-accent" aria-hidden="true"></span>
+                  <span>{item.label}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="flex shrink-0 flex-col items-start gap-3 lg:items-end">
+            <a
+              href={LANDSCAPING_OFFER.ctaHref}
+              data-lead-trigger="landscaping-offer"
+              class="inline-flex cursor-pointer items-center justify-center gap-2.5 rounded-sm bg-accent px-7 py-4 text-sm font-medium text-text-primary transition-colors duration-[350ms] ease-[var(--ease-editorial)] hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-elevated"
+            >
+              <span>{LANDSCAPING_OFFER.ctaLabel}</span>
+              <svg
+                class="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14" />
+                <path d="m13 6 6 6-6 6" />
+              </svg>
+            </a>
+            <p class="cursor-default text-xs text-text-muted">
+              {LANDSCAPING_OFFER.note}
+            </p>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- 07. О НАС СО СТАТИСТИКОЙ (300+ объектов, 5+ лет опыта, гарантия до 5 лет; карточки статичны) -->
+  <section
+    id="about"
+    class="scroll-mt-20 border-b border-border-subtle bg-bg-primary py-20 sm:py-28 lg:py-32"
+  >
+    <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+      <div class="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-12">
+        <div class="reveal lg:col-span-5">
+          <p class="mb-4 cursor-default text-xs uppercase tracking-[0.22em] text-text-muted">
+            {LANDSCAPING_ABOUT_DATA.eyebrow}
+          </p>
+
+          <h2 class="text-3xl font-normal leading-[1.12] tracking-tight text-text-primary sm:text-4xl lg:text-5xl">
+            {LANDSCAPING_ABOUT_DATA.titlePrefix}
+            <span class="font-serif text-[1.12em] font-medium italic text-text-primary">
+              {LANDSCAPING_ABOUT_DATA.titleAccent}
+            </span>
+          </h2>
+        </div>
+
+        <div class="reveal reveal-delay-100 space-y-5 lg:col-span-7">
+          <p class="font-serif text-2xl italic leading-snug text-text-primary sm:text-[1.7rem]">
+            {LANDSCAPING_ABOUT_DATA.editorialLead}
+          </p>
+
+          <p class="text-sm leading-relaxed text-text-secondary sm:text-base">
+            {LANDSCAPING_ABOUT_DATA.editorialBody}
+          </p>
+
+          <div class="flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-border-subtle pt-5 text-xs text-text-muted">
+            <span class="cursor-default">{LANDSCAPING_CONTACTS.address}</span>
+            <span class="hidden h-3 w-px bg-border-subtle sm:inline-block" aria-hidden="true"></span>
+            <span class="cursor-default">{LANDSCAPING_CONTACTS.requisites}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Карточки статистики: строго статичные, без hover-эффектов -->
+      <dl class="mt-12 grid grid-cols-1 gap-px border border-border-subtle bg-border-subtle md:grid-cols-3 lg:mt-16">
+        {LANDSCAPING_ABOUT_DATA.stats.map((stat, index) => {
+          const delayClass =
+            index === 1 ? 'reveal-delay-100' : index === 2 ? 'reveal-delay-200' : '';
+
+          return (
+            <div class="cursor-default bg-bg-secondary p-7 sm:p-9">
+              <div class={`reveal ${delayClass}`}>
+                <span
+                  aria-hidden="true"
+                  class="font-serif text-base italic leading-none text-text-muted"
+                >
+                  {stat.number}
+                </span>
+                <dt class="mt-5 font-serif text-4xl font-medium italic leading-none tracking-tight text-text-primary sm:text-5xl">
+                  {stat.value}
+                </dt>
+                <dd class="mt-3">
+                  <span class="block text-base font-medium text-text-primary">
+                    {stat.label}
+                  </span>
+                  <span class="mt-2 block text-xs leading-relaxed text-text-secondary sm:text-sm">
+                    {stat.note}
+                  </span>
+                </dd>
+              </div>
+            </div>
+          );
+        })}
+      </dl>
+    </div>
+  </section>
+
+  <!-- 08. ОТЗЫВЫ КЛИЕНТОВ (8 отзывов на базе TabbedGallery.tsx client:visible) -->
+  <section
+    id="reviews"
+    class="scroll-mt-20 border-b border-border-subtle bg-bg-primary py-20 sm:py-28 lg:py-32"
+  >
+    <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+      <div class="flex flex-col justify-between gap-6 border-b border-border-subtle pb-10 lg:flex-row lg:items-end lg:pb-12">
+        <div class="reveal max-w-2xl">
+          <p class="mb-4 cursor-default text-xs uppercase tracking-[0.22em] text-text-muted">
+            Отзывы клиентов · 01 — 08
+          </p>
+          <h2 class="text-3xl font-normal leading-[1.12] tracking-tight text-text-primary sm:text-4xl lg:text-5xl">
+            Что говорят владельцы{' '}
+            <span class="font-serif text-[1.12em] font-medium italic text-text-primary">
+              готовых участков
+            </span>
+          </h2>
+        </div>
+
+        <p class="reveal reveal-delay-100 max-w-md text-sm leading-relaxed text-text-secondary sm:text-base">
+          Восемь историй из Тюмени и коттеджных посёлков области — о сроках, прозрачной смете и
+          том, как покрытия держат сибирскую весну.
+        </p>
+      </div>
+
+      <div class="mt-12 lg:mt-14">
+        <TabbedGallery
+          client:visible
+          tabs={reviewGalleryTabs}
+          variant="reviews"
+          ariaLabel="Отзывы клиентов о благоустройстве участков"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- 09. ЧАСТЫЕ ВОПРОСЫ (FaqAccordion.tsx client:visible, 7 ключевых вопросов) -->
+  <section
+    id="faq"
+    class="scroll-mt-20 border-b border-border-subtle bg-bg-primary py-20 sm:py-28 lg:py-32"
+  >
+    <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+      <div class="flex flex-col justify-between gap-6 border-b border-border-subtle pb-10 lg:flex-row lg:items-end lg:pb-12">
+        <div class="reveal max-w-2xl">
+          <p class="mb-4 cursor-default text-xs uppercase tracking-[0.22em] text-text-muted">
+            Частые вопросы · 01 — 07
+          </p>
+          <h2 class="text-3xl font-normal leading-[1.12] tracking-tight text-text-primary sm:text-4xl lg:text-5xl">
+            Отвечаем на важные{' '}
+            <span class="font-serif text-[1.12em] font-medium italic text-text-primary">
+              вопросы до&nbsp;старта
+            </span>
+          </h2>
+        </div>
+
+        <p class="reveal reveal-delay-100 max-w-md text-sm leading-relaxed text-text-secondary sm:text-base">
+          Прозрачные условия по оплате, срокам, гарантии, договору и работе на сложных тюменских
+          грунтах.
+        </p>
+      </div>
+
+      <div class="mt-12 lg:mt-14">
+        <FaqAccordion
+          client:visible
+          items={LANDSCAPING_FAQ_ITEMS}
+          defaultOpenId={LANDSCAPING_FAQ_ITEMS[0]?.id ?? null}
+          asideBadge="7 ключевых ответов"
+          asideQuote="Надёжное благоустройство начинается с\u00A0правильного основания и\u00A0ясного договора."
+          asideDescription="Собрали честные ответы о поэтапной оплате, гарантии до 5 лет, сроках и работе с грунтовыми водами. Остались вопросы — разберём на выезде."
+          asideSpecs={landscapingFaqAsideSpecs}
+          ctaLabel="Заказать бесплатный выезд"
+          ctaHref="#contact-form"
+          ctaLeadTrigger="landscaping-offer"
+          ctaNote="Выезд инженера с нивелиром по Тюмени и области — 0 ₽"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. СПОКОЙНАЯ ФОРМА ЗАЯВКИ ВНИЗУ СТРАНИЦЫ (React client:visible) -->
+  <ConsultationSection
+    client:visible
+    eyebrow="Диалог с инженером · Без навязчивых звонков"
+    titlePrefix="Обсудим "
+    titleAccent="ваш\u00A0участок"
+    description="Оставьте заявку — спокойно разберём задачу, подскажем оптимальную технологию основания под ваш грунт, рассчитаем ориентир бюджета и согласуем бесплатный выезд."
+    steps={LANDSCAPING_CONSULTATION_STEPS}
+    topics={LANDSCAPING_CONSULTATION_TOPICS}
+    defaultTopicId="paving"
+    channels={LANDSCAPING_CONTACT_CHANNELS}
+    notePlaceholder="Например: КП «Комарово», парковка и дорожки ~160 м², хотим начать в мае"
+    newsletterLabel="Получать сезонные предложения по благоустройству (необязательно)"
+    contactInfo={landscapingConsultationContactInfo}
+    leadSource="landscaping-footer-cta"
+  />
+</Layout>

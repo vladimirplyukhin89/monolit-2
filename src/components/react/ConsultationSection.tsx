@@ -7,10 +7,42 @@ import {
   getPreferredChannelLabel,
   validateLeadContact,
   type ConsultationTopicId,
+  type ConsultationTopicOption,
   type PreferredContactChannelId,
+  type PreferredContactChannelOption,
 } from '../../data/lead';
 import { SITE_CONFIG } from '../../data/navigation';
 import { selectedLeadContext } from '../../stores/lead';
+
+export interface ConsultationStepItem {
+  readonly number: string;
+  readonly text: string;
+}
+
+export interface ConsultationContactInfo {
+  readonly eyebrow?: string;
+  readonly phoneDisplay: string;
+  readonly phoneHref: string;
+  readonly email: string;
+  readonly address: string;
+  readonly scheduleNote: string;
+  readonly requisites?: string;
+}
+
+export interface ConsultationSectionProps {
+  readonly eyebrow?: string;
+  readonly titlePrefix?: string;
+  readonly titleAccent?: string;
+  readonly description?: string;
+  readonly steps?: readonly ConsultationStepItem[];
+  readonly topics?: readonly ConsultationTopicOption[];
+  readonly defaultTopicId?: ConsultationTopicId;
+  readonly channels?: readonly PreferredContactChannelOption[];
+  readonly notePlaceholder?: string;
+  readonly newsletterLabel?: string;
+  readonly contactInfo?: ConsultationContactInfo;
+  readonly leadSource?: string;
+}
 
 interface ConsultationFormState {
   readonly topics: readonly ConsultationTopicId[];
@@ -23,22 +55,48 @@ interface ConsultationFormState {
   readonly acceptNewsletter: boolean;
 }
 
-const INITIAL_CONSULTATION_FORM: ConsultationFormState = {
-  topics: ['repair'],
-  channel: 'phone',
-  name: '',
-  phone: '',
-  note: '',
-  acceptPrivacy: false,
-  acceptPersonalData: false,
-  acceptNewsletter: false,
+const DEFAULT_CONTACT_INFO: ConsultationContactInfo = {
+  eyebrow: 'Прямая связь с офисом',
+  phoneDisplay: SITE_CONFIG.phoneDisplay,
+  phoneHref: SITE_CONFIG.phoneHref,
+  email: SITE_CONFIG.email,
+  address: SITE_CONFIG.address,
+  scheduleNote: 'Пн — Пт: 09:00 — 19:00 · Сб: 10:00 — 16:00',
 };
 
-export default function ConsultationSection() {
+function createInitialForm(
+  defaultTopicId: ConsultationTopicId,
+): ConsultationFormState {
+  return {
+    topics: [defaultTopicId],
+    channel: 'phone',
+    name: '',
+    phone: '',
+    note: '',
+    acceptPrivacy: false,
+    acceptPersonalData: false,
+    acceptNewsletter: false,
+  };
+}
+
+export default function ConsultationSection({
+  eyebrow = 'Диалог со студией · Без навязчивых звонков',
+  titlePrefix = 'Начнём ',
+  titleAccent = 'с\u00A0разговора',
+  description = 'Расскажите о вашей квартире, доме или задаче — спокойно обсудим сроки, ориентир бюджета и оптимальный формат работы. Заявку разбирает ведущий инженер, а не колл-центр.',
+  steps = CONSULTATION_STEPS,
+  topics = CONSULTATION_TOPICS,
+  defaultTopicId = topics[0]?.id ?? 'repair',
+  channels = PREFERRED_CONTACT_CHANNELS,
+  notePlaceholder = 'Например: ЖК «Европейский», 76 м², планируем старт ремонта в следующем месяце',
+  newsletterLabel = 'Хочу получать полезные материалы по ремонту и сезонные предложения (необязательно)',
+  contactInfo = DEFAULT_CONTACT_INFO,
+  leadSource = 'consultation-section',
+}: ConsultationSectionProps) {
   const formId = useId();
   const formCardRef = useRef<HTMLDivElement | null>(null);
-  const [form, setForm] = useState<ConsultationFormState>(
-    INITIAL_CONSULTATION_FORM,
+  const [form, setForm] = useState<ConsultationFormState>(() =>
+    createInitialForm(defaultTopicId),
   );
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
@@ -74,11 +132,13 @@ export default function ConsultationSection() {
 
     const topicSummary =
       form.topics.length > 0
-        ? form.topics.map((id) => getConsultationTopicLabel(id)).join(', ')
+        ? form.topics
+            .map((id) => getConsultationTopicLabel(id, topics))
+            .join(', ')
         : 'Общая консультация';
 
     selectedLeadContext.set({
-      source: 'consultation-section',
+      source: leadSource,
       projectComplex: topicSummary,
       projectTitle: form.note.trim() || undefined,
     });
@@ -95,14 +155,14 @@ export default function ConsultationSection() {
   };
 
   const handleReset = (): void => {
-    setForm(INITIAL_CONSULTATION_FORM);
+    setForm(createInitialForm(defaultTopicId));
     setErrorMessage(null);
     setIsSubmitted(false);
   };
 
   const selectedTopicLabels =
     form.topics.length > 0
-      ? form.topics.map((id) => getConsultationTopicLabel(id))
+      ? form.topics.map((id) => getConsultationTopicLabel(id, topics))
       : ['Общая консультация'];
 
   return (
@@ -117,28 +177,26 @@ export default function ConsultationSection() {
           <div className="flex flex-col justify-between gap-10 lg:col-span-5">
             <div>
               <p className="mb-4 cursor-default text-xs uppercase tracking-[0.22em] text-text-muted">
-                Диалог со студией · Без навязчивых звонков
+                {eyebrow}
               </p>
 
               <h2
                 id={`${formId}-heading`}
                 className="cursor-default text-3xl font-normal leading-[1.12] tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
               >
-                Начнём{' '}
+                {titlePrefix}
                 <span className="font-serif text-[1.12em] font-medium italic text-text-primary">
-                  с&nbsp;разговора
+                  {titleAccent}
                 </span>
               </h2>
 
               <p className="mt-5 max-w-md cursor-default text-sm leading-relaxed text-text-secondary sm:text-base">
-                Расскажите о вашей квартире, доме или задаче — спокойно обсудим
-                сроки, ориентир бюджета и оптимальный формат работы. Заявку
-                разбирает ведущий инженер, а не колл-центр.
+                {description}
               </p>
 
               {/* Статичный список шагов диалога: без hover-подсветки */}
               <ol className="mt-8 divide-y divide-border-subtle border-y border-border-subtle">
-                {CONSULTATION_STEPS.map((step) => (
+                {steps.map((step) => (
                   <li
                     key={step.number}
                     className="flex cursor-default items-start gap-4 py-4"
@@ -160,29 +218,32 @@ export default function ConsultationSection() {
             {/* Спокойная карточка прямых контактов: контейнер статичен, интерактивны только ссылки */}
             <aside className="cursor-default border border-border-subtle bg-bg-secondary p-6 sm:p-7">
               <p className="text-[11px] uppercase tracking-[0.2em] text-text-muted">
-                Прямая связь с офисом
+                {contactInfo.eyebrow ?? 'Прямая связь с офисом'}
               </p>
 
               <div className="mt-4 flex flex-col items-start gap-1.5">
                 <a
-                  href={SITE_CONFIG.phoneHref}
+                  href={contactInfo.phoneHref}
                   className="text-lg font-medium tracking-tight text-text-primary transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent sm:text-xl"
                 >
-                  {SITE_CONFIG.phoneDisplay}
+                  {contactInfo.phoneDisplay}
                 </a>
                 <a
-                  href={`mailto:${SITE_CONFIG.email}`}
+                  href={`mailto:${contactInfo.email}`}
                   className="text-sm text-text-secondary transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                 >
-                  {SITE_CONFIG.email}
+                  {contactInfo.email}
                 </a>
               </div>
 
               <div className="mt-5 border-t border-border-subtle pt-4 text-xs leading-relaxed text-text-muted">
-                <p className="text-text-secondary">{SITE_CONFIG.address}</p>
-                <p className="mt-1">
-                  Пн — Пт: 09:00 — 19:00 · Сб: 10:00 — 16:00
-                </p>
+                <p className="text-text-secondary">{contactInfo.address}</p>
+                <p className="mt-1">{contactInfo.scheduleNote}</p>
+                {contactInfo.requisites && (
+                  <p className="mt-2.5 border-t border-border-subtle pt-2.5 text-[11px] text-text-muted">
+                    {contactInfo.requisites}
+                  </p>
+                )}
               </div>
             </aside>
           </div>
@@ -212,7 +273,7 @@ export default function ConsultationSection() {
                     </div>
 
                     <div className="mt-3.5 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-                      {CONSULTATION_TOPICS.map((topic) => {
+                      {topics.map((topic) => {
                         const isChecked = form.topics.includes(topic.id);
 
                         return (
@@ -292,7 +353,7 @@ export default function ConsultationSection() {
                         aria-label="Удобный способ связи"
                         className="mt-3.5 grid grid-cols-2 gap-2.5 sm:grid-cols-4"
                       >
-                        {PREFERRED_CONTACT_CHANNELS.map((channel) => {
+                        {channels.map((channel) => {
                           const isActive = form.channel === channel.id;
 
                           return (
@@ -412,7 +473,7 @@ export default function ConsultationSection() {
                             note: event.target.value,
                           }))
                         }
-                        placeholder="Например: ЖК «Европейский», 76 м², планируем старт ремонта в следующем месяце"
+                        placeholder={notePlaceholder}
                         className="mt-2 w-full resize-none rounded-sm border border-border-subtle bg-bg-primary px-4 py-3 text-sm leading-relaxed text-text-primary placeholder:text-text-muted transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:border-border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                       />
                     </div>
@@ -484,10 +545,7 @@ export default function ConsultationSection() {
                         }
                         className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-accent"
                       />
-                      <span>
-                        Хочу получать полезные материалы по ремонту и сезонные
-                        предложения (необязательно)
-                      </span>
+                      <span>{newsletterLabel}</span>
                     </label>
                   </div>
 
@@ -545,7 +603,8 @@ export default function ConsultationSection() {
 
                   <p className="mt-3 max-w-xl text-sm leading-relaxed text-text-secondary">
                     Ведущий инженер свяжется с вами в рабочее время через
-                    выбранный канал ({getPreferredChannelLabel(form.channel)}) и
+                    выбранный канал (
+                    {getPreferredChannelLabel(form.channel, channels)}) и
                     подготовит ответы по вашему объекту.
                   </p>
 
@@ -563,7 +622,7 @@ export default function ConsultationSection() {
                         Способ связи
                       </dt>
                       <dd className="mt-1 text-sm font-medium text-text-primary">
-                        {getPreferredChannelLabel(form.channel)}
+                        {getPreferredChannelLabel(form.channel, channels)}
                       </dd>
                     </div>
                   </dl>
