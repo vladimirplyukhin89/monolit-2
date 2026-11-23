@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.4](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.3...v0.0.4) (2026-11-23)
+
+
+### Features
+
+* **portfolio:** добавить секцию портфолио и интерактивный слайдер «До/После» ([9271821](https://github.com/vladimirplyukhin89/monolit-2/commit/92718212f4895a75d40d9ce70557e1673f3f4438))
+
 ### [0.0.3](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.2...v0.0.3) (2026-11-23)
 
 
