@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@theme {
+  /* Фоны */
+  --color-bg-primary: #0D0D0E;
+  --color-bg-secondary: #161618;
+  --color-bg-elevated: #1F1F23;
+
+  /* Оранжевые акценты (спокойный благородный оттенок) */
+  --color-accent: #E85D2A;
+  --color-accent-hover: #F26D3D;
+  --color-accent-muted: rgba(232, 93, 42, 0.12);
+
+  /* Текст */
+  --color-text-primary: #F5F5F7;
+  --color-text-secondary: #A1A1AA;
+  --color-text-muted: #6E6E77;
+
+  /* Границы */
+  --color-border-subtle: #27272A;
+  --color-border-accent: rgba(232, 93, 42, 0.4);
+
+    /* Шрифты */
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", ui-serif, Georgia, serif;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    font-feature-settings: "kern" 1, "liga" 1;
+    -webkit-font-smoothing: antialiased;
+  }
+}
