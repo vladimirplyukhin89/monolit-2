@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
 @theme {
-  /* Фоны */
+  /* Фоны (Dark & Warm Orange Editorial) */
   --color-bg-primary: #0D0D0E;
   --color-bg-secondary: #161618;
   --color-bg-elevated: #1F1F23;
 
-  /* Оранжевые акценты (спокойный благородный оттенок) */
+  /* Оранжевые акценты (спокойный благородный терракотово-оранжевый) */
   --color-accent: #E85D2A;
   --color-accent-hover: #F26D3D;
   --color-accent-muted: rgba(232, 93, 42, 0.12);
@@ -20,16 +20,139 @@
   --color-border-subtle: #27272A;
   --color-border-accent: rgba(232, 93, 42, 0.4);
 
-    /* Шрифты */
-  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Cormorant Garamond", ui-serif, Georgia, serif;
+  /* Шрифтовая пара: Manrope + Cormorant Garamond */
+  --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-serif: "Cormorant Garamond", ui-serif, Georgia, Cambria, serif;
+
+  /* Кривая движения (editorial slow-ease) */
+  --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Утилитарные анимации Tailwind v4 для React-шагов и модалок */
+  --animate-fade-in: fade-in 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-fade-in-up: fade-in-up 800ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @layer base {
-  body {
+  html {
     background-color: var(--color-bg-primary);
     color: var(--color-text-primary);
+    scroll-behavior: smooth;
+    overflow-x: clip;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
     font-feature-settings: "kern" 1, "liga" 1;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background-color: var(--color-accent-muted);
+    color: var(--color-text-primary);
+  }
+}
+
+/* Плавное скролл-появление статичных блоков (IntersectionObserver -> .is-visible) */
+.reveal,
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 800ms var(--ease-editorial),
+    transform 800ms var(--ease-editorial);
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible,
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  will-change: auto;
+}
+
+.reveal-delay-100 {
+  transition-delay: 100ms;
+}
+
+.reveal-delay-200 {
+  transition-delay: 200ms;
+}
+
+.reveal-delay-300 {
+  transition-delay: 300ms;
+}
+
+.reveal-delay-400 {
+  transition-delay: 400ms;
+}
+
+/* Плавное раскрытие аккордеона FAQ через CSS Grid */
+.accordion-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 360ms var(--ease-editorial);
+}
+
+.accordion-panel[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+
+.accordion-inner {
+  overflow: hidden;
+}
+
+/* Темная редакционная подача встроенной карты офиса */
+.editorial-map-frame {
+  filter: grayscale(100%) invert(92%) contrast(90%) brightness(92%);
+}
+
+/* Уважение системной настройки снижения анимаций */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .reveal,
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    will-change: auto !important;
+  }
+
+  .animate-fade-in,
+  .animate-fade-in-up {
+    animation: none !important;
+  }
+
+  .accordion-panel {
+    transition: none !important;
   }
 }

@@ -1,0 +1,17 @@
+---
+description: Стандарты плавных редакционных анимаций на чистом CSS (без сторонних библиотек)
+globs: *.astro, *.tsx, *.css
+alwaysApply: false
+---
+
+# Стандарты анимаций (Pure CSS + IntersectionObserver)
+
+- **Никаких тяжелых библиотек:** Запрещено устанавливать и использовать `framer-motion`, `gsap` и аналоги. Вся анимация строится на нативном CSS (`transition`, `@keyframes`) и классах Tailwind v4.
+- **Характер движения:** Медленный, кинематографичный («editorial slow-ease»).
+  - Кривая: `cubic-bezier(0.22, 1, 0.36, 1)`.
+  - Длительность: `700ms–900ms` для появления блоков, `300ms–400ms` для кнопок/модалок.
+- **Реализация:**
+  - Появление при скролле: один глобальный `IntersectionObserver` (`once: true`) в `Layout.astro`, добавляющий класс `.is-visible` (`opacity: 1; transform: translateY(0)`).
+  - Аккордеон FAQ: плавное раскрытие через CSS Grid (`grid-template-rows: 0fr` -> `1fr`).
+  - Квиз и модалки в React: плавная смена состояния через CSS-анимацию появления (`animate-fade-in`) при смене `key` шага.
+- **Ограничения:** Не анимировать теги услуг в Hero при скролле. Учитывать `@media (prefers-reduced-motion: reduce)`.
