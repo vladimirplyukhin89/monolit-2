@@ -187,9 +187,8 @@ export const COMPANY_CONTACTS: CompanyContacts = {
   ],
   scheduleNote: 'Пн — Пт: 08:00 — 20:00 · Сб: 09:00 — 18:00',
   mapEmbedUrl:
-    'https://yandex.ru/map-widget/v1/?ll=65.508247%2C57.129267&z=15&pt=65.508247,57.129267,pm2orgm',
-  mapExternalUrl:
-    'https://yandex.ru/maps/?text=%D0%A2%D1%8E%D0%BC%D0%B5%D0%BD%D1%8C%2C%20%D1%83%D0%BB.%20%D0%94%D0%B5%D0%BF%D1%83%D1%82%D0%B0%D1%82%D1%81%D0%BA%D0%B0%D1%8F%2C%20129',
+    'https://yandex.ru/map-widget/v1/?ll=65.548027%2C57.122166&z=16&pt=65.548027%2C57.122166%2Cpm2orm',
+  mapExternalUrl: 'https://yandex.ru/maps/?pt=65.548027,57.122166&z=16&l=map',
   messengers: MESSENGER_LINKS,
   socialLinks: COMPANY_SOCIAL_LINKS,
 } as const;

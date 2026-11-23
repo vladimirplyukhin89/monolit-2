@@ -1,5 +1,6 @@
 ---
 import BrandLogo from './BrandLogo.astro';
+import OfficeMap from './OfficeMap.astro';
 import SocialLinks from './SocialLinks.astro';
 import {
   COMPANY_CONTACTS,
@@ -50,9 +51,6 @@ const email = COMPANY_CONTACTS.email;
 const emailHref = COMPANY_CONTACTS.emailHref;
 const address = COMPANY_CONTACTS.address;
 const requisites = COMPANY_CONTACTS.requisites;
-const schedule = COMPANY_CONTACTS.schedule;
-const mapEmbedUrl = COMPANY_CONTACTS.mapEmbedUrl;
-const mapExternalUrl = COMPANY_CONTACTS.mapExternalUrl;
 const messengers = COMPANY_CONTACTS.messengers;
 ---
 
@@ -177,10 +175,11 @@ const messengers = COMPANY_CONTACTS.messengers;
           </div>
         </div>
 
-        <!-- Основная сетка: бренд, навигация, направления компании, контакты -->
-        <div class="grid grid-cols-1 gap-12 border-b border-border-subtle py-14 md:grid-cols-2 lg:grid-cols-12 lg:gap-10 lg:py-16">
+        <!-- Основная сетка: бренд и навигация слева, контакты с картой офиса справа -->
+        <div class="grid grid-cols-1 gap-12 border-b border-border-subtle py-14 md:grid-cols-2 md:items-start lg:gap-14 lg:py-16">
+          <div class="flex flex-col gap-12">
           <!-- Колонка 1: Бренд и мессенджеры -->
-          <div class="reveal lg:col-span-4">
+          <div class="reveal">
             <a
               href="/"
               aria-label={`${SITE_CONFIG.brandName} — на главную`}
@@ -210,8 +209,9 @@ const messengers = COMPANY_CONTACTS.messengers;
             </div>
           </div>
 
+          <div class="grid gap-12 sm:grid-cols-2">
           <!-- Колонка 2: Дублирование основного меню текущей страницы -->
-          <div class="reveal reveal-delay-100 lg:col-span-2">
+          <div class="reveal reveal-delay-100">
             <h3 class="text-xs font-medium uppercase tracking-[0.2em] text-text-muted">
               Навигация
             </h3>
@@ -230,7 +230,7 @@ const messengers = COMPANY_CONTACTS.messengers;
           </div>
 
           <!-- Колонка 3: Переключатель разделов (Главная / Ремонт квартир / Благоустройство) -->
-          <div class="reveal reveal-delay-200 lg:col-span-2">
+          <div class="reveal reveal-delay-200">
             <h3 class="text-xs font-medium uppercase tracking-[0.2em] text-text-muted">
               Направления
             </h3>
@@ -278,9 +278,11 @@ const messengers = COMPANY_CONTACTS.messengers;
               </ul>
             )}
           </div>
+          </div>
+          </div>
 
-          <!-- Колонка 4: Контакты, адрес офиса и режим работы -->
-          <div class="reveal reveal-delay-300 lg:col-span-4">
+          <!-- Колонка 4: Контакты, адрес офиса, соцсети и карта -->
+          <div class="reveal reveal-delay-300">
             <h3 class="text-xs font-medium uppercase tracking-[0.2em] text-text-muted">
               Офис и контакты
             </h3>
@@ -309,63 +311,8 @@ const messengers = COMPANY_CONTACTS.messengers;
 
               <SocialLinks ariaLabel="Социальные сети и быстрая связь" />
 
-              <dl class="space-y-1.5 border-t border-border-subtle pt-4 text-sm">
-                {schedule.map((row) => (
-                  <div class="flex items-baseline justify-between gap-4">
-                    <dt class="text-text-muted">{row.days}</dt>
-                    <dd class="text-text-secondary">{row.hours}</dd>
-                  </div>
-                ))}
-              </dl>
+              <OfficeMap />
             </div>
-          </div>
-        </div>
-
-        <!-- Интерактивная карта офиса (темная редакционная подача) -->
-        <div class="reveal border-b border-border-subtle py-12">
-          <div class="mb-5 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
-            <div>
-              <p class="text-xs uppercase tracking-[0.2em] text-text-muted">
-                Личная встреча в офисе
-              </p>
-              <p class="mt-1.5 text-sm text-text-secondary">
-                {isLandscaping
-                  ? 'Обсудим ваш участок, покажем образцы брусчатки и бордюров, составим график работ.'
-                  : 'Приезжайте посмотреть образцы материалов и обсудить планировку за чашкой кофе.'}
-              </p>
-            </div>
-
-            <a
-              href={mapExternalUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex shrink-0 items-center gap-2 text-sm text-text-primary transition-colors duration-300 hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-            >
-              <span>Построить маршрут</span>
-              <svg
-                class="h-4 w-4"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M7 17 17 7" />
-                <path d="M8 7h9v9" />
-              </svg>
-            </a>
-          </div>
-
-          <div class="relative h-64 w-full overflow-hidden border border-border-subtle bg-bg-secondary sm:h-72 lg:h-80">
-            <iframe
-              src={mapEmbedUrl}
-              title={`Карта расположения офиса ${SITE_CONFIG.brandName}`}
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-              class="editorial-map-frame h-full w-full border-0"
-            />
           </div>
         </div>
 

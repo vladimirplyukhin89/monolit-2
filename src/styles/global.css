@@ -282,11 +282,6 @@ dialog.editorial-dialog[open] {
   box-shadow: 0 0 0 3px var(--color-accent-muted), 0 0 0 1px var(--color-accent);
 }
 
-/* Темная редакционная подача встроенной карты офиса */
-.editorial-map-frame {
-  filter: grayscale(100%) invert(92%) contrast(90%) brightness(92%);
-}
-
 /* Уважение системной настройки снижения анимаций */
 @media (prefers-reduced-motion: reduce) {
   html {

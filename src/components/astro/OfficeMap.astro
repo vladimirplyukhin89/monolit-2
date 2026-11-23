@@ -1,0 +1,194 @@
+---
+import {
+  COMPANY_CONTACTS,
+  type ScheduleRow,
+} from '../../data/navigation';
+
+export interface Props {
+  address?: string;
+  schedule?: readonly ScheduleRow[];
+  embedUrl?: string;
+  externalUrl?: string;
+  title?: string;
+  class?: string;
+}
+
+const {
+  address = COMPANY_CONTACTS.address,
+  schedule = COMPANY_CONTACTS.schedule,
+  embedUrl = COMPANY_CONTACTS.mapEmbedUrl,
+  externalUrl = COMPANY_CONTACTS.mapExternalUrl,
+  title = 'Офис компании Монолит — г. Тюмень, ул. Депутатская, 129',
+  class: className = '',
+} = Astro.props;
+---
+
+<div
+  class:list={['relative flex flex-col gap-3', className]}
+  data-office-map
+  data-map-active="false"
+>
+  <div
+    data-office-map-stage
+    class="relative h-[320px] w-full min-w-0 cursor-pointer overflow-hidden rounded-2xl border border-border-subtle bg-bg-secondary md:h-[400px]"
+    role="group"
+    aria-label="Карта офиса на ул. Депутатская, 129"
+  >
+    <iframe
+      data-office-map-frame
+      src={embedUrl}
+      title={title}
+      loading="lazy"
+      tabindex="-1"
+      referrerpolicy="no-referrer-when-downgrade"
+      class="office-map-frame pointer-events-none absolute inset-0 h-full w-full border-0"
+    />
+
+    <div
+      class="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-20 bg-gradient-to-t from-bg-primary from-15% via-bg-primary/75 to-transparent"
+      aria-hidden="true"
+    />
+
+    <button
+      type="button"
+      data-office-map-shield
+      class="absolute top-3 left-1/2 z-20 inline-flex max-w-[calc(100%-1.5rem)] -translate-x-1/2 cursor-pointer items-center justify-center rounded-full border border-border-subtle bg-bg-primary/92 px-3.5 py-2 text-center text-[11px] leading-snug text-text-secondary backdrop-blur-sm transition-colors duration-300 ease-[var(--ease-editorial)] hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent motion-reduce:transition-none lg:top-4 lg:left-auto lg:right-3 lg:max-w-[46%] lg:translate-x-0"
+    >
+      Нажмите, чтобы управлять картой
+    </button>
+
+    <button
+      type="button"
+      data-office-map-release
+      hidden
+      class="absolute top-3 left-1/2 z-20 inline-flex max-w-[calc(100%-1.5rem)] -translate-x-1/2 cursor-pointer items-center justify-center rounded-full border border-border-accent bg-bg-primary/92 px-3.5 py-2 text-center text-[11px] leading-snug text-text-primary backdrop-blur-sm transition-colors duration-300 ease-[var(--ease-editorial)] hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent motion-reduce:transition-none lg:top-4 lg:left-auto lg:right-3 lg:max-w-[46%] lg:translate-x-0"
+    >
+      Листать страницу
+    </button>
+  </div>
+
+  <div
+    data-office-map-card
+    class="pointer-events-auto cursor-default rounded-xl border border-border-subtle bg-bg-primary/95 p-3 backdrop-blur-sm sm:p-3.5 lg:absolute lg:bottom-4 lg:left-4 lg:z-20 lg:w-[min(15.5rem,calc(50%-2.5rem))]"
+  >
+    <p class="text-[11px] uppercase tracking-[0.18em] text-text-muted">Офис</p>
+    <p class="mt-1.5 text-sm leading-snug text-text-primary">{address}</p>
+
+    <dl class="mt-2.5 space-y-1 text-xs">
+      {
+        schedule.map((row) => (
+          <div class="flex items-baseline justify-between gap-3">
+            <dt class="text-text-muted">{row.days}</dt>
+            <dd class="text-right text-text-secondary">{row.hours}</dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <a
+      href={externalUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-3 inline-flex min-h-11 w-full items-center justify-center gap-1.5 rounded-sm border border-border-subtle bg-bg-elevated px-3 text-xs font-medium text-text-primary transition-colors duration-300 ease-[var(--ease-editorial)] hover:border-border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary motion-reduce:transition-none"
+    >
+      <span>Открыть в Яндекс.Картах</span>
+      <svg
+        class="h-3.5 w-3.5 shrink-0"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.6"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M7 17 17 7" />
+        <path d="M8 7h9v9" />
+      </svg>
+      <span class="sr-only">Откроется в новой вкладке</span>
+    </a>
+  </div>
+</div>
+
+<style>
+  .office-map-frame {
+    filter: invert(90%) hue-rotate(180deg) contrast(95%);
+  }
+</style>
+
+<script>
+  function initOfficeMaps(): void {
+    const maps = document.querySelectorAll<HTMLElement>('[data-office-map]');
+
+    maps.forEach((root) => {
+      if (root.dataset.bound === 'true') return;
+
+      const stage = root.querySelector<HTMLElement>('[data-office-map-stage]');
+      const frame = root.querySelector<HTMLIFrameElement>('[data-office-map-frame]');
+      const shield = root.querySelector<HTMLButtonElement>('[data-office-map-shield]');
+      const release = root.querySelector<HTMLButtonElement>('[data-office-map-release]');
+
+      if (!stage || !frame || !shield || !release) return;
+
+      root.dataset.bound = 'true';
+
+      const setActive = (active: boolean): void => {
+        root.dataset.mapActive = active ? 'true' : 'false';
+        frame.classList.toggle('pointer-events-none', !active);
+        frame.classList.toggle('pointer-events-auto', active);
+        stage.classList.toggle('cursor-pointer', !active);
+        frame.tabIndex = active ? 0 : -1;
+        shield.hidden = active;
+        release.hidden = !active;
+      };
+
+      shield.addEventListener('click', (event: MouseEvent) => {
+        event.preventDefault();
+        event.stopPropagation();
+        setActive(true);
+        if (event.detail === 0) {
+          release.focus({ preventScroll: true });
+        }
+      });
+
+      release.addEventListener('click', (event: MouseEvent) => {
+        event.preventDefault();
+        event.stopPropagation();
+        setActive(false);
+        if (event.detail === 0) {
+          shield.focus({ preventScroll: true });
+        }
+      });
+
+      root.addEventListener('click', (event: MouseEvent) => {
+        if (root.dataset.mapActive === 'true') return;
+        const target = event.target;
+        if (!(target instanceof Element)) return;
+        if (target.closest('a, button, [data-office-map-card]')) return;
+        setActive(true);
+      });
+
+      root.addEventListener('mouseleave', () => {
+        if (root.dataset.mapActive !== 'true') return;
+        if (window.matchMedia('(pointer: coarse)').matches) return;
+        setActive(false);
+      });
+
+      document.addEventListener('pointerdown', (event: PointerEvent) => {
+        if (root.dataset.mapActive !== 'true') return;
+        const target = event.target;
+        if (!(target instanceof Node) || root.contains(target)) return;
+        setActive(false);
+      });
+
+      document.addEventListener('keydown', (event: KeyboardEvent) => {
+        if (event.key !== 'Escape' || root.dataset.mapActive !== 'true') return;
+        setActive(false);
+        shield.focus({ preventScroll: true });
+      });
+    });
+  }
+
+  initOfficeMaps();
+  document.addEventListener('astro:page-load', initOfficeMaps);
+</script>
