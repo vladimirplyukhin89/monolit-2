@@ -135,6 +135,27 @@
   animation: hero-bg-zoom 1200ms var(--ease-editorial) forwards;
 }
 
+/* Плавный CSS-зум (scale 1.03) фото карточки портфолио только при наведении на кликабельную кнопку */
+.portfolio-card-image {
+  transform: scale(1);
+  transition: transform 700ms var(--ease-editorial);
+}
+
+.portfolio-card:has([data-card-action]:hover) .portfolio-card-image,
+.portfolio-card:has([data-card-action]:focus-visible) .portfolio-card-image {
+  transform: scale(1.03);
+}
+
+/* Редакционные модальные окна на нативном <dialog> */
+dialog.editorial-dialog::backdrop {
+  background-color: color-mix(in srgb, var(--color-bg-primary) 84%, transparent);
+  backdrop-filter: blur(6px);
+}
+
+dialog.editorial-dialog[open] {
+  animation: fade-in 360ms var(--ease-editorial) both;
+}
+
 /* Плавное раскрытие аккордеона FAQ через CSS Grid */
 .accordion-panel {
   display: grid;
@@ -181,5 +202,14 @@
 
   .accordion-panel {
     transition: none !important;
+  }
+
+  .portfolio-card-image {
+    transition: none !important;
+    transform: scale(1) !important;
+  }
+
+  dialog.editorial-dialog[open] {
+    animation: none !important;
   }
 }

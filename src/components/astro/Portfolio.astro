@@ -1,0 +1,1001 @@
+---
+import { Image, getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import design1Image from '../../assets/images/portfolio/design-1.webp';
+import design2Image from '../../assets/images/portfolio/design-2.webp';
+import design3Image from '../../assets/images/portfolio/design-3.webp';
+import design4Image from '../../assets/images/portfolio/design-4.webp';
+import design5Image from '../../assets/images/portfolio/design-5.webp';
+import before1Image from '../../assets/images/before-after/before-1.webp';
+import after1Image from '../../assets/images/before-after/after-1.avif';
+import BeforeAfterSlider from '../react/BeforeAfterSlider';
+import {
+  BEFORE_AFTER_SHOWCASE,
+  INITIAL_VISIBLE_PROJECTS,
+  PORTFOLIO_PROJECTS,
+  type PortfolioImageKey,
+} from '../../data/portfolio';
+
+const PORTFOLIO_IMAGE_MAP: Record<PortfolioImageKey, ImageMetadata> = {
+  'design-1': design1Image,
+  'design-2': design2Image,
+  'design-3': design3Image,
+  'design-4': design4Image,
+  'design-5': design5Image,
+};
+
+const [optimizedBefore, optimizedAfter, optimizedModalImages] =
+  await Promise.all([
+    getImage({ src: before1Image, format: 'webp', quality: 88 }),
+    getImage({ src: after1Image, width: 1280, format: 'webp', quality: 86 }),
+    Promise.all(
+      PORTFOLIO_PROJECTS.map(async (project) => {
+        const asset = PORTFOLIO_IMAGE_MAP[project.imageKey];
+        const optimized = await getImage({
+          src: asset,
+          width: 1280,
+          format: 'webp',
+          quality: 84,
+        });
+        return {
+          ...project,
+          imageSrc: optimized.src,
+        };
+      }),
+    ),
+  ]);
+
+const remainingCount = Math.max(
+  0,
+  PORTFOLIO_PROJECTS.length - INITIAL_VISIBLE_PROJECTS,
+);
+---
+
+<section
+  id="portfolio"
+  class="border-b border-border-subtle bg-bg-primary py-20 sm:py-28 lg:py-32"
+>
+  <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+    <!-- Редакционный заголовок секции в стиле Verelle Private -->
+    <div class="flex flex-col justify-between gap-6 border-b border-border-subtle pb-10 lg:flex-row lg:items-end lg:pb-12">
+      <div class="reveal max-w-2xl">
+        <p class="mb-4 cursor-default text-xs uppercase tracking-[0.22em] text-text-muted">
+          Портфолио · Реализованные объекты 01 — 0{PORTFOLIO_PROJECTS.length}
+        </p>
+        <h2 class="text-3xl font-normal leading-[1.12] tracking-tight text-text-primary sm:text-4xl lg:text-5xl">
+          Интерьеры, созданные{' '}
+          <span class="font-serif text-[1.12em] font-medium italic text-text-primary">
+            для&nbsp;спокойной жизни
+          </span>
+        </h2>
+      </div>
+
+      <p class="reveal reveal-delay-100 max-w-md text-sm leading-relaxed text-text-secondary sm:text-base">
+        Каждый проект — это история реальной квартиры в Тюмени: от инженерного каркаса до
+        финального света, с фиксированным бюджетом и честными сроками сдачи.
+      </p>
+    </div>
+
+    <!-- Редакционная лента карточек проектов -->
+    <div class="mt-12 space-y-8 lg:mt-14 lg:space-y-10" data-portfolio-list>
+      {PORTFOLIO_PROJECTS.map((project, index) => {
+        const isExtra = index >= INITIAL_VISIBLE_PROJECTS;
+        const imageAsset = PORTFOLIO_IMAGE_MAP[project.imageKey];
+        const delayClass =
+          index % 3 === 1
+            ? 'reveal-delay-100'
+            : index % 3 === 2
+              ? 'reveal-delay-200'
+              : '';
+
+        return (
+          <article
+            data-portfolio-card
+            data-extra-project={isExtra ? 'true' : undefined}
+            class:list={[
+              'portfolio-card reveal cursor-default border border-border-subtle bg-bg-secondary',
+              delayClass,
+              isExtra && 'hidden',
+            ]}
+          >
+            <div class="grid grid-cols-1 lg:grid-cols-12">
+              <!-- Фотография объекта: плавный CSS-зум scale(1.03) только при наведении на кнопки карточки -->
+              <div class="relative aspect-[16/11] overflow-hidden border-b border-border-subtle bg-bg-primary lg:col-span-6 lg:aspect-auto lg:min-h-[460px] lg:border-r lg:border-b-0">
+                <Image
+                  src={imageAsset}
+                  alt={project.imageAlt}
+                  widths={[640, 960, 1280]}
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  loading="lazy"
+                  decoding="async"
+                  class={`portfolio-card-image h-full w-full object-cover ${project.imagePositionClass}`}
+                />
+                <div
+                  aria-hidden="true"
+                  class="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-bg-primary/60 via-bg-primary/20 to-transparent"
+                ></div>
+                <span class="pointer-events-none absolute top-4 left-4 inline-flex cursor-default items-center gap-2 border border-border-subtle bg-bg-primary/85 px-3 py-1.5 text-[11px] font-medium uppercase leading-none tracking-[0.18em] text-text-secondary backdrop-blur-sm select-none">
+                  <span class="font-serif text-xs italic text-accent" aria-hidden="true">
+                    {project.number}
+                  </span>
+                  <span>{project.complex}</span>
+                </span>
+              </div>
+
+              <!-- Редакционное описание, сетка характеристик и цитата (Verelle Private) -->
+              <div class="flex flex-col justify-between p-6 sm:p-8 lg:col-span-6 lg:p-10">
+                <div>
+                  <p class="cursor-default text-[11px] uppercase tracking-[0.2em] text-text-muted">
+                    Объект №{project.number} · {project.complex}
+                  </p>
+
+                  <h3 class="mt-3 text-2xl font-normal leading-[1.2] tracking-tight text-text-primary sm:text-[1.7rem]">
+                    {project.title}
+                  </h3>
+
+                  <!-- Заметка от команды -->
+                  <div class="mt-5">
+                    <p class="cursor-default text-[11px] font-medium uppercase tracking-[0.18em] text-accent">
+                      {project.editorialLabel}
+                    </p>
+                    <p class="mt-2 text-sm leading-relaxed text-text-secondary">
+                      {project.editorialNote}
+                    </p>
+                  </div>
+
+                  <!-- Структурированная сетка характеристик -->
+                  <dl class="mt-6 grid grid-cols-2 gap-px border border-border-subtle bg-border-subtle">
+                    <div class="bg-bg-elevated px-4 py-3">
+                      <dt class="text-[11px] uppercase tracking-[0.16em] text-text-muted">
+                        Площадь
+                      </dt>
+                      <dd class="mt-1 text-sm font-medium text-text-primary">
+                        {project.specs.area}
+                      </dd>
+                    </div>
+                    <div class="bg-bg-elevated px-4 py-3">
+                      <dt class="text-[11px] uppercase tracking-[0.16em] text-text-muted">
+                        Сроки
+                      </dt>
+                      <dd class="mt-1 text-sm font-medium text-text-primary">
+                        {project.specs.timeline}
+                      </dd>
+                    </div>
+                    <div class="bg-bg-elevated px-4 py-3">
+                      <dt class="text-[11px] uppercase tracking-[0.16em] text-text-muted">
+                        Локация
+                      </dt>
+                      <dd class="mt-1 text-sm font-medium text-text-primary">
+                        {project.specs.location}
+                      </dd>
+                    </div>
+                    <div class="bg-bg-elevated px-4 py-3">
+                      <dt class="text-[11px] uppercase tracking-[0.16em] text-text-muted">
+                        Формат
+                      </dt>
+                      <dd class="mt-1 text-sm font-medium text-text-primary">
+                        {project.specs.format}
+                      </dd>
+                    </div>
+                  </dl>
+
+                  <!-- Цитата по проекту -->
+                  <figure class="mt-6 border-l border-border-accent pl-4">
+                    <blockquote class="font-serif text-lg italic leading-snug text-text-primary sm:text-xl">
+                      «{project.quote}»
+                    </blockquote>
+                    <figcaption class="mt-1.5 text-xs text-text-muted">
+                      {project.quoteAuthor}
+                    </figcaption>
+                  </figure>
+                </div>
+
+                <!-- Кликабельные кнопки действий (hover только на кнопках) -->
+                <div class="mt-7 flex flex-wrap items-center gap-3 border-t border-border-subtle pt-6">
+                  <button
+                    type="button"
+                    data-card-action
+                    data-project-detail-open={index}
+                    class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-sm border border-border-subtle bg-bg-elevated px-5 py-3 text-sm font-normal text-text-primary transition-colors duration-[350ms] ease-[var(--ease-editorial)] hover:border-border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                  >
+                    <span>Смотреть больше</span>
+                    <svg
+                      class="h-4 w-4"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M7 17 17 7" />
+                      <path d="M8 7h9v9" />
+                    </svg>
+                  </button>
+
+                  <button
+                    type="button"
+                    data-card-action
+                    data-want-same={project.complex}
+                    data-project-title={project.title}
+                    data-project-area={project.specs.area}
+                    class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-sm bg-accent px-5 py-3 text-sm font-medium text-text-primary transition-colors duration-[350ms] ease-[var(--ease-editorial)] hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-secondary"
+                  >
+                    <span>Хочу так же</span>
+                    <svg
+                      class="h-4 w-4"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M5 12h14" />
+                      <path d="m13 6 6 6-6 6" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+
+    <!-- Пагинация / раскрытие дополнительных объектов -->
+    {remainingCount > 0 && (
+      <div class="reveal mt-10 flex flex-col items-center justify-between gap-4 border-t border-border-subtle pt-8 sm:flex-row">
+        <p class="cursor-default text-xs text-text-muted" data-portfolio-counter>
+          Показано {INITIAL_VISIBLE_PROJECTS} из {PORTFOLIO_PROJECTS.length} объектов
+        </p>
+
+        <button
+          type="button"
+          data-portfolio-load-more
+          aria-expanded="false"
+          class="inline-flex cursor-pointer items-center justify-center gap-2.5 rounded-sm border border-border-subtle bg-bg-secondary px-7 py-3.5 text-sm font-medium text-text-primary transition-colors duration-[350ms] ease-[var(--ease-editorial)] hover:border-border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+        >
+          <span data-load-more-label>Смотреть ещё ({remainingCount})</span>
+          <svg
+            data-load-more-icon
+            class="h-4 w-4 transition-transform duration-[350ms] ease-[var(--ease-editorial)]"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M12 5v14" />
+            <path d="m19 12-7 7-7-7" />
+          </svg>
+        </button>
+      </div>
+    )}
+
+    <!-- Интерактивный блок «До / После» (React-остров client:visible) -->
+    <div
+      id="before-after"
+      class="mt-20 border-t border-border-subtle pt-16 lg:mt-24 lg:pt-20"
+    >
+      <div class="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-center lg:gap-10">
+        <div class="reveal lg:col-span-5">
+          <span class="inline-flex cursor-default items-center bg-accent-muted px-3 py-1.5 text-[11px] font-medium uppercase leading-none tracking-[0.18em] text-accent select-none">
+            {BEFORE_AFTER_SHOWCASE.badge}
+          </span>
+
+          <h3 class="mt-5 text-2xl font-normal leading-[1.16] tracking-tight text-text-primary sm:text-3xl lg:text-[2.2rem]">
+            {BEFORE_AFTER_SHOWCASE.titlePrefix}
+            <span class="font-serif text-[1.12em] font-medium italic text-text-primary">
+              {BEFORE_AFTER_SHOWCASE.titleAccent}
+            </span>
+          </h3>
+
+          <p class="mt-4 text-sm leading-relaxed text-text-secondary sm:text-base">
+            {BEFORE_AFTER_SHOWCASE.editorialNote}
+          </p>
+
+          <dl class="mt-6 grid grid-cols-2 gap-px border border-border-subtle bg-border-subtle">
+            <div class="bg-bg-secondary px-4 py-3">
+              <dt class="text-[11px] uppercase tracking-[0.16em] text-text-muted">
+                Площадь
+              </dt>
+              <dd class="mt-1 text-sm font-medium text-text-primary">
+                {BEFORE_AFTER_SHOWCASE.specs.area}
+              </dd>
+            </div>
+            <div class="bg-bg-secondary px-4 py-3">
+              <dt class="text-[11px] uppercase tracking-[0.16em] text-text-muted">
+                Сроки
+              </dt>
+              <dd class="mt-1 text-sm font-medium text-text-primary">
+                {BEFORE_AFTER_SHOWCASE.specs.timeline}
+              </dd>
+            </div>
+            <div class="bg-bg-secondary px-4 py-3">
+              <dt class="text-[11px] uppercase tracking-[0.16em] text-text-muted">
+                Локация
+              </dt>
+              <dd class="mt-1 text-sm font-medium text-text-primary">
+                {BEFORE_AFTER_SHOWCASE.specs.location}
+              </dd>
+            </div>
+            <div class="bg-bg-secondary px-4 py-3">
+              <dt class="text-[11px] uppercase tracking-[0.16em] text-text-muted">
+                Формат
+              </dt>
+              <dd class="mt-1 text-sm font-medium text-text-primary">
+                {BEFORE_AFTER_SHOWCASE.specs.format}
+              </dd>
+            </div>
+          </dl>
+
+          <div class="mt-7">
+            <button
+              type="button"
+              data-want-same={BEFORE_AFTER_SHOWCASE.complex}
+              data-project-title={`${BEFORE_AFTER_SHOWCASE.titlePrefix}${BEFORE_AFTER_SHOWCASE.titleAccent}`}
+              data-project-area={BEFORE_AFTER_SHOWCASE.specs.area}
+              class="inline-flex cursor-pointer items-center justify-center gap-2.5 rounded-sm bg-accent px-6 py-3.5 text-sm font-medium text-text-primary transition-colors duration-[350ms] ease-[var(--ease-editorial)] hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
+            >
+              <span>{BEFORE_AFTER_SHOWCASE.ctaLabel}</span>
+              <svg
+                class="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14" />
+                <path d="m13 6 6 6-6 6" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="reveal reveal-delay-100 lg:col-span-7">
+          <BeforeAfterSlider
+            client:visible
+            beforeSrc={optimizedBefore.src}
+            afterSrc={optimizedAfter.src}
+            beforeAlt={BEFORE_AFTER_SHOWCASE.beforeAlt}
+            afterAlt={BEFORE_AFTER_SHOWCASE.afterAlt}
+            beforeLabel={BEFORE_AFTER_SHOWCASE.beforeLabel}
+            afterLabel={BEFORE_AFTER_SHOWCASE.afterLabel}
+            initialPosition={50}
+            ariaLabel={`Сравнение до и после ремонта в ${BEFORE_AFTER_SHOWCASE.complex}`}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно детального описания проекта («Смотреть больше») -->
+  <dialog
+    id="portfolio-detail-dialog"
+    aria-labelledby="portfolio-detail-title"
+    class="editorial-dialog m-auto max-h-[90dvh] w-[min(92vw,980px)] overflow-y-auto border border-border-subtle bg-bg-secondary p-0 text-text-primary"
+  >
+    <div class="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-border-subtle bg-bg-secondary/95 px-5 py-4 backdrop-blur-md sm:px-7">
+      <div class="flex items-center gap-3">
+        <span
+          data-detail-counter
+          class="cursor-default font-serif text-base italic text-accent"
+        >
+          01 / 0{PORTFOLIO_PROJECTS.length}
+        </span>
+        <span class="h-3.5 w-px bg-border-subtle" aria-hidden="true"></span>
+        <span
+          data-detail-complex
+          class="cursor-default text-xs uppercase tracking-[0.18em] text-text-muted"
+        >
+          ЖК «Европейский»
+        </span>
+      </div>
+
+      <!-- Стрелки переключения сгруппированы рядом в одном блоке (senior-ux-audit.md) -->
+      <div class="flex items-center gap-2">
+        <div
+          class="inline-flex items-center gap-1"
+          role="group"
+          aria-label="Переключение проектов"
+        >
+          <button
+            type="button"
+            data-detail-prev
+            aria-label="Предыдущий объект"
+            class="inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-sm border border-border-subtle bg-bg-elevated text-text-primary transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:border-border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+          >
+            <svg
+              class="h-4 w-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="m15 18-6-6 6-6" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            data-detail-next
+            aria-label="Следующий объект"
+            class="inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-sm border border-border-subtle bg-bg-elevated text-text-primary transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:border-border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+          >
+            <svg
+              class="h-4 w-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="m9 18 6-6-6-6" />
+            </svg>
+          </button>
+        </div>
+
+        <button
+          type="button"
+          data-dialog-close
+          aria-label="Закрыть окно"
+          class="inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-sm border border-border-subtle bg-bg-primary text-text-secondary transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+        >
+          <svg
+            class="h-4 w-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <line x1="6" y1="6" x2="18" y2="18" />
+            <line x1="18" y1="6" x2="6" y2="18" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="p-5 sm:p-7 lg:p-8">
+      <div class="relative aspect-[16/9] w-full overflow-hidden border border-border-subtle bg-bg-primary">
+        <img
+          data-detail-image
+          src=""
+          alt=""
+          class="h-full w-full object-cover object-center"
+        />
+      </div>
+
+      <div class="mt-6">
+        <h3
+          id="portfolio-detail-title"
+          data-detail-title
+          class="text-2xl font-normal leading-snug tracking-tight text-text-primary sm:text-3xl"
+        >
+        </h3>
+        <p data-detail-note class="mt-3 text-sm leading-relaxed text-text-secondary sm:text-base"></p>
+      </div>
+
+      <!-- Сетка ключевых характеристик -->
+      <dl class="mt-6 grid grid-cols-2 gap-px border border-border-subtle bg-border-subtle sm:grid-cols-4">
+        <div class="bg-bg-elevated px-4 py-3">
+          <dt class="text-[11px] uppercase tracking-[0.16em] text-text-muted">Площадь</dt>
+          <dd data-detail-area class="mt-1 text-sm font-medium text-text-primary"></dd>
+        </div>
+        <div class="bg-bg-elevated px-4 py-3">
+          <dt class="text-[11px] uppercase tracking-[0.16em] text-text-muted">Сроки</dt>
+          <dd data-detail-timeline class="mt-1 text-sm font-medium text-text-primary"></dd>
+        </div>
+        <div class="bg-bg-elevated px-4 py-3">
+          <dt class="text-[11px] uppercase tracking-[0.16em] text-text-muted">Локация</dt>
+          <dd data-detail-location class="mt-1 text-sm font-medium text-text-primary"></dd>
+        </div>
+        <div class="bg-bg-elevated px-4 py-3">
+          <dt class="text-[11px] uppercase tracking-[0.16em] text-text-muted">Формат</dt>
+          <dd data-detail-format class="mt-1 text-sm font-medium text-text-primary"></dd>
+        </div>
+      </dl>
+
+      <!-- Детальный состав выполненных работ (ref-1-nikakih-nervov.md) -->
+      <div class="mt-7 grid grid-cols-1 gap-px border border-border-subtle bg-border-subtle md:grid-cols-2">
+        <div class="bg-bg-primary p-5">
+          <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-accent">
+            01 · Стены и геометрия
+          </p>
+          <p data-detail-walls class="mt-2 text-sm leading-relaxed text-text-secondary"></p>
+        </div>
+        <div class="bg-bg-primary p-5">
+          <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-accent">
+            02 · Полы и покрытия
+          </p>
+          <p data-detail-floors class="mt-2 text-sm leading-relaxed text-text-secondary"></p>
+        </div>
+        <div class="bg-bg-primary p-5">
+          <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-accent">
+            03 · Инженерия и свет
+          </p>
+          <p data-detail-engineering class="mt-2 text-sm leading-relaxed text-text-secondary"></p>
+        </div>
+        <div class="bg-bg-primary p-5">
+          <p class="text-[11px] font-medium uppercase tracking-[0.18em] text-accent">
+            04 · Сроки и сдача
+          </p>
+          <p data-detail-handover class="mt-2 text-sm leading-relaxed text-text-secondary"></p>
+        </div>
+      </div>
+
+      <figure class="mt-6 border-l border-border-accent pl-4">
+        <blockquote
+          data-detail-quote
+          class="font-serif text-lg italic leading-snug text-text-primary sm:text-xl"
+        >
+        </blockquote>
+        <figcaption data-detail-quote-author class="mt-1.5 text-xs text-text-muted"></figcaption>
+      </figure>
+
+      <div class="mt-7 flex flex-wrap items-center justify-between gap-4 border-t border-border-subtle pt-6">
+        <p class="cursor-default text-xs text-text-muted">
+          Рассчитаем ориентировочный бюджет и сроки под вашу планировку за 24 часа.
+        </p>
+
+        <button
+          type="button"
+          data-detail-want-same
+          class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-sm bg-accent px-6 py-3.5 text-sm font-medium text-text-primary transition-colors duration-[350ms] ease-[var(--ease-editorial)] hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-secondary"
+        >
+          <span>Хочу так же</span>
+          <svg
+            class="h-4 w-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M5 12h14" />
+            <path d="m13 6 6 6-6 6" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Спокойная форма заявки с предзаполненным названием ЖК («Хочу так же») -->
+  <dialog
+    id="portfolio-lead-dialog"
+    aria-labelledby="portfolio-lead-title"
+    class="editorial-dialog m-auto max-h-[90dvh] w-[min(92vw,520px)] overflow-y-auto border border-border-subtle bg-bg-secondary p-0 text-text-primary"
+  >
+    <div class="flex items-center justify-between gap-4 border-b border-border-subtle px-6 py-5">
+      <p class="cursor-default text-xs uppercase tracking-[0.2em] text-text-muted">
+        Обсудить проект
+      </p>
+      <button
+        type="button"
+        data-lead-close
+        aria-label="Закрыть окно заявки"
+        class="inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-sm border border-border-subtle bg-bg-primary text-text-secondary transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+      >
+        <svg
+          class="h-4 w-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <line x1="6" y1="6" x2="18" y2="18" />
+          <line x1="18" y1="6" x2="6" y2="18" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="p-6 sm:p-7">
+      <h3
+        id="portfolio-lead-title"
+        class="text-2xl font-normal leading-snug tracking-tight text-text-primary"
+      >
+        Начнём{' '}
+        <span class="font-serif text-[1.12em] font-medium italic">с&nbsp;разговора</span>
+      </h3>
+      <p class="mt-2 text-sm leading-relaxed text-text-secondary">
+        Подготовим расчёт стоимости и сроков с опорой на выбранный проект — спокойно и без
+        навязчивых звонков.
+      </p>
+
+      <form data-lead-form class="mt-6 space-y-4">
+        <div>
+          <label
+            for="portfolio-lead-complex"
+            class="block text-xs uppercase tracking-[0.16em] text-text-muted"
+          >
+            Ориентир по проекту / ЖК
+          </label>
+          <input
+            id="portfolio-lead-complex"
+            name="complex"
+            type="text"
+            readonly
+            class="mt-2 w-full rounded-sm border border-border-accent bg-bg-elevated px-4 py-3 text-sm text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+          />
+        </div>
+
+        <div>
+          <label
+            for="portfolio-lead-name"
+            class="block text-xs uppercase tracking-[0.16em] text-text-muted"
+          >
+            Ваше имя
+          </label>
+          <input
+            id="portfolio-lead-name"
+            name="name"
+            type="text"
+            required
+            autocomplete="name"
+            placeholder="Например, Алексей"
+            class="mt-2 w-full rounded-sm border border-border-subtle bg-bg-primary px-4 py-3 text-sm text-text-primary placeholder:text-text-muted focus-visible:border-border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+          />
+        </div>
+
+        <div>
+          <label
+            for="portfolio-lead-phone"
+            class="block text-xs uppercase tracking-[0.16em] text-text-muted"
+          >
+            Телефон или мессенджер
+          </label>
+          <input
+            id="portfolio-lead-phone"
+            name="phone"
+            type="tel"
+            required
+            autocomplete="tel"
+            placeholder="+7 (900) 000-00-00"
+            class="mt-2 w-full rounded-sm border border-border-subtle bg-bg-primary px-4 py-3 text-sm text-text-primary placeholder:text-text-muted focus-visible:border-border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+          />
+        </div>
+
+        <label class="flex cursor-pointer items-start gap-3 pt-1 text-xs leading-relaxed text-text-secondary">
+          <input
+            type="checkbox"
+            required
+            class="mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-accent"
+          />
+          <span>
+            Согласен с политикой конфиденциальности и обработкой персональных данных
+          </span>
+        </label>
+
+        <button
+          type="submit"
+          class="mt-2 inline-flex w-full cursor-pointer items-center justify-center rounded-sm bg-accent px-6 py-3.5 text-sm font-medium text-text-primary transition-colors duration-[350ms] ease-[var(--ease-editorial)] hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-secondary"
+        >
+          Получить расчёт под мой объект
+        </button>
+      </form>
+
+      <div
+        data-lead-success
+        class="mt-6 hidden border border-border-accent bg-bg-elevated p-5 animate-fade-in"
+      >
+        <p class="text-xs uppercase tracking-[0.18em] text-accent">Заявка принята</p>
+        <p class="mt-2 text-sm leading-relaxed text-text-primary">
+          Спасибо! Инженер-сметчик свяжется с вами в течение 15 минут в рабочее время и
+          подготовит ориентир по бюджету.
+        </p>
+      </div>
+    </div>
+  </dialog>
+
+  <script
+    id="portfolio-projects-data"
+    type="application/json"
+    set:html={JSON.stringify(optimizedModalImages)}
+  ></script>
+</section>
+
+<script>
+  import { selectedLeadContext } from '../../stores/lead';
+
+  interface SerializedPortfolioProject {
+    id: string;
+    number: string;
+    complex: string;
+    title: string;
+    editorialNote: string;
+    specs: {
+      area: string;
+      timeline: string;
+      location: string;
+      format: string;
+    };
+    quote: string;
+    quoteAuthor: string;
+    details: {
+      walls: string;
+      floors: string;
+      engineering: string;
+      handover: string;
+    };
+    imageSrc: string;
+    imageAlt: string;
+    imagePositionClass: string;
+  }
+
+  function initPortfolioSection(): void {
+    const section = document.getElementById('portfolio');
+    if (!section || section.dataset.bound === 'true') {
+      return;
+    }
+    section.dataset.bound = 'true';
+
+    const dataScript = document.getElementById('portfolio-projects-data');
+    let projects: SerializedPortfolioProject[] = [];
+
+    if (dataScript?.textContent) {
+      try {
+        projects = JSON.parse(dataScript.textContent) as SerializedPortfolioProject[];
+      } catch {
+        projects = [];
+      }
+    }
+
+    // 1. Пагинация «Смотреть ещё»
+    const loadMoreBtn = section.querySelector<HTMLButtonElement>(
+      '[data-portfolio-load-more]',
+    );
+    const loadMoreLabel = section.querySelector<HTMLElement>(
+      '[data-load-more-label]',
+    );
+    const loadMoreIcon = section.querySelector<SVGElement>(
+      '[data-load-more-icon]',
+    );
+    const counterEl = section.querySelector<HTMLElement>(
+      '[data-portfolio-counter]',
+    );
+    const extraCards = Array.from(
+      section.querySelectorAll<HTMLElement>('[data-extra-project="true"]'),
+    );
+    const totalCount = projects.length;
+    const initialCount = totalCount - extraCards.length;
+
+    loadMoreBtn?.addEventListener('click', () => {
+      const isExpanded = loadMoreBtn.getAttribute('aria-expanded') === 'true';
+      const nextExpanded = !isExpanded;
+
+      loadMoreBtn.setAttribute('aria-expanded', String(nextExpanded));
+
+      extraCards.forEach((card) => {
+        if (nextExpanded) {
+          card.classList.remove('hidden');
+          card.classList.add('is-visible', 'animate-fade-in');
+        } else {
+          card.classList.add('hidden');
+          card.classList.remove('animate-fade-in');
+        }
+      });
+
+      if (loadMoreLabel) {
+        loadMoreLabel.textContent = nextExpanded
+          ? 'Свернуть дополнительные проекты'
+          : `Смотреть ещё (${extraCards.length})`;
+      }
+
+      loadMoreIcon?.classList.toggle('rotate-180', nextExpanded);
+
+      if (counterEl) {
+        counterEl.textContent = nextExpanded
+          ? `Показано ${totalCount} из ${totalCount} объектов`
+          : `Показано ${initialCount} из ${totalCount} объектов`;
+      }
+    });
+
+    // 2. Модальное окно детального просмотра («Смотреть больше»)
+    const detailDialog = document.getElementById('portfolio-detail-dialog');
+    let activeIndex = 0;
+
+    const renderProjectDetail = (index: number): void => {
+      if (!(detailDialog instanceof HTMLDialogElement) || projects.length === 0) {
+        return;
+      }
+
+      const normalizedIndex =
+        ((index % projects.length) + projects.length) % projects.length;
+      activeIndex = normalizedIndex;
+      const project = projects[normalizedIndex];
+
+      const setText = (selector: string, value: string): void => {
+        const el = detailDialog.querySelector<HTMLElement>(selector);
+        if (el) {
+          el.textContent = value;
+        }
+      };
+
+      setText(
+        '[data-detail-counter]',
+        `${project.number} / 0${projects.length}`,
+      );
+      setText('[data-detail-complex]', project.complex);
+      setText('[data-detail-title]', project.title);
+      setText('[data-detail-note]', project.editorialNote);
+      setText('[data-detail-area]', project.specs.area);
+      setText('[data-detail-timeline]', project.specs.timeline);
+      setText('[data-detail-location]', project.specs.location);
+      setText('[data-detail-format]', project.specs.format);
+      setText('[data-detail-walls]', project.details.walls);
+      setText('[data-detail-floors]', project.details.floors);
+      setText('[data-detail-engineering]', project.details.engineering);
+      setText('[data-detail-handover]', project.details.handover);
+      setText('[data-detail-quote]', `«${project.quote}»`);
+      setText('[data-detail-quote-author]', project.quoteAuthor);
+
+      const img = detailDialog.querySelector<HTMLImageElement>(
+        '[data-detail-image]',
+      );
+      if (img) {
+        img.src = project.imageSrc;
+        img.alt = project.imageAlt;
+        img.className = `h-full w-full object-cover ${project.imagePositionClass}`;
+      }
+    };
+
+    section
+      .querySelectorAll<HTMLButtonElement>('[data-project-detail-open]')
+      .forEach((button) => {
+        button.addEventListener('click', () => {
+          const parsedIndex = Number(button.dataset.projectDetailOpen ?? '0');
+          renderProjectDetail(Number.isNaN(parsedIndex) ? 0 : parsedIndex);
+          if (detailDialog instanceof HTMLDialogElement && !detailDialog.open) {
+            detailDialog.showModal();
+          }
+        });
+      });
+
+    if (detailDialog instanceof HTMLDialogElement) {
+      detailDialog
+        .querySelector('[data-detail-prev]')
+        ?.addEventListener('click', () => renderProjectDetail(activeIndex - 1));
+
+      detailDialog
+        .querySelector('[data-detail-next]')
+        ?.addEventListener('click', () => renderProjectDetail(activeIndex + 1));
+
+      detailDialog
+        .querySelector('[data-dialog-close]')
+        ?.addEventListener('click', () => detailDialog.close());
+
+      detailDialog.addEventListener('click', (event: MouseEvent) => {
+        if (event.target === detailDialog) {
+          detailDialog.close();
+        }
+      });
+
+      detailDialog.addEventListener('keydown', (event: KeyboardEvent) => {
+        if (event.key === 'ArrowLeft') {
+          event.preventDefault();
+          renderProjectDetail(activeIndex - 1);
+        } else if (event.key === 'ArrowRight') {
+          event.preventDefault();
+          renderProjectDetail(activeIndex + 1);
+        }
+      });
+    }
+
+    // 3. Обработка «Хочу так же» (синхронизация через nanostores + форма с предзаполненным ЖК)
+    const leadDialog = document.getElementById('portfolio-lead-dialog');
+    const leadForm = leadDialog?.querySelector<HTMLFormElement>('[data-lead-form]');
+    const leadSuccess = leadDialog?.querySelector<HTMLElement>('[data-lead-success]');
+    const complexInput = document.getElementById('portfolio-lead-complex');
+
+    const openLeadRequest = (
+      projectComplex: string,
+      projectTitle?: string,
+      projectArea?: string,
+    ): void => {
+      const payload = {
+        source: 'portfolio-want-same',
+        projectComplex,
+        projectTitle,
+        projectArea,
+      };
+
+      selectedLeadContext.set(payload);
+
+      const customEvent = new CustomEvent('monolit:lead-open', {
+        detail: payload,
+        cancelable: true,
+      });
+      const shouldUseLocalDialog = window.dispatchEvent(customEvent);
+
+      if (!shouldUseLocalDialog) {
+        return;
+      }
+
+      if (complexInput instanceof HTMLInputElement) {
+        complexInput.value = projectArea
+          ? `${projectComplex} (${projectArea})`
+          : projectComplex;
+      }
+
+      leadForm?.classList.remove('hidden');
+      leadForm?.reset();
+      if (complexInput instanceof HTMLInputElement) {
+        complexInput.value = projectArea
+          ? `${projectComplex} (${projectArea})`
+          : projectComplex;
+      }
+      leadSuccess?.classList.add('hidden');
+
+      if (leadDialog instanceof HTMLDialogElement && !leadDialog.open) {
+        leadDialog.showModal();
+      }
+    };
+
+    section
+      .querySelectorAll<HTMLButtonElement>('[data-want-same]')
+      .forEach((button) => {
+        button.addEventListener('click', () => {
+          const complex = button.dataset.wantSame ?? 'Индивидуальный проект';
+          openLeadRequest(
+            complex,
+            button.dataset.projectTitle,
+            button.dataset.projectArea,
+          );
+        });
+      });
+
+    if (detailDialog instanceof HTMLDialogElement) {
+      detailDialog
+        .querySelector<HTMLButtonElement>('[data-detail-want-same]')
+        ?.addEventListener('click', () => {
+          const currentProject = projects[activeIndex];
+          detailDialog.close();
+          if (currentProject) {
+            openLeadRequest(
+              currentProject.complex,
+              currentProject.title,
+              currentProject.specs.area,
+            );
+          }
+        });
+    }
+
+    if (leadDialog instanceof HTMLDialogElement) {
+      leadDialog
+        .querySelector('[data-lead-close]')
+        ?.addEventListener('click', () => leadDialog.close());
+
+      leadDialog.addEventListener('click', (event: MouseEvent) => {
+        if (event.target === leadDialog) {
+          leadDialog.close();
+        }
+      });
+
+      leadForm?.addEventListener('submit', (event: SubmitEvent) => {
+        event.preventDefault();
+        leadForm.classList.add('hidden');
+        leadSuccess?.classList.remove('hidden');
+      });
+    }
+  }
+
+  initPortfolioSection();
+  document.addEventListener('astro:page-load', initPortfolioSection);
+</script>
