@@ -60,11 +60,14 @@
     background-color: var(--color-bg-primary);
     color: var(--color-text-primary);
     scroll-behavior: smooth;
+    max-width: 100%;
     overflow-x: clip;
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {
     margin: 0;
+    max-width: 100%;
     background-color: var(--color-bg-primary);
     color: var(--color-text-primary);
     font-family: var(--font-sans);
@@ -72,6 +75,30 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: clip;
+  }
+
+  img,
+  video,
+  canvas,
+  iframe {
+    max-width: 100%;
+  }
+
+  button,
+  a,
+  label,
+  summary,
+  [role="button"],
+  [role="tab"],
+  [role="radio"],
+  [role="switch"] {
+    touch-action: manipulation;
+  }
+
+  /* Статичные карточки и бейджи не должны вспыхивать при тапе */
+  article,
+  [aria-hidden="true"] {
+    -webkit-tap-highlight-color: transparent;
   }
 
   ::selection {
@@ -142,9 +169,14 @@
   transition: transform 700ms var(--ease-editorial);
 }
 
-.portfolio-card:has([data-card-action]:hover) .portfolio-card-image,
 .portfolio-card:has([data-card-action]:focus-visible) .portfolio-card-image {
   transform: scale(1.03);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .portfolio-card:has([data-card-action]:hover) .portfolio-card-image {
+    transform: scale(1.03);
+  }
 }
 
 /* Плавный CSS-зум (scale 1.03 за 1000ms) фоновой картинки карточек разводящей страницы Hub */
@@ -154,9 +186,20 @@
   will-change: transform;
 }
 
-.hub-card:hover .hub-card-image,
-.hub-card:focus-visible .hub-card-image {
-  transform: scale(1.03);
+.hub-card:focus-visible .hub-card-image,
+.hub-card:active .hub-card-image {
+  transform: scale(1.015);
+}
+
+.hub-card:active .hub-card-line {
+  opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hub-card:hover .hub-card-image,
+  .hub-card:focus-visible .hub-card-image {
+    transform: scale(1.03);
+  }
 }
 
 /* Редакционные модальные окна на нативном <dialog> */
@@ -216,6 +259,7 @@ dialog.editorial-dialog[open] {
 .accordion-panel {
   display: grid;
   grid-template-rows: 0fr;
+  overflow: hidden;
   transition: grid-template-rows 360ms var(--ease-editorial);
 }
 
@@ -231,16 +275,31 @@ dialog.editorial-dialog[open] {
 .editorial-range {
   -webkit-appearance: none;
   appearance: none;
+  height: 44px;
+  margin: 0;
+  background: transparent;
+  outline: none;
+  touch-action: none;
+  cursor: pointer;
+}
+
+.editorial-range::-webkit-slider-runnable-track {
   height: 2px;
   background: var(--color-border-subtle);
-  outline: none;
+}
+
+.editorial-range::-moz-range-track {
+  height: 2px;
+  background: var(--color-border-subtle);
+  border: none;
 }
 
 .editorial-range::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 20px;
-  height: 20px;
+  width: 28px;
+  height: 28px;
+  margin-top: -13px;
   border-radius: 9999px;
   background: var(--color-accent);
   border: 2px solid var(--color-bg-primary);
@@ -257,8 +316,8 @@ dialog.editorial-dialog[open] {
 }
 
 .editorial-range::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
+  width: 28px;
+  height: 28px;
   border-radius: 9999px;
   background: var(--color-accent);
   border: 2px solid var(--color-bg-primary);
@@ -280,6 +339,35 @@ dialog.editorial-dialog[open] {
 
 .editorial-range:focus-visible::-moz-range-thumb {
   box-shadow: 0 0 0 3px var(--color-accent-muted), 0 0 0 1px var(--color-accent);
+}
+
+/* Блокировка скролла, пока открыто мобильное меню (и html, и body) */
+html.menu-open,
+html.menu-open body {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+/* Поля с телефона: 16px, чтобы iOS не зумил страницу, и зона не ниже 44px */
+@media (max-width: 639px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="button"]):not([type="submit"]):not([type="hidden"]),
+  textarea,
+  select {
+    font-size: 1rem;
+    min-height: 2.75rem;
+  }
+
+  label:has(> input[type="checkbox"]) {
+    min-height: 2.75rem;
+  }
+}
+
+/* На тач-экранах hover не залипает: отклик только пока палец на кнопке */
+@media (hover: none) {
+  a.bg-accent:active,
+  button.bg-accent:active {
+    background-color: var(--color-accent-hover);
+  }
 }
 
 /* Уважение системной настройки снижения анимаций */

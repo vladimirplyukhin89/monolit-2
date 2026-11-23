@@ -36,7 +36,10 @@ export default function BeforeAfterSlider({
   ariaLabel = 'Сравнение интерьера до и после ремонта',
 }: BeforeAfterSliderProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const railRef = useRef<HTMLDivElement | null>(null);
   const activePointerIdRef = useRef<number | null>(null);
+  const pendingClientXRef = useRef<number | null>(null);
+  const frameRef = useRef<number | null>(null);
 
   const [position, setPosition] = useState<number>(() =>
     clampPosition(initialPosition),
@@ -58,6 +61,25 @@ export default function BeforeAfterSlider({
     const ratio = ((clientX - rect.left) / rect.width) * 100;
     setPosition(clampPosition(ratio));
   }, []);
+
+  const queuePositionFromClientX = useCallback(
+    (clientX: number) => {
+      pendingClientXRef.current = clientX;
+      if (frameRef.current !== null) {
+        return;
+      }
+
+      frameRef.current = window.requestAnimationFrame(() => {
+        frameRef.current = null;
+        const nextClientX = pendingClientXRef.current;
+        pendingClientXRef.current = null;
+        if (nextClientX !== null) {
+          updatePositionFromClientX(nextClientX);
+        }
+      });
+    },
+    [updatePositionFromClientX],
+  );
 
   const startDrag = useCallback(
     (
@@ -89,9 +111,13 @@ export default function BeforeAfterSlider({
         return;
       }
 
-      updatePositionFromClientX(event.clientX);
+      if (event.cancelable) {
+        event.preventDefault();
+      }
+
+      queuePositionFromClientX(event.clientX);
     },
-    [updatePositionFromClientX],
+    [queuePositionFromClientX],
   );
 
   const stopDrag = useCallback((event: ReactPointerEvent<HTMLElement>) => {
@@ -169,6 +195,40 @@ export default function BeforeAfterSlider({
     },
     [jumpToPosition],
   );
+
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail) {
+      return;
+    }
+
+    const handleTouchMove = (event: TouchEvent): void => {
+      if (activePointerIdRef.current === null) {
+        return;
+      }
+
+      if (event.cancelable) {
+        event.preventDefault();
+      }
+
+      const touch = event.touches[0];
+      if (!touch) {
+        return;
+      }
+
+      queuePositionFromClientX(touch.clientX);
+    };
+
+    rail.addEventListener('touchmove', handleTouchMove, { passive: false });
+
+    return () => {
+      rail.removeEventListener('touchmove', handleTouchMove);
+      if (frameRef.current !== null) {
+        window.cancelAnimationFrame(frameRef.current);
+        frameRef.current = null;
+      }
+    };
+  }, [queuePositionFromClientX]);
 
   useEffect(() => {
     if (!isAnimatingStep) {
@@ -264,7 +324,8 @@ export default function BeforeAfterSlider({
           onPointerMove={handlePointerMove}
           onPointerUp={stopDrag}
           onPointerCancel={stopDrag}
-          style={{ left: `${position}%` }}
+          ref={railRef}
+          style={{ left: `${position}%`, touchAction: 'none' }}
           className={`group absolute inset-y-0 z-20 flex w-11 -translate-x-1/2 touch-none cursor-ew-resize items-center justify-center focus-visible:outline-none ${transitionClass}`}
         >
           {/* Тонкая разделительная линия */}
@@ -316,7 +377,7 @@ export default function BeforeAfterSlider({
           <button
             type="button"
             onClick={() => jumpToPosition(100)}
-            className={`cursor-pointer rounded-sm border px-2.5 py-1.5 text-[11px] font-medium uppercase leading-none tracking-[0.14em] transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent ${
+            className={`min-h-11 cursor-pointer rounded-sm border px-3.5 py-2 text-[11px] font-medium uppercase leading-none tracking-[0.14em] transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent ${
               roundedPosition >= 95
                 ? 'border-border-accent bg-accent-muted text-accent'
                 : 'border-border-subtle bg-bg-secondary text-text-secondary hover:border-border-accent hover:text-text-primary'
@@ -327,7 +388,7 @@ export default function BeforeAfterSlider({
           <button
             type="button"
             onClick={() => jumpToPosition(50)}
-            className={`cursor-pointer rounded-sm border px-2.5 py-1.5 text-[11px] font-medium uppercase leading-none tracking-[0.14em] transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent ${
+            className={`min-h-11 cursor-pointer rounded-sm border px-3.5 py-2 text-[11px] font-medium uppercase leading-none tracking-[0.14em] transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent ${
               roundedPosition >= 45 && roundedPosition <= 55
                 ? 'border-border-accent bg-accent-muted text-accent'
                 : 'border-border-subtle bg-bg-secondary text-text-secondary hover:border-border-accent hover:text-text-primary'
@@ -338,7 +399,7 @@ export default function BeforeAfterSlider({
           <button
             type="button"
             onClick={() => jumpToPosition(0)}
-            className={`cursor-pointer rounded-sm border px-2.5 py-1.5 text-[11px] font-medium uppercase leading-none tracking-[0.14em] transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent ${
+            className={`min-h-11 cursor-pointer rounded-sm border px-3.5 py-2 text-[11px] font-medium uppercase leading-none tracking-[0.14em] transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent ${
               roundedPosition <= 5
                 ? 'border-border-accent bg-accent-muted text-accent'
                 : 'border-border-subtle bg-bg-secondary text-text-secondary hover:border-border-accent hover:text-text-primary'

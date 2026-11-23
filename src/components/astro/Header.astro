@@ -58,9 +58,9 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
   compact ? (
     <header
       id="site-header"
-      class="sticky top-0 z-40 w-full border-b border-border-subtle bg-bg-primary/92 backdrop-blur-md"
+      class="sticky top-0 z-40 w-full overflow-x-clip border-b border-border-subtle bg-bg-primary/92 backdrop-blur-md"
     >
-      <div class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-5 sm:h-[72px] sm:px-8 lg:px-10">
+      <div class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-2 px-4 sm:h-[72px] sm:gap-3 sm:px-8 lg:px-10">
         <!-- Левая группа: логотип + подпись региона -->
         <div class="flex min-w-0 items-center gap-3 sm:gap-4">
           <a
@@ -111,7 +111,7 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
           <button
             type="button"
             data-lead-trigger="hub-header-cta"
-            class="inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-sm bg-accent px-4 py-2.5 text-xs font-medium text-text-primary transition-colors duration-300 hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary sm:px-5 sm:text-sm"
+            class="inline-flex min-h-11 shrink-0 cursor-pointer items-center justify-center whitespace-nowrap rounded-sm bg-accent px-3 py-2.5 text-xs font-medium text-text-primary transition-colors duration-300 hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary sm:px-5 sm:text-sm"
           >
             Связаться
           </button>
@@ -123,7 +123,7 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
             aria-expanded="false"
             aria-controls="mobile-menu-panel"
             aria-label="Открыть меню навигации"
-            class="inline-flex h-11 w-11 cursor-pointer items-center justify-center border border-border-subtle bg-bg-secondary text-text-primary transition-colors duration-300 hover:border-border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent lg:hidden"
+            class="inline-flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center border border-border-subtle bg-bg-secondary text-text-primary transition-colors duration-300 hover:border-border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent lg:hidden!"
           >
             <span class="sr-only">Меню</span>
             <svg
@@ -161,7 +161,8 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
       <div
         id="mobile-menu-panel"
         aria-hidden="true"
-        class="hidden max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-border-subtle bg-bg-primary sm:max-h-[calc(100dvh-72px)] lg:hidden"
+        inert
+        class="hidden max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain border-t border-border-subtle bg-bg-primary sm:max-h-[calc(100dvh-72px)] lg:hidden!"
       >
         <div class="animate-fade-in mx-auto max-w-7xl px-5 py-8 sm:px-8">
           <p class="mb-4 text-xs uppercase tracking-[0.2em] text-text-muted">
@@ -236,9 +237,9 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
   ) : (
     <header
       id="site-header"
-      class="sticky top-0 z-40 w-full border-b border-border-subtle bg-bg-primary/90 backdrop-blur-md"
+      class="sticky top-0 z-40 w-full overflow-x-clip border-b border-border-subtle bg-bg-primary/90 backdrop-blur-md"
     >
-      <div class="mx-auto flex h-20 max-w-7xl items-center justify-between gap-3 px-5 sm:px-8 lg:gap-3 lg:px-6 xl:gap-4 xl:px-10">
+      <div class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-2 px-4 sm:h-20 sm:gap-3 sm:px-8 lg:gap-3 lg:px-6 xl:gap-4 xl:px-10">
         <!-- Левая группа: логотип (ссылка на главную /) + переключатель страниц (десктоп lg и выше) -->
         <div class="flex min-w-0 shrink-0 items-center gap-3 xl:gap-5">
           <a
@@ -325,7 +326,7 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
           aria-expanded="false"
           aria-controls="mobile-menu-panel"
           aria-label="Открыть меню навигации"
-          class="inline-flex h-11 w-11 cursor-pointer items-center justify-center border border-border-subtle bg-bg-secondary text-text-primary transition-colors duration-300 hover:border-border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent lg:hidden"
+          class="inline-flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center border border-border-subtle bg-bg-secondary text-text-primary transition-colors duration-300 hover:border-border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent lg:hidden!"
         >
           <span class="sr-only">Меню</span>
           <svg
@@ -362,7 +363,8 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
       <div
         id="mobile-menu-panel"
         aria-hidden="true"
-        class="hidden max-h-[calc(100dvh-5rem)] overflow-y-auto border-t border-border-subtle bg-bg-primary lg:hidden"
+        inert
+        class="hidden max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain border-t border-border-subtle bg-bg-primary sm:max-h-[calc(100dvh-5rem)] lg:hidden!"
       >
         <div class="animate-fade-in mx-auto max-w-7xl px-5 py-8 sm:px-8">
           <p class="mb-4 text-xs uppercase tracking-[0.2em] text-text-muted">
@@ -383,7 +385,7 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
                   data-mobile-nav-link
                   aria-current={isActive ? 'page' : undefined}
                   class:list={[
-                    'flex items-center justify-center rounded-sm border px-3 py-3 text-center text-xs font-medium transition-colors duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent sm:text-sm',
+                    'flex min-h-11 items-center justify-center rounded-sm border px-3 py-3 text-center text-xs font-medium transition-colors duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent sm:text-sm',
                     isActive
                       ? 'border-border-accent bg-accent-muted text-accent'
                       : 'border-border-subtle bg-bg-secondary text-text-secondary hover:border-border-accent hover:text-text-primary',
@@ -477,9 +479,14 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
       );
       panel.setAttribute('aria-hidden', String(!isOpen));
       panel.classList.toggle('hidden', !isOpen);
+      if (isOpen) {
+        panel.removeAttribute('inert');
+      } else {
+        panel.setAttribute('inert', '');
+      }
       openIcon?.classList.toggle('hidden', isOpen);
       closeIcon?.classList.toggle('hidden', !isOpen);
-      document.body.classList.toggle('overflow-hidden', isOpen);
+      document.documentElement.classList.toggle('menu-open', isOpen);
     };
 
     toggleBtn.addEventListener('click', () => {
@@ -489,6 +496,23 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
 
     navLinks.forEach((link) => {
       link.addEventListener('click', () => setMenuOpen(false));
+    });
+
+    document.addEventListener('click', (event: MouseEvent) => {
+      if (toggleBtn.getAttribute('aria-expanded') !== 'true') {
+        return;
+      }
+
+      const target = event.target;
+      if (!(target instanceof Node)) {
+        return;
+      }
+
+      if (toggleBtn.contains(target) || panel.contains(target)) {
+        return;
+      }
+
+      setMenuOpen(false);
     });
 
     document.addEventListener('keydown', (event: KeyboardEvent) => {

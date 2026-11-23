@@ -645,7 +645,7 @@ export default function QuizCalculator() {
                                 type="button"
                                 onClick={() => handleAreaChange(preset)}
                                 aria-pressed={isSelected}
-                                className={`cursor-pointer rounded-sm border px-3.5 py-2 text-xs font-medium tabular-nums transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent ${
+                                className={`min-h-11 cursor-pointer rounded-sm border px-3.5 py-2 text-xs font-medium tabular-nums transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent ${
                                   isSelected
                                     ? 'border-border-accent bg-accent-muted text-accent'
                                     : 'border-border-subtle bg-bg-secondary text-text-secondary hover:border-border-accent hover:text-text-primary'
@@ -762,7 +762,7 @@ export default function QuizCalculator() {
                                 channel: channel.id,
                               }))
                             }
-                            className={`cursor-pointer rounded-sm border px-4 py-2 text-xs font-medium transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent ${
+                            className={`min-h-11 cursor-pointer rounded-sm border px-4 py-2 text-xs font-medium transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent ${
                               isActive
                                 ? 'border-border-accent bg-accent-muted text-accent'
                                 : 'border-border-subtle bg-bg-primary text-text-secondary hover:border-border-accent hover:text-text-primary'
@@ -800,7 +800,7 @@ export default function QuizCalculator() {
                           }
                         }}
                         placeholder="Например, Дмитрий"
-                        className="mt-2 w-full rounded-sm border border-border-subtle bg-bg-primary px-4 py-3 text-sm text-text-primary placeholder:text-text-muted transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:border-border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                        className="mt-2 w-full rounded-sm border border-border-subtle bg-bg-primary px-4 py-3 text-base text-text-primary placeholder:text-text-muted transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:border-border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent sm:text-sm"
                       />
                     </div>
 
@@ -815,8 +815,10 @@ export default function QuizCalculator() {
                         id={`${formId}-phone`}
                         name="phone"
                         type="tel"
+                        inputMode="tel"
                         required
                         autoComplete="tel"
+                        enterKeyHint="send"
                         value={leadForm.phone}
                         onChange={(event) => {
                           setLeadForm((prev) => ({
@@ -828,7 +830,7 @@ export default function QuizCalculator() {
                           }
                         }}
                         placeholder="+7 (900) 000-00-00"
-                        className="mt-2 w-full rounded-sm border border-border-subtle bg-bg-primary px-4 py-3 text-sm text-text-primary placeholder:text-text-muted transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:border-border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                        className="mt-2 w-full rounded-sm border border-border-subtle bg-bg-primary px-4 py-3 text-base text-text-primary placeholder:text-text-muted transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:border-border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent sm:text-sm"
                       />
                     </div>
                   </div>
@@ -915,11 +917,11 @@ export default function QuizCalculator() {
                     </p>
                   )}
 
-                  <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
+                  <div className="mt-6 flex flex-col items-stretch justify-between gap-3 sm:flex-row sm:items-center sm:gap-4">
                     <button
                       type="button"
                       onClick={handlePrev}
-                      className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-sm border border-border-subtle bg-bg-primary px-5 py-3.5 text-sm font-normal text-text-secondary transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                      className="inline-flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-sm border border-border-subtle bg-bg-primary px-5 py-3.5 text-sm font-normal text-text-secondary transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent sm:w-auto"
                     >
                       <svg
                         className="h-4 w-4"
@@ -939,7 +941,7 @@ export default function QuizCalculator() {
 
                     <button
                       type="submit"
-                      className="inline-flex cursor-pointer items-center justify-center gap-2.5 rounded-sm bg-accent px-7 py-3.5 text-sm font-medium text-text-primary transition-colors duration-[350ms] ease-[var(--ease-editorial)] hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-secondary"
+                      className="inline-flex min-h-11 w-full cursor-pointer items-center justify-center gap-2.5 rounded-sm bg-accent px-7 py-3.5 text-sm font-medium text-text-primary transition-colors duration-[350ms] ease-[var(--ease-editorial)] hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-secondary sm:w-auto"
                     >
                       <span>Получить точную смету</span>
                       <svg

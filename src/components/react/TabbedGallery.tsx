@@ -108,12 +108,12 @@ export default function TabbedGallery({
       className="border border-border-subtle bg-bg-secondary"
     >
       {/* Верхняя панель: табы категорий (если их > 1) + сгруппированные стрелки и счётчик */}
-      <div className="flex flex-col justify-between gap-4 border-b border-border-subtle bg-bg-elevated px-5 py-4 sm:flex-row sm:items-center sm:px-6 lg:px-8">
+      <div className="flex min-w-0 flex-col justify-between gap-4 border-b border-border-subtle bg-bg-elevated px-5 py-4 sm:flex-row sm:items-center sm:px-6 lg:px-8">
         {showTabs ? (
           <div
             role="tablist"
             aria-label="Категории работ"
-            className="flex flex-wrap items-center gap-2"
+            className="flex w-full min-w-0 max-w-full snap-x snap-mandatory items-center gap-2 overflow-x-auto overscroll-x-contain pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] sm:flex-wrap sm:overflow-visible [&::-webkit-scrollbar]:hidden"
           >
             {tabs.map((tab, index) => {
               const isSelected = index === safeTabIndex;
@@ -126,7 +126,7 @@ export default function TabbedGallery({
                   aria-selected={isSelected}
                   aria-controls={`${instanceId}-panel-${tab.id}`}
                   onClick={() => handleTabChange(index)}
-                  className={`inline-flex cursor-pointer items-center gap-2 rounded-sm border px-3.5 py-2 text-xs font-medium transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent sm:px-4 sm:text-sm ${
+                  className={`inline-flex min-h-11 shrink-0 snap-start cursor-pointer items-center gap-2 rounded-sm border px-3.5 py-2 text-xs font-medium transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent sm:px-4 sm:text-sm ${
                     isSelected
                       ? 'border-border-accent bg-accent-muted text-accent'
                       : 'border-border-subtle bg-bg-secondary text-text-secondary hover:border-border-accent hover:text-text-primary'
@@ -158,7 +158,7 @@ export default function TabbedGallery({
         )}
 
         {/* Счётчик + сгруппированные рядом стрелки переключения (senior-ux-audit.md) */}
-        <div className="flex shrink-0 items-center justify-between gap-4 sm:justify-end">
+        <div className="flex shrink-0 items-center justify-between gap-3 sm:justify-end">
           <p
             aria-live="polite"
             className="cursor-default font-serif text-base italic tabular-nums text-text-secondary"
@@ -180,7 +180,7 @@ export default function TabbedGallery({
               onClick={handlePrevSlide}
               disabled={totalSlides <= 1}
               aria-label="Предыдущий слайд"
-              className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-sm border border-border-subtle bg-bg-secondary text-text-primary transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:border-border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent disabled:cursor-not-allowed disabled:opacity-40"
+              className="inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-sm border border-border-subtle bg-bg-secondary text-text-primary transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:border-border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent disabled:cursor-not-allowed disabled:opacity-40"
             >
               <svg
                 className="h-4 w-4"
@@ -201,7 +201,7 @@ export default function TabbedGallery({
               onClick={handleNextSlide}
               disabled={totalSlides <= 1}
               aria-label="Следующий слайд"
-              className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-sm border border-border-subtle bg-bg-secondary text-text-primary transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:border-border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent disabled:cursor-not-allowed disabled:opacity-40"
+              className="inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-sm border border-border-subtle bg-bg-secondary text-text-primary transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:border-border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent disabled:cursor-not-allowed disabled:opacity-40"
             >
               <svg
                 className="h-4 w-4"
@@ -442,7 +442,7 @@ export default function TabbedGallery({
                   onClick={() => setActiveSlideIndex(idx)}
                   aria-label={`Перейти к слайду ${idx + 1} из ${totalSlides}`}
                   aria-current={isActive ? 'true' : undefined}
-                  className={`inline-flex h-7 min-w-7 cursor-pointer items-center justify-center rounded-sm border px-2 text-[11px] font-medium tabular-nums leading-none transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent ${
+                  className={`inline-flex h-11 min-w-11 cursor-pointer items-center justify-center rounded-sm border px-2 text-[11px] font-medium tabular-nums leading-none transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent ${
                     isActive
                       ? 'border-border-accent bg-accent-muted text-accent'
                       : 'border-border-subtle bg-bg-secondary text-text-muted hover:border-border-accent hover:text-text-primary'

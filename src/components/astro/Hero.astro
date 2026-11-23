@@ -94,9 +94,9 @@ const showBreadcrumbs =
         <span>{meta}</span>
       </p>
 
-      <h1 class="animate-fade-in-up [animation-delay:120ms] cursor-default font-sans text-4xl font-medium leading-[1.08] tracking-tight text-text-primary sm:text-5xl lg:text-[3.75rem]">
+      <h1 class="animate-fade-in-up [animation-delay:120ms] max-w-full cursor-default overflow-visible text-balance font-sans text-[1.875rem] font-medium leading-[1.24] tracking-tight text-text-primary min-[400px]:text-4xl min-[400px]:leading-[1.2] sm:text-5xl sm:leading-[1.14] lg:text-[3.75rem] lg:leading-[1.1]">
         {titlePrefix}{' '}
-        <span class="font-serif text-[1.12em] italic text-accent">{titleAccent}</span>
+        <span class="font-serif text-[1.08em] italic leading-[1.2] text-accent [padding-inline:0.04em]">{titleAccent}</span>
         {
           titleSuffix && (
             <>
@@ -144,22 +144,22 @@ const showBreadcrumbs =
     {
       tags.length > 0 && (
         <div
-          class="mt-12 border-t border-border-subtle/80 pt-6 lg:mt-16"
+          class="mt-12 overflow-x-clip border-t border-border-subtle/80 pt-6 lg:mt-16"
           aria-label="Ключевые направления"
         >
           <p class="cursor-default select-none text-[11px] uppercase leading-4 tracking-[0.22em] text-text-muted">
             Ключевые направления
           </p>
-          <ul class="mt-3 flex flex-wrap items-center gap-2.5">
+          <ul class="mt-3 flex flex-wrap content-start items-start gap-x-2.5 gap-y-2 overflow-x-clip [contain:layout]">
             {tags.map((tag, index) => (
-              <li class="inline-flex h-8 cursor-default select-none items-center gap-2 whitespace-nowrap border border-border-subtle bg-bg-secondary/85 px-3.5 text-xs font-normal leading-none tracking-wide text-text-secondary">
+              <li class="inline-flex h-8 max-w-full shrink-0 cursor-default select-none items-center gap-2 whitespace-nowrap border border-border-subtle bg-bg-secondary/85 px-3.5 text-xs font-normal leading-8 tracking-wide text-text-secondary">
                 <span
-                  class="font-serif text-[13px] italic leading-none text-text-muted"
+                  class="font-serif text-[13px] italic leading-8 text-text-muted"
                   aria-hidden="true"
                 >
                   {String(index + 1).padStart(2, '0')}
                 </span>
-                <span class="leading-none">{tag}</span>
+                <span class="leading-8">{tag}</span>
               </li>
             ))}
           </ul>

@@ -161,7 +161,7 @@ export default function CookieBanner() {
       role="region"
       aria-labelledby={`${bannerId}-title`}
       data-state={isVisible ? 'open' : 'closed'}
-      className={`editorial-cookie-banner fixed right-4 bottom-4 left-4 z-40 max-w-[calc(100vw-2rem)] border border-border-subtle bg-bg-secondary/95 p-5 text-text-primary backdrop-blur-md sm:right-6 sm:bottom-6 sm:left-auto sm:w-[420px] ${
+      className={`editorial-cookie-banner fixed right-4 bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 z-40 box-border w-auto max-w-[calc(100%-2rem)] border border-border-subtle bg-bg-secondary/95 p-5 text-text-primary backdrop-blur-md sm:right-6 sm:bottom-[max(1.5rem,env(safe-area-inset-bottom))] sm:left-auto sm:w-[420px] ${
         isVisible ? 'pointer-events-auto' : 'pointer-events-none'
       }`}
     >
@@ -190,7 +190,7 @@ export default function CookieBanner() {
           type="button"
           onClick={() => dismissWithPreferences(false, false)}
           aria-label="Закрыть и оставить только необходимые cookie"
-          className="inline-flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-sm border border-border-subtle bg-bg-primary text-text-muted transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+          className="inline-flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-sm border border-border-subtle bg-bg-primary text-text-muted transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
         >
           <svg
             className="h-3.5 w-3.5"
@@ -248,7 +248,7 @@ export default function CookieBanner() {
                 aria-checked={analyticsEnabled}
                 aria-labelledby={`${bannerId}-analytics-label`}
                 onClick={() => setAnalyticsEnabled((prev) => !prev)}
-                className={`relative mt-0.5 inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent ${
+                className={`relative inline-flex h-11 w-16 shrink-0 cursor-pointer items-center rounded-full border px-1 transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent ${
                   analyticsEnabled
                     ? 'border-accent bg-accent'
                     : 'border-border-subtle bg-bg-primary'
@@ -256,8 +256,8 @@ export default function CookieBanner() {
               >
                 <span
                   aria-hidden="true"
-                  className={`inline-block h-3.5 w-3.5 rounded-full bg-text-primary transition-transform duration-[300ms] ease-[var(--ease-editorial)] ${
-                    analyticsEnabled ? 'translate-x-4' : 'translate-x-0.5'
+                  className={`inline-block h-8 w-8 rounded-full bg-text-primary transition-transform duration-[300ms] ease-[var(--ease-editorial)] ${
+                    analyticsEnabled ? 'translate-x-5' : 'translate-x-0'
                   }`}
                 />
               </button>
@@ -282,7 +282,7 @@ export default function CookieBanner() {
                 aria-checked={preferencesEnabled}
                 aria-labelledby={`${bannerId}-prefs-label`}
                 onClick={() => setPreferencesEnabled((prev) => !prev)}
-                className={`relative mt-0.5 inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent ${
+                className={`relative inline-flex h-11 w-16 shrink-0 cursor-pointer items-center rounded-full border px-1 transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent ${
                   preferencesEnabled
                     ? 'border-accent bg-accent'
                     : 'border-border-subtle bg-bg-primary'
@@ -290,8 +290,8 @@ export default function CookieBanner() {
               >
                 <span
                   aria-hidden="true"
-                  className={`inline-block h-3.5 w-3.5 rounded-full bg-text-primary transition-transform duration-[300ms] ease-[var(--ease-editorial)] ${
-                    preferencesEnabled ? 'translate-x-4' : 'translate-x-0.5'
+                  className={`inline-block h-8 w-8 rounded-full bg-text-primary transition-transform duration-[300ms] ease-[var(--ease-editorial)] ${
+                    preferencesEnabled ? 'translate-x-5' : 'translate-x-0'
                   }`}
                 />
               </button>
@@ -308,7 +308,7 @@ export default function CookieBanner() {
             onClick={() =>
               dismissWithPreferences(analyticsEnabled, preferencesEnabled)
             }
-            className="inline-flex flex-1 cursor-pointer items-center justify-center rounded-sm bg-accent px-4 py-2.5 text-xs font-medium text-text-primary transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-secondary"
+            className="inline-flex min-h-11 flex-1 cursor-pointer items-center justify-center rounded-sm bg-accent px-4 py-2.5 text-xs font-medium text-text-primary transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-secondary"
           >
             Сохранить выбор
           </button>
@@ -316,7 +316,7 @@ export default function CookieBanner() {
           <button
             type="button"
             onClick={() => dismissWithPreferences(true, true)}
-            className="inline-flex flex-1 cursor-pointer items-center justify-center rounded-sm bg-accent px-4 py-2.5 text-xs font-medium text-text-primary transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-secondary"
+            className="inline-flex min-h-11 flex-1 cursor-pointer items-center justify-center rounded-sm bg-accent px-4 py-2.5 text-xs font-medium text-text-primary transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-secondary"
           >
             Принять все
           </button>
@@ -325,7 +325,7 @@ export default function CookieBanner() {
         <button
           type="button"
           onClick={() => dismissWithPreferences(false, false)}
-          className="inline-flex cursor-pointer items-center justify-center rounded-sm border border-border-subtle bg-bg-elevated px-3.5 py-2.5 text-xs font-normal text-text-secondary transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+          className="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-sm border border-border-subtle bg-bg-elevated px-3.5 py-2.5 text-xs font-normal text-text-secondary transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
         >
           Только необходимые
         </button>
@@ -334,7 +334,7 @@ export default function CookieBanner() {
           type="button"
           aria-expanded={showSettings}
           onClick={() => setShowSettings((prev) => !prev)}
-          className="inline-flex cursor-pointer items-center justify-center px-2 py-2 text-xs text-text-muted transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+          className="inline-flex min-h-11 cursor-pointer items-center justify-center px-3 py-2 text-xs text-text-muted transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
         >
           {showSettings ? 'Скрыть' : 'Настроить'}
         </button>

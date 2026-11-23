@@ -249,7 +249,7 @@ export default function ConsultationSection({
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={messenger.label}
-                        className="inline-flex h-8 items-center justify-center rounded-sm border border-border-subtle bg-bg-primary px-3 text-xs font-medium text-text-secondary transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                        className="inline-flex min-h-11 items-center justify-center rounded-sm border border-border-subtle bg-bg-primary px-3 text-xs font-medium text-text-secondary transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
                       >
                         {messenger.shortLabel}
                       </a>
@@ -390,7 +390,7 @@ export default function ConsultationSection({
                                   channel: channel.id,
                                 }))
                               }
-                              className={`flex cursor-pointer flex-col items-start rounded-sm border px-3.5 py-3 text-left transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent ${
+                              className={`flex min-h-11 cursor-pointer flex-col items-start rounded-sm border px-3.5 py-3 text-left transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent ${
                                 isActive
                                   ? 'border-border-accent bg-accent-muted text-text-primary'
                                   : 'border-border-subtle bg-bg-primary/70 text-text-secondary hover:border-border-accent hover:text-text-primary'
@@ -444,7 +444,7 @@ export default function ConsultationSection({
                             }
                           }}
                           placeholder="Например, Елена"
-                          className="mt-2 w-full rounded-sm border border-border-subtle bg-bg-primary px-4 py-3 text-sm text-text-primary placeholder:text-text-muted transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:border-border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                          className="mt-2 w-full rounded-sm border border-border-subtle bg-bg-primary px-4 py-3 text-base text-text-primary placeholder:text-text-muted transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:border-border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent sm:text-sm"
                         />
                       </div>
 
@@ -459,8 +459,10 @@ export default function ConsultationSection({
                           id={`${formId}-phone`}
                           name="phone"
                           type="tel"
+                          inputMode="tel"
                           required
                           autoComplete="tel"
+                          enterKeyHint="send"
                           value={form.phone}
                           onChange={(event) => {
                             setForm((prev) => ({
@@ -472,7 +474,7 @@ export default function ConsultationSection({
                             }
                           }}
                           placeholder="+7 (900) 000-00-00"
-                          className="mt-2 w-full rounded-sm border border-border-subtle bg-bg-primary px-4 py-3 text-sm text-text-primary placeholder:text-text-muted transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:border-border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                          className="mt-2 w-full rounded-sm border border-border-subtle bg-bg-primary px-4 py-3 text-base text-text-primary placeholder:text-text-muted transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:border-border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent sm:text-sm"
                         />
                       </div>
                     </div>
@@ -496,7 +498,7 @@ export default function ConsultationSection({
                           }))
                         }
                         placeholder={notePlaceholder}
-                        className="mt-2 w-full resize-none rounded-sm border border-border-subtle bg-bg-primary px-4 py-3 text-sm leading-relaxed text-text-primary placeholder:text-text-muted transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:border-border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                        className="mt-2 w-full resize-none rounded-sm border border-border-subtle bg-bg-primary px-4 py-3 text-base leading-relaxed text-text-primary placeholder:text-text-muted transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:border-border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent sm:text-sm"
                       />
                     </div>
                   </div>

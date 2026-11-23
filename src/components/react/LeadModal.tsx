@@ -72,6 +72,7 @@ export default function LeadModal() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
+  const backdropRef = useRef<HTMLDivElement | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
   const nameInputRef = useRef<HTMLInputElement | null>(null);
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -210,6 +211,37 @@ export default function LeadModal() {
     };
   }, [isOpen]);
 
+  // Привязка оверлея к visual viewport, чтобы клавиатура не уводила диалог за экран
+  useEffect(() => {
+    if (!isMounted) {
+      return;
+    }
+
+    const backdrop = backdropRef.current;
+    const viewport = window.visualViewport;
+    if (!backdrop || !viewport) {
+      return;
+    }
+
+    const syncViewport = (): void => {
+      backdrop.style.top = `${viewport.offsetTop}px`;
+      backdrop.style.height = `${viewport.height}px`;
+      backdrop.style.bottom = 'auto';
+    };
+
+    syncViewport();
+    viewport.addEventListener('resize', syncViewport);
+    viewport.addEventListener('scroll', syncViewport);
+
+    return () => {
+      viewport.removeEventListener('resize', syncViewport);
+      viewport.removeEventListener('scroll', syncViewport);
+      backdrop.style.top = '';
+      backdrop.style.height = '';
+      backdrop.style.bottom = '';
+    };
+  }, [isMounted]);
+
   // Блокировка скролла без горизонтального скачка макета
   useEffect(() => {
     if (!isMounted) {
@@ -239,6 +271,12 @@ export default function LeadModal() {
     }
 
     const focusTimer = window.setTimeout(() => {
+      const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
+      if (coarsePointer) {
+        panelRef.current?.focus({ preventScroll: true });
+        return;
+      }
+
       if (nameInputRef.current) {
         nameInputRef.current.focus();
       } else {
@@ -341,9 +379,10 @@ export default function LeadModal() {
 
   return (
     <div
+      ref={backdropRef}
       data-state={stateAttr}
       onClick={handleBackdropClick}
-      className={`editorial-modal-backdrop fixed inset-0 z-50 flex items-center justify-center overflow-y-auto p-4 sm:p-6 ${
+      className={`editorial-modal-backdrop fixed inset-x-0 top-0 z-50 flex h-dvh items-start justify-center overflow-hidden p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:items-center sm:p-6 ${
         isVisible ? 'pointer-events-auto' : 'pointer-events-none'
       }`}
     >
@@ -351,13 +390,14 @@ export default function LeadModal() {
         ref={panelRef}
         role="dialog"
         aria-modal="true"
+        tabIndex={-1}
         aria-labelledby={`${modalId}-title`}
         aria-describedby={`${modalId}-description`}
         data-state={stateAttr}
-        className="editorial-modal-panel relative my-auto max-h-[90dvh] w-full max-w-[540px] overflow-y-auto border border-border-subtle bg-bg-secondary text-text-primary"
+        className="editorial-modal-panel flex max-h-full min-h-0 w-full max-w-[540px] flex-col overflow-hidden border border-border-subtle bg-bg-secondary text-text-primary outline-none"
       >
-        {/* Шапка модального окна */}
-        <div className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-border-subtle bg-bg-secondary/95 px-5 py-4 backdrop-blur-md sm:px-7">
+        {/* Шапка модального окна: кнопка закрытия всегда в зоне большого пальца */}
+        <div className="flex shrink-0 items-center justify-between gap-4 border-b border-border-subtle bg-bg-secondary px-5 py-3 sm:px-7 sm:py-4">
           <p className="cursor-default text-[11px] uppercase tracking-[0.2em] text-text-muted">
             {preset.eyebrow}
           </p>
@@ -367,7 +407,7 @@ export default function LeadModal() {
             type="button"
             onClick={handleClose}
             aria-label="Закрыть окно заявки"
-            className="inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-sm border border-border-subtle bg-bg-primary text-text-secondary transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+            className="inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-sm border border-border-subtle bg-bg-primary text-text-secondary transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
           >
             <svg
               className="h-4 w-4"
@@ -384,7 +424,7 @@ export default function LeadModal() {
           </button>
         </div>
 
-        <div className="p-5 sm:p-7">
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-5 sm:p-7">
           {!isSubmitted ? (
             <div key="lead-modal-form" className="animate-fade-in">
               <h2
@@ -451,7 +491,7 @@ export default function LeadModal() {
                               channel: channel.id,
                             }))
                           }
-                          className={`cursor-pointer rounded-sm border px-3.5 py-2 text-xs font-medium transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent ${
+                          className={`min-h-11 cursor-pointer rounded-sm border px-3.5 py-2 text-xs font-medium transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent ${
                             isActive
                               ? 'border-border-accent bg-accent-muted text-accent'
                               : 'border-border-subtle bg-bg-primary text-text-secondary hover:border-border-accent hover:text-text-primary'
@@ -489,7 +529,7 @@ export default function LeadModal() {
                       }
                     }}
                     placeholder="Например, Алексей"
-                    className="mt-2 w-full rounded-sm border border-border-subtle bg-bg-primary px-4 py-3 text-sm text-text-primary placeholder:text-text-muted transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:border-border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                    className="mt-2 w-full rounded-sm border border-border-subtle bg-bg-primary px-4 py-3 text-base text-text-primary placeholder:text-text-muted transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:border-border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent sm:text-sm"
                   />
                 </div>
 
@@ -504,8 +544,10 @@ export default function LeadModal() {
                     id={`${modalId}-phone`}
                     name="phone"
                     type="tel"
+                    inputMode="tel"
                     required
                     autoComplete="tel"
+                    enterKeyHint="send"
                     value={form.phone}
                     onChange={(event) => {
                       setForm((prev) => ({
@@ -517,7 +559,7 @@ export default function LeadModal() {
                       }
                     }}
                     placeholder="+7 (900) 000-00-00"
-                    className="mt-2 w-full rounded-sm border border-border-subtle bg-bg-primary px-4 py-3 text-sm text-text-primary placeholder:text-text-muted transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:border-border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                    className="mt-2 w-full rounded-sm border border-border-subtle bg-bg-primary px-4 py-3 text-base text-text-primary placeholder:text-text-muted transition-colors duration-[300ms] ease-[var(--ease-editorial)] focus-visible:border-border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent sm:text-sm"
                   />
                 </div>
 
