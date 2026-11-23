@@ -3,8 +3,10 @@ import { Image } from 'astro:assets';
 import { SITE_CONFIG } from '../../data/navigation';
 import { getLogoAsset } from '../../utils/images';
 
+export type BrandLogoSize = 'sm' | 'md' | 'lg';
+
 export interface Props {
-  size?: 'sm' | 'md';
+  size?: BrandLogoSize;
   subtitle?: string;
   showSubtitleOnMobile?: boolean;
 }
@@ -16,8 +18,42 @@ const {
 } = Astro.props;
 
 const logo = getLogoAsset();
-const svgHeightClass = size === 'sm' ? '[&>svg]:h-3.5 sm:[&>svg]:h-4' : '[&>svg]:h-4 sm:[&>svg]:h-5';
-const rasterHeightClass = size === 'sm' ? 'h-4 sm:h-5' : 'h-5 sm:h-6';
+
+const svgHeightClasses: Record<BrandLogoSize, string> = {
+  sm: '[&>svg]:h-3.5 sm:[&>svg]:h-4',
+  md: '[&>svg]:h-4 sm:[&>svg]:h-5',
+  lg: '[&>svg]:h-[1.32rem] sm:[&>svg]:h-[1.65rem]',
+};
+
+const rasterHeightClasses: Record<BrandLogoSize, string> = {
+  sm: 'h-4 sm:h-5',
+  md: 'h-5 sm:h-6',
+  lg: 'h-[1.65rem] sm:h-[1.98rem]',
+};
+
+const rasterImageHeights: Record<BrandLogoSize, number> = {
+  sm: 20,
+  md: 28,
+  lg: 38,
+};
+
+const textBadgeClasses: Record<BrandLogoSize, string> = {
+  sm: 'h-7 w-7 text-base',
+  md: 'h-9 w-9 text-lg',
+  lg: 'h-[2.97rem] w-[2.97rem] text-[1.485rem]',
+};
+
+const textTitleClasses: Record<BrandLogoSize, string> = {
+  sm: 'text-xs tracking-[0.2em]',
+  md: 'text-sm tracking-[0.2em] xl:tracking-[0.22em]',
+  lg: 'text-[1.155rem] tracking-[0.2em] xl:tracking-[0.22em]',
+};
+
+const svgHeightClass = svgHeightClasses[size];
+const rasterHeightClass = rasterHeightClasses[size];
+const rasterImageHeight = rasterImageHeights[size];
+const textBadgeClass = textBadgeClasses[size];
+const textTitleClass = textTitleClasses[size];
 ---
 
 <span class="inline-flex items-center gap-2.5 xl:gap-3">
@@ -50,7 +86,7 @@ const rasterHeightClass = size === 'sm' ? 'h-4 sm:h-5' : 'h-5 sm:h-6';
       <Image
         src={logo.image}
         alt={SITE_CONFIG.brandName}
-        height={size === 'sm' ? 20 : 28}
+        height={rasterImageHeight}
         loading="eager"
         decoding="async"
         class:list={['w-auto object-contain object-left', rasterHeightClass]}
@@ -73,7 +109,7 @@ const rasterHeightClass = size === 'sm' ? 'h-4 sm:h-5' : 'h-5 sm:h-6';
       <span
         class:list={[
           'flex items-center justify-center border border-border-subtle bg-bg-secondary font-serif italic leading-none text-text-primary transition-colors duration-300 group-hover:border-border-accent group-hover:text-accent',
-          size === 'sm' ? 'h-7 w-7 text-base' : 'h-9 w-9 text-lg',
+          textBadgeClass,
         ]}
         aria-hidden="true"
       >
@@ -83,9 +119,7 @@ const rasterHeightClass = size === 'sm' ? 'h-4 sm:h-5' : 'h-5 sm:h-6';
         <span
           class:list={[
             'font-semibold text-text-primary transition-colors duration-300 group-hover:text-accent',
-            size === 'sm'
-              ? 'text-xs tracking-[0.2em]'
-              : 'text-sm tracking-[0.2em] xl:tracking-[0.22em]',
+            textTitleClass,
           ]}
         >
           {SITE_CONFIG.brandName}

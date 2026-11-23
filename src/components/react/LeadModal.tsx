@@ -101,12 +101,17 @@ export default function LeadModal() {
         return;
       }
 
-      const trigger = target.closest<HTMLElement>('[data-lead-trigger]');
+      const trigger = target.closest<HTMLElement>(
+        '[data-lead-trigger], [data-open-modal]',
+      );
       if (!trigger) {
         return;
       }
 
-      const source = trigger.dataset.leadTrigger ?? 'header-cta';
+      const source =
+        trigger.dataset.leadTrigger ||
+        trigger.dataset.openModal ||
+        'hero-cta';
       const projectComplex = trigger.dataset.leadComplex ?? '';
       const projectTitle = trigger.dataset.leadTitle;
       const projectArea = trigger.dataset.leadArea;

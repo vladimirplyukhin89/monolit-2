@@ -2,6 +2,7 @@
 import { getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import Layout from '../layouts/Layout.astro';
+import Hero from '../components/astro/Hero.astro';
 import SafeImage from '../components/astro/SafeImage.astro';
 import BeforeAfterSlider from '../components/react/BeforeAfterSlider';
 import TabbedGallery, { type GalleryTab } from '../components/react/TabbedGallery';
@@ -17,7 +18,6 @@ import {
   LANDSCAPING_CONTACT_CHANNELS,
   LANDSCAPING_CONTACTS,
   LANDSCAPING_FAQ_ITEMS,
-  LANDSCAPING_HERO_TAGS,
   LANDSCAPING_MATERIALS_DATA,
   LANDSCAPING_OFFER,
   LANDSCAPING_PAGE_META,
@@ -30,9 +30,6 @@ import {
 
 const beforeLandscapingImage = getImageAsset('landscaping/before-after/before');
 const afterLandscapingImage = getImageAsset('landscaping/before-after/after');
-const heroLandscapingImage =
-  getFirstImageInDir('landscaping/hero', { useFallback: false }) ??
-  afterLandscapingImage;
 const asphaltWorkImage = getImageAsset('landscaping/works/asphalt/asphalt');
 const path1WorkImage = getImageAsset('landscaping/works/paths/path-1');
 const path2WorkImage = getImageAsset('landscaping/works/paths/path-2');
@@ -149,138 +146,24 @@ const landscapingConsultationContactInfo = {
   description={LANDSCAPING_PAGE_META.description}
   currentPath="/blagoustrojstvo"
 >
-  <!-- 01. HERO: статичный бейдж и фиксированные теги направлений без анимации при скролле -->
-  <section
-    id="hero"
-    class="relative overflow-hidden border-b border-border-subtle bg-bg-primary"
-  >
-    <div class="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none">
-      <SafeImage
-        src={heroLandscapingImage}
-        alt="Благоустроенный загородный участок с мощением брусчаткой, ступенями, газоном и подсветкой в Тюмени"
-        widths={[768, 1280, 1920]}
-        sizes="100vw"
-        loading="eager"
-        fetchpriority="high"
-        decoding="async"
-        class="hero-bg-zoom h-full w-full object-cover object-center opacity-55"
-      />
-      <div
-        aria-hidden="true"
-        class="absolute inset-0 bg-gradient-to-r from-bg-primary via-bg-primary/88 to-bg-primary/45"
-      ></div>
-      <div
-        aria-hidden="true"
-        class="absolute inset-0 bg-gradient-to-t from-bg-primary via-bg-primary/40 to-bg-primary/70"
-      ></div>
-    </div>
-
-    <div class="relative z-10 mx-auto max-w-7xl px-5 pt-12 pb-14 sm:px-8 sm:pt-16 sm:pb-16 lg:px-10 lg:pt-20 lg:pb-18">
-      <div class="max-w-3xl">
-        <!-- Статичный информационный бейдж без scroll-анимации и без hover -->
-        <div class="mb-6 flex flex-wrap items-center gap-3">
-          <span class="inline-flex h-7 cursor-default items-center gap-2 bg-accent-muted px-3 text-[11px] font-medium uppercase leading-none tracking-[0.18em] text-accent select-none">
-            <span class="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true"></span>
-            <span>Тюмень и область · Сезон 2026</span>
-          </span>
-          <span class="cursor-default text-xs uppercase leading-none tracking-[0.2em] text-text-muted select-none">
-            Благоустройство под ключ
-          </span>
-        </div>
-
-        <h1 class="text-4xl font-normal leading-[1.08] tracking-tight text-text-primary sm:text-5xl lg:text-[3.75rem]">
-          Благоустройство участка,
-          <br class="hidden sm:inline" />
-          {' '}в&nbsp;который{' '}
-          <span class="font-serif text-[1.12em] font-medium italic whitespace-nowrap text-text-primary">
-            хочется возвращаться
-          </span>
-        </h1>
-
-        <p class="mt-5 max-w-2xl text-base leading-relaxed text-text-secondary sm:text-lg">
-          Асфальтирование, укладка брусчатки, установка бордюров, утеплённая отмостка и дренаж
-          по&nbsp;технологии СНиП. Своя техника, прямые поставки материалов и гарантия до&nbsp;5&nbsp;лет.
-        </p>
-
-        <!-- Чёткое разделение: кликабельная CTA-кнопка + спокойная статичная заметка -->
-        <div class="mt-8 flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-7">
-          <a
-            href="#contact-form"
-            data-lead-trigger="landscaping-hero-cta"
-            class="inline-flex cursor-pointer items-center justify-center gap-2.5 rounded-sm bg-accent px-7 py-4 text-sm font-medium text-text-primary transition-colors duration-[350ms] ease-[var(--ease-editorial)] hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
-          >
-            <span>Рассчитать стоимость</span>
-            <svg
-              class="h-4 w-4"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.6"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M5 12h14" />
-              <path d="m13 6 6 6-6 6" />
-            </svg>
-          </a>
-
-          <p class="cursor-default border-l border-border-subtle pl-4 text-xs leading-relaxed text-text-muted">
-            Бесплатный выезд инженера с нивелиром
-            <span class="block text-text-secondary">
-              и расчёт точной сметы по вашему участку
-            </span>
-          </p>
-        </div>
-
-        <!-- Быстрая прямая связь: телефон + Telegram / Max -->
-        <div class="mt-7 flex flex-wrap items-center gap-x-6 gap-y-2.5 text-sm">
-          <a
-            href={LANDSCAPING_CONTACTS.phoneHref}
-            class="font-medium tracking-tight text-text-primary transition-colors duration-300 hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-          >
-            {LANDSCAPING_CONTACTS.phoneDisplay}
-          </a>
-          <span class="hidden h-3.5 w-px bg-border-subtle sm:inline-block" aria-hidden="true"></span>
-          <div class="flex items-center gap-4 text-xs text-text-secondary">
-            {LANDSCAPING_CONTACTS.messengers.map((messenger) => (
-              <a
-                href={messenger.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="underline decoration-border-subtle underline-offset-4 transition-colors duration-300 hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-              >
-                Написать в {messenger.shortLabel}
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <!-- Фиксированные теги направлений: без анимаций, параллакса, сдвигов и hover-эффектов -->
-      <div
-        class="mt-10 border-t border-border-subtle/80 pt-6 lg:mt-12"
-        aria-label="Направления благоустройства"
-      >
-        <p class="cursor-default text-[11px] uppercase leading-4 tracking-[0.22em] text-text-muted">
-          Направления работ
-        </p>
-        <ul class="mt-3 flex flex-wrap items-center gap-2.5">
-          {LANDSCAPING_HERO_TAGS.map((tag) => (
-            <li class="inline-flex h-8 cursor-default items-center gap-2 border border-border-subtle bg-bg-secondary/90 px-3.5 text-xs font-normal leading-none tracking-wide text-text-secondary whitespace-nowrap select-none">
-              <span
-                class="font-serif text-[13px] italic leading-none text-text-muted"
-                aria-hidden="true"
-              >
-                {tag.number}
-              </span>
-              <span class="leading-none">{tag.label}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
-  </section>
+  <!-- 01. HERO -->
+  <Hero
+    meta="Тюмень и область · Внешние работы"
+    titlePrefix="Благоустройство участка, сделанное"
+    titleAccent="на десятилетия."
+    subtitle="Мощение брусчаткой, асфальтирование, отмостки и дренаж. Фиксируем смету до старта работ и даём гарантию до 5 лет."
+    tags={[
+      'асфальтирование',
+      'брусчатка',
+      'водоотведение',
+      'отмостки',
+      'тротуарная плитка',
+    ]}
+    ctaText="Заказать расчёт"
+    imagePath="src/assets/images/landscaping/hero/"
+    imageAlt="Благоустроенный загородный участок с мощением брусчаткой, отмосткой и дренажом в Тюмени"
+    modalSource="landscaping-hero-cta"
+  />
 
   <!-- 02. ПОЧЕМУ НАМ ДОВЕРЯЮТ (статичные карточки без hover-эффектов) -->
   <section

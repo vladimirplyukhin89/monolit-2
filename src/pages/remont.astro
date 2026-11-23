@@ -9,7 +9,23 @@ import ConsultationSection from '../components/react/ConsultationSection';
 ---
 
 <Layout currentPath="/remont">
-  <Hero />
+  <Hero
+    meta="Тюмень · Ремонт и инженерия"
+    titlePrefix="Ремонт квартир, в котором"
+    titleAccent="всё продумано"
+    titleSuffix="заранее."
+    subtitle="Один договор, фиксированная смета за 24 часа и гарантия 2 года. Вы занимаетесь своей жизнью — реализацию под ключ мы берём на себя."
+    tags={[
+      'дизайн-проект',
+      'ремонт под ключ',
+      'инженерные сети',
+      'авторский надзор',
+    ]}
+    ctaText="Рассчитать смету"
+    imagePath="src/assets/images/remont/hero/"
+    imageAlt="Современный интерьер квартиры после ремонта под ключ в Тюмени"
+    modalSource="hero-cta"
+  />
   <Services />
   <Portfolio />
 
