@@ -1,23 +1,13 @@
 import type { FaqItem } from './faq';
-import type { NavItem, ScheduleRow } from './navigation';
+import {
+  COMPANY_CONTACTS,
+  type CompanyContacts,
+  type NavItem,
+} from './navigation';
 
-export interface LandscapingContacts {
+export interface LandscapingContacts extends CompanyContacts {
   readonly brandSubtitle: string;
   readonly regionMeta: string;
-  readonly phoneDisplay: string;
-  readonly phoneHref: string;
-  readonly email: string;
-  readonly address: string;
-  readonly requisites: string;
-  readonly schedule: readonly ScheduleRow[];
-  readonly mapEmbedUrl: string;
-  readonly mapExternalUrl: string;
-  readonly messengers: readonly {
-    readonly id: 'telegram' | 'max';
-    readonly label: string;
-    readonly shortLabel: string;
-    readonly href: string;
-  }[];
 }
 
 export interface LandscapingTag {
@@ -104,37 +94,9 @@ export const LANDSCAPING_PAGE_META = {
 } as const;
 
 export const LANDSCAPING_CONTACTS: LandscapingContacts = {
+  ...COMPANY_CONTACTS,
   brandSubtitle: 'Благоустройство участков',
   regionMeta: 'Тюмень и область · Сезон 2026',
-  phoneDisplay: '8 (919) 950-77-22',
-  phoneHref: 'tel:+79199507722',
-  email: 'monolittmn@mail.ru',
-  address: 'г. Тюмень, ул. Депутатская, 129',
-  requisites:
-    'ИП Ерамасов В.Н. · ИНН 723011554086 · ОГРНИП 323723200019722',
-  schedule: [
-    { days: 'Пн — Пт', hours: '08:00 — 20:00' },
-    { days: 'Суббота', hours: '09:00 — 18:00' },
-    { days: 'Воскресенье', hours: 'Выезд по записи' },
-  ],
-  mapEmbedUrl:
-    'https://yandex.ru/map-widget/v1/?ll=65.508247%2C57.129267&z=15&pt=65.508247,57.129267,pm2orgm',
-  mapExternalUrl:
-    'https://yandex.ru/maps/?text=%D0%A2%D1%8E%D0%BC%D0%B5%D0%BD%D1%8C%2C%20%D1%83%D0%BB.%20%D0%94%D0%B5%D0%BF%D1%83%D1%82%D0%B0%D1%82%D1%81%D0%BA%D0%B0%D1%8F%2C%20129',
-  messengers: [
-    {
-      id: 'telegram',
-      label: 'Написать в Telegram',
-      shortLabel: 'Telegram',
-      href: 'https://t.me/+79199507722',
-    },
-    {
-      id: 'max',
-      label: 'Написать в Max',
-      shortLabel: 'Max',
-      href: 'https://max.ru',
-    },
-  ],
 } as const;
 
 export const LANDSCAPING_NAV_ITEMS: readonly NavItem[] = [

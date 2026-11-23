@@ -11,7 +11,7 @@ import {
   type PreferredContactChannelId,
   type PreferredContactChannelOption,
 } from '../../data/lead';
-import { SITE_CONFIG } from '../../data/navigation';
+import { SITE_CONFIG, type MessengerLink } from '../../data/navigation';
 import { selectedLeadContext } from '../../stores/lead';
 
 export interface ConsultationStepItem {
@@ -27,6 +27,7 @@ export interface ConsultationContactInfo {
   readonly address: string;
   readonly scheduleNote: string;
   readonly requisites?: string;
+  readonly messengers?: readonly MessengerLink[];
 }
 
 export interface ConsultationSectionProps {
@@ -61,7 +62,9 @@ const DEFAULT_CONTACT_INFO: ConsultationContactInfo = {
   phoneHref: SITE_CONFIG.phoneHref,
   email: SITE_CONFIG.email,
   address: SITE_CONFIG.address,
-  scheduleNote: 'Пн — Пт: 09:00 — 19:00 · Сб: 10:00 — 16:00',
+  scheduleNote: SITE_CONFIG.scheduleNote,
+  requisites: SITE_CONFIG.requisites,
+  messengers: SITE_CONFIG.messengers,
 };
 
 function createInitialForm(
@@ -234,6 +237,25 @@ export default function ConsultationSection({
                 >
                   {contactInfo.email}
                 </a>
+                <div
+                  className="mt-2.5 flex flex-wrap items-center gap-2"
+                  aria-label="Мессенджеры"
+                >
+                  {(contactInfo.messengers ?? SITE_CONFIG.messengers).map(
+                    (messenger) => (
+                      <a
+                        key={messenger.id}
+                        href={messenger.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={messenger.label}
+                        className="inline-flex h-8 items-center justify-center rounded-sm border border-border-subtle bg-bg-primary px-3 text-xs font-medium text-text-secondary transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                      >
+                        {messenger.shortLabel}
+                      </a>
+                    ),
+                  )}
+                </div>
               </div>
 
               <div className="mt-5 border-t border-border-subtle pt-4 text-xs leading-relaxed text-text-muted">

@@ -13,7 +13,6 @@ export type ConsultationTopicId =
 export type PreferredContactChannelId =
   | 'phone'
   | 'telegram'
-  | 'whatsapp'
   | 'max'
   | 'meeting';
 
@@ -86,14 +85,14 @@ export const PREFERRED_CONTACT_CHANNELS: readonly PreferredContactChannelOption[
       hint: 'Спокойно в чате',
     },
     {
-      id: 'whatsapp',
-      label: 'WhatsApp',
-      hint: 'Отправим расчёт',
+      id: 'max',
+      label: 'Max',
+      hint: 'Быстро в мессенджере',
     },
     {
       id: 'meeting',
       label: 'Встреча в офисе',
-      hint: 'Ул. Республики, 65',
+      hint: 'Ул. Депутатская, 129',
     },
   ] as const;
 
@@ -256,15 +255,7 @@ export function getPreferredChannelLabel(
     channels.find((channel) => channel.id === id) ??
     PREFERRED_CONTACT_CHANNELS.find((channel) => channel.id === id);
 
-  if (found) {
-    return found.label;
-  }
-
-  if (id === 'max') {
-    return 'Max';
-  }
-
-  return 'Звонок';
+  return found?.label ?? 'Звонок';
 }
 
 export function validateLeadContact(

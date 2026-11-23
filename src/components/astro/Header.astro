@@ -1,11 +1,11 @@
 ---
 import BrandLogo from './BrandLogo.astro';
 import {
+  COMPANY_CONTACTS,
   DIRECTION_PAGES,
   HUB_CONFIG,
   MAIN_NAV_ITEMS,
   SITE_CONFIG,
-  SOCIAL_LINKS,
   type PageSwitchId,
 } from '../../data/navigation';
 import {
@@ -43,12 +43,11 @@ const brandSubtitle = isLandscaping
 const regionMeta = isLandscaping
   ? LANDSCAPING_CONTACTS.regionMeta
   : SITE_CONFIG.regionMeta;
-const phoneDisplay = isLandscaping
-  ? LANDSCAPING_CONTACTS.phoneDisplay
-  : SITE_CONFIG.phoneDisplay;
-const phoneHref = isLandscaping
-  ? LANDSCAPING_CONTACTS.phoneHref
-  : SITE_CONFIG.phoneHref;
+const phoneDisplay = COMPANY_CONTACTS.phoneDisplay;
+const phoneHref = COMPANY_CONTACTS.phoneHref;
+const email = COMPANY_CONTACTS.email;
+const emailHref = COMPANY_CONTACTS.emailHref;
+const messengers = COMPANY_CONTACTS.messengers;
 const ctaTrigger = isLandscaping ? 'landscaping-header-cta' : 'header-cta';
 const mobileCtaTrigger = isLandscaping ? 'landscaping-header-cta' : 'mobile-cta';
 const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
@@ -177,70 +176,22 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
 
         <!-- Правая группа (десктоп lg и выше): мессенджеры + кнопка связи -->
         <div class="hidden shrink-0 lg:flex lg:items-center lg:gap-3">
-          {isLandscaping ? (
-            <div
-              class="hidden items-center gap-1.5 xl:flex"
-              aria-label="Мессенджеры"
-            >
-              {LANDSCAPING_CONTACTS.messengers.map((messenger) => (
-                <a
-                  href={messenger.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={messenger.label}
-                  class="inline-flex h-9 items-center justify-center rounded-sm border border-border-subtle bg-bg-secondary px-2.5 text-xs font-medium text-text-secondary transition-colors duration-300 hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-                >
-                  {messenger.shortLabel}
-                </a>
-              ))}
-            </div>
-          ) : (
-            <div
-              class="hidden items-center gap-2 xl:flex"
-              aria-label="Мессенджеры и соцсети"
-            >
-              {SOCIAL_LINKS.slice(0, 2).map((social) => (
-                <a
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={social.label}
-                  class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border-subtle bg-bg-secondary text-text-secondary transition-colors duration-300 hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-                >
-                  {social.id === 'telegram' && (
-                    <svg
-                      class="h-4 w-4"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="1.6"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      aria-hidden="true"
-                    >
-                      <path d="M21.5 4.5 2.5 11.8l6.8 2.4 2.4 6.3 3.4-3.7 4.9 3.2L21.5 4.5Z" />
-                      <path d="M9.3 14.2 17.5 8" />
-                    </svg>
-                  )}
-                  {social.id === 'whatsapp' && (
-                    <svg
-                      class="h-4 w-4"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="1.6"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      aria-hidden="true"
-                    >
-                      <path d="M20.5 11.7a8.5 8.5 0 0 1-12.4 7.5L3.5 20.5l1.3-4.4a8.5 8.5 0 1 1 15.7-4.4Z" />
-                      <path d="M9.2 9.4c.2-.4.5-.5.8-.5h.5c.2 0 .4.1.5.4l.7 1.7c.1.2.1.5-.1.7l-.5.6c-.1.1-.1.3 0 .5.4.8 1.2 1.5 2 1.9.2.1.4.1.5 0l.6-.6c.2-.2.5-.2.7-.1l1.7.8c.3.1.4.3.4.5v.5c0 .4-.2.8-.6 1-1 .4-2.5.3-4.2-.6-1.8-.9-3.1-2.3-3.9-4-.6-1.2-.6-2.1-.1-2.8Z" />
-                    </svg>
-                  )}
-                </a>
-              ))}
-            </div>
-          )}
+          <div
+            class="hidden items-center gap-1.5 xl:flex"
+            aria-label="Мессенджеры"
+          >
+            {messengers.map((messenger) => (
+              <a
+                href={messenger.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={messenger.label}
+                class="inline-flex h-9 items-center justify-center rounded-sm border border-border-subtle bg-bg-secondary px-2.5 text-xs font-medium text-text-secondary transition-colors duration-300 hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+              >
+                {messenger.shortLabel}
+              </a>
+            ))}
+          </div>
 
           <a
             href={ctaHref}
@@ -350,56 +301,31 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
             <div class="flex flex-col gap-2">
               <a
                 href={phoneHref}
-                class="text-base font-medium text-text-primary transition-colors duration-300 hover:text-accent"
+                class="text-base font-medium text-text-primary transition-colors duration-300 hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
               >
                 {phoneDisplay}
               </a>
 
-              {isLandscaping ? (
-                <div class="flex items-center gap-2.5 pt-1">
-                  {LANDSCAPING_CONTACTS.messengers.map((messenger) => (
-                    <a
-                      href={messenger.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={messenger.label}
-                      class="inline-flex h-9 items-center justify-center rounded-sm border border-border-subtle bg-bg-secondary px-3.5 text-xs font-medium text-text-secondary transition-colors duration-300 hover:border-border-accent hover:text-text-primary"
-                    >
-                      {messenger.shortLabel}
-                    </a>
-                  ))}
-                </div>
-              ) : (
-                <div class="flex items-center gap-3 pt-1">
-                  {SOCIAL_LINKS.map((social) => (
-                    <a
-                      href={social.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={social.label}
-                      class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border-subtle bg-bg-secondary text-text-secondary transition-colors duration-300 hover:border-border-accent hover:text-text-primary"
-                    >
-                      {social.id === 'telegram' && (
-                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                          <path d="M21.5 4.5 2.5 11.8l6.8 2.4 2.4 6.3 3.4-3.7 4.9 3.2L21.5 4.5Z" />
-                          <path d="M9.3 14.2 17.5 8" />
-                        </svg>
-                      )}
-                      {social.id === 'whatsapp' && (
-                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                          <path d="M20.5 11.7a8.5 8.5 0 0 1-12.4 7.5L3.5 20.5l1.3-4.4a8.5 8.5 0 1 1 15.7-4.4Z" />
-                          <path d="M9.2 9.4c.2-.4.5-.5.8-.5h.5c.2 0 .4.1.5.4l.7 1.7c.1.2.1.5-.1.7l-.5.6c-.1.1-.1.3 0 .5.4.8 1.2 1.5 2 1.9.2.1.4.1.5 0l.6-.6c.2-.2.5-.2.7-.1l1.7.8c.3.1.4.3.4.5v.5c0 .4-.2.8-.6 1-1 .4-2.5.3-4.2-.6-1.8-.9-3.1-2.3-3.9-4-.6-1.2-.6-2.1-.1-2.8Z" />
-                        </svg>
-                      )}
-                      {social.id === 'vk' && (
-                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                          <path d="M3 7.5c.2 5.4 3.4 9 8.7 9h.5v-3.2c1.8.2 3.1 1.5 3.7 3.2H19c-.8-2.6-2.8-4.1-4.1-4.6 1.3-.7 3.1-2.4 3.5-4.4h-2.8c-.6 1.8-2.1 3.5-3.4 3.7V7.5H9.6v6.5c-1.4-.3-3.1-2-3.2-6.5H3Z" />
-                        </svg>
-                      )}
-                    </a>
-                  ))}
-                </div>
-              )}
+              <a
+                href={emailHref}
+                class="text-sm text-text-secondary transition-colors duration-300 hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+              >
+                {email}
+              </a>
+
+              <div class="flex items-center gap-2.5 pt-1" aria-label="Мессенджеры">
+                {messengers.map((messenger) => (
+                  <a
+                    href={messenger.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={messenger.label}
+                    class="inline-flex h-9 items-center justify-center rounded-sm border border-border-subtle bg-bg-secondary px-3.5 text-xs font-medium text-text-secondary transition-colors duration-300 hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                  >
+                    {messenger.shortLabel}
+                  </a>
+                ))}
+              </div>
             </div>
 
             <a

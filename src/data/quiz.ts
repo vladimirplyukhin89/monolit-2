@@ -14,7 +14,7 @@ export type RepairTierId = 'standard' | 'comfort' | 'premium';
 
 export type DesignScopeId = 'technical' | 'full' | 'full-supervision';
 
-export type ContactChannelId = 'phone' | 'telegram' | 'whatsapp';
+export type ContactChannelId = 'phone' | 'telegram' | 'max';
 
 export type QuizStepId =
   | 'service'
@@ -238,7 +238,7 @@ export const CONTACT_CHANNEL_OPTIONS: readonly {
 }[] = [
   { id: 'phone', label: 'Звонок' },
   { id: 'telegram', label: 'Telegram' },
-  { id: 'whatsapp', label: 'WhatsApp' },
+  { id: 'max', label: 'Max' },
 ] as const;
 
 const STEP_DEFINITIONS: Record<QuizStepId, QuizStepDefinition> = {
