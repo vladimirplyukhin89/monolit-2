@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.14](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.13...v0.0.14) (2026-11-23)
+
+
+### Features
+
+* **contacts:** добавить интерактивную карту офиса в блок контактов футера ([aeee5d8](https://github.com/vladimirplyukhin89/monolit-2/commit/aeee5d8e96b17808591b3443ff082153b132006f))
+
 ### [0.0.13](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.12...v0.0.13) (2026-11-23)
 
 
