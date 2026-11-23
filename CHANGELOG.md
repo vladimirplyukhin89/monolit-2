@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.13](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.12...v0.0.13) (2026-11-23)
+
+
+### Features
+
+* **contacts:** создать компонент SocialLinks и встроить его в футер и мобильное меню на всех страницах ([700af9e](https://github.com/vladimirplyukhin89/monolit-2/commit/700af9ea308a458e5734d3d210c060e9e92e53d2))
+
 ### [0.0.12](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.11...v0.0.12) (2026-11-23)
 
 
