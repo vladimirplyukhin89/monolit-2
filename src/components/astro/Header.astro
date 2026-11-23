@@ -18,7 +18,7 @@ export interface Props {
   compact?: boolean;
 }
 
-const { currentPath = '/', compact = false } = Astro.props;
+const { currentPath = Astro.url.pathname, compact = false } = Astro.props;
 
 const normalizedPath =
   currentPath.length > 1 && currentPath.endsWith('/')
@@ -27,11 +27,14 @@ const normalizedPath =
 
 const isLandscaping = normalizedPath.startsWith('/blagoustrojstvo');
 const isRepair = normalizedPath.startsWith('/remont');
-const activePageId: PageSwitchId = isLandscaping
+const isHub = normalizedPath === '/' || normalizedPath === '';
+const activePageId: PageSwitchId | null = isLandscaping
   ? 'landscaping'
   : isRepair
     ? 'repair'
-    : 'hub';
+    : isHub
+      ? 'hub'
+      : null;
 
 const navItems = isLandscaping ? LANDSCAPING_NAV_ITEMS : MAIN_NAV_ITEMS;
 const brandSubtitle = isLandscaping
@@ -62,7 +65,7 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
         <div class="flex min-w-0 items-center gap-3 sm:gap-4">
           <a
             href="/"
-            aria-current="page"
+            aria-current={isHub ? 'page' : undefined}
             aria-label={`${SITE_CONFIG.brandName} — главная страница`}
             class="group inline-flex shrink-0 items-center rounded-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
           >

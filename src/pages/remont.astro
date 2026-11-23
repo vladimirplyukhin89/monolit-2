@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Hero from '../components/astro/Hero.astro';
 import Services from '../components/astro/Services.astro';
 import Portfolio from '../components/astro/Portfolio.astro';
+import PageNavigation from '../components/astro/PageNavigation.astro';
 import FaqAccordion from '../components/react/FaqAccordion';
 import QuizCalculator from '../components/react/QuizCalculator';
 import ConsultationSection from '../components/react/ConsultationSection';
@@ -10,6 +11,7 @@ import ConsultationSection from '../components/react/ConsultationSection';
 
 <Layout currentPath="/remont">
   <Hero
+    breadcrumbCurrent="Ремонт квартир"
     meta="Тюмень · Ремонт и инженерия"
     titlePrefix="Ремонт квартир, в котором"
     titleAccent="всё продумано"
@@ -93,4 +95,7 @@ import ConsultationSection from '../components/react/ConsultationSection';
 
   <!-- Блок спокойной формы обратной связи («Начнём с разговора» — React client:visible) -->
   <ConsultationSection client:visible />
+
+  <!-- Навигационный блок переходов в другие разделы -->
+  <PageNavigation currentSection="remont" />
 </Layout>

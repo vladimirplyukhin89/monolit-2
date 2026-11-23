@@ -4,6 +4,7 @@ import type { ImageMetadata } from 'astro';
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/astro/Hero.astro';
 import SafeImage from '../components/astro/SafeImage.astro';
+import PageNavigation from '../components/astro/PageNavigation.astro';
 import BeforeAfterSlider from '../components/react/BeforeAfterSlider';
 import TabbedGallery, { type GalleryTab } from '../components/react/TabbedGallery';
 import FaqAccordion from '../components/react/FaqAccordion';
@@ -148,6 +149,7 @@ const landscapingConsultationContactInfo = {
 >
   <!-- 01. HERO -->
   <Hero
+    breadcrumbCurrent="Благоустройство участков"
     meta="Тюмень и область · Внешние работы"
     titlePrefix="Благоустройство участка, сделанное"
     titleAccent="на десятилетия."
@@ -759,4 +761,7 @@ const landscapingConsultationContactInfo = {
     contactInfo={landscapingConsultationContactInfo}
     leadSource="landscaping-footer-cta"
   />
+
+  <!-- 11. НАВИГАЦИОННЫЙ БЛОК ПЕРЕХОДОВ В ДРУГИЕ РАЗДЕЛЫ -->
+  <PageNavigation currentSection="blagoustrojstvo" />
 </Layout>

@@ -19,7 +19,7 @@ export interface Props {
   compact?: boolean;
 }
 
-const { currentPath = '/', compact = false } = Astro.props;
+const { currentPath = Astro.url.pathname, compact = false } = Astro.props;
 
 const normalizedPath =
   currentPath.length > 1 && currentPath.endsWith('/')
@@ -28,11 +28,14 @@ const normalizedPath =
 
 const isLandscaping = normalizedPath.startsWith('/blagoustrojstvo');
 const isRepair = normalizedPath.startsWith('/remont');
-const activePageId: PageSwitchId = isLandscaping
+const isHub = normalizedPath === '/' || normalizedPath === '';
+const activePageId: PageSwitchId | null = isLandscaping
   ? 'landscaping'
   : isRepair
     ? 'repair'
-    : 'hub';
+    : isHub
+      ? 'hub'
+      : null;
 
 const currentYear = new Date().getFullYear();
 

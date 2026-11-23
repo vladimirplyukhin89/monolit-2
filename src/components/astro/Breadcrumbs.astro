@@ -1,0 +1,66 @@
+---
+export interface Props {
+  readonly currentLabel: string;
+  readonly homeLabel?: string;
+  readonly homeHref?: string;
+  readonly separator?: '/' | '·';
+  readonly class?: string;
+}
+
+const {
+  currentLabel,
+  homeLabel = 'Главная',
+  homeHref = '/',
+  separator = '/',
+  class: className,
+} = Astro.props;
+---
+
+<nav
+  aria-label="Хлебные крошки"
+  class:list={['block', className]}
+>
+  <ol
+    itemscope
+    itemtype="https://schema.org/BreadcrumbList"
+    class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs leading-none tracking-[0.06em] text-text-muted"
+  >
+    <li
+      itemprop="itemListElement"
+      itemscope
+      itemtype="https://schema.org/ListItem"
+      class="inline-flex items-center"
+    >
+      <a
+        href={homeHref}
+        itemprop="item"
+        class="rounded-xs py-0.5 text-text-muted transition-colors duration-[350ms] ease-[var(--ease-editorial)] hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+      >
+        <span itemprop="name">{homeLabel}</span>
+      </a>
+      <meta itemprop="position" content="1" />
+    </li>
+
+    <li
+      itemprop="itemListElement"
+      itemscope
+      itemtype="https://schema.org/ListItem"
+      class="inline-flex items-center gap-2"
+    >
+      <span
+        aria-hidden="true"
+        class="cursor-default select-none text-text-muted/60"
+      >
+        {separator}
+      </span>
+      <span
+        itemprop="name"
+        aria-current="page"
+        class="cursor-default select-none text-text-muted"
+      >
+        {currentLabel}
+      </span>
+      <meta itemprop="position" content="2" />
+    </li>
+  </ol>
+</nav>
