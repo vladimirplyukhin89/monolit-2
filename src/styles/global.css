@@ -56,6 +56,7 @@
 
 @layer base {
   html {
+    color-scheme: dark;
     background-color: var(--color-bg-primary);
     color: var(--color-text-primary);
     scroll-behavior: smooth;
@@ -154,6 +155,49 @@ dialog.editorial-dialog::backdrop {
 
 dialog.editorial-dialog[open] {
   animation: fade-in 360ms var(--ease-editorial) both;
+}
+
+/* Универсальное модальное окно захвата лидов (чистый CSS transition без bounce) */
+.editorial-modal-backdrop {
+  background-color: color-mix(in srgb, var(--color-bg-primary) 82%, transparent);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: opacity 320ms var(--ease-editorial);
+}
+
+.editorial-modal-backdrop[data-state="open"] {
+  opacity: 1;
+}
+
+.editorial-modal-panel {
+  opacity: 0;
+  transform: translateY(12px) scale(0.985);
+  box-shadow: 0 24px 64px color-mix(in srgb, var(--color-bg-primary) 76%, transparent);
+  transition:
+    opacity 360ms var(--ease-editorial),
+    transform 360ms var(--ease-editorial);
+  will-change: opacity, transform;
+}
+
+.editorial-modal-panel[data-state="open"] {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Компактный Cookie-баннер (чистый CSS transition без bounce) */
+.editorial-cookie-banner {
+  opacity: 0;
+  transform: translateY(14px);
+  box-shadow: 0 20px 52px color-mix(in srgb, var(--color-bg-primary) 72%, transparent);
+  transition:
+    opacity 360ms var(--ease-editorial),
+    transform 360ms var(--ease-editorial);
+  will-change: opacity, transform;
+}
+
+.editorial-cookie-banner[data-state="open"] {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* Плавное раскрытие аккордеона FAQ через CSS Grid */
@@ -266,6 +310,14 @@ dialog.editorial-dialog[open] {
 
   dialog.editorial-dialog[open] {
     animation: none !important;
+  }
+
+  .editorial-modal-backdrop,
+  .editorial-modal-panel,
+  .editorial-cookie-banner {
+    transition: none !important;
+    transform: none !important;
+    will-change: auto !important;
   }
 
   .editorial-range::-webkit-slider-thumb,
