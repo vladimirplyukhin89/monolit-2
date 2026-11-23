@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.5](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.4...v0.0.5) (2026-11-23)
+
+
+### Features
+
+* **interactive:** добавить калькулятор-квиз и аккордеон FAQ ([16d2b06](https://github.com/vladimirplyukhin89/monolit-2/commit/16d2b063178bc64c23f790e0bd3cee563d096e44))
+
 ### [0.0.4](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.3...v0.0.4) (2026-11-23)
 
 
