@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.6](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.5...v0.0.6) (2026-11-23)
+
+
+### Features
+
+* **leads:** добавить форму консультации, модалку заявок и cookie-баннер ([bb42e14](https://github.com/vladimirplyukhin89/monolit-2/commit/bb42e144af8a2b48b8226f5550913631a415eefb))
+
 ### [0.0.5](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.4...v0.0.5) (2026-11-23)
 
 
