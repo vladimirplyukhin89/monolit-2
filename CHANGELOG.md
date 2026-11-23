@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.8](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.7...v0.0.8) (2026-11-23)
+
+
+### Features
+
+* **hub:** добавить разводящую главную страницу и безопасный fallback изображений ([36b45f8](https://github.com/vladimirplyukhin89/monolit-2/commit/36b45f8d7d3af43fbba7115cbf501b4c9d93ed88))
+
 ### [0.0.7](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.6...v0.0.7) (2026-11-23)
 
 
