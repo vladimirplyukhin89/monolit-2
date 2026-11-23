@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.10](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.9...v0.0.10) (2026-11-23)
+
+
+### Features
+
+* **hero:** создать универсальный компонент Hero, обновить страницы и увеличить логотип в шапке ([bf92d0c](https://github.com/vladimirplyukhin89/monolit-2/commit/bf92d0cee7c71e31512a9824c113d1f0081ee9be))
+
 ### [0.0.9](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.8...v0.0.9) (2026-11-23)
 
 ### [0.0.8](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.7...v0.0.8) (2026-11-23)
