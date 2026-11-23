@@ -1,28 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { SITE_CONFIG } from '../data/navigation';
+import Hero from '../components/astro/Hero.astro';
+import Services from '../components/astro/Services.astro';
 ---
 
 <Layout currentPath="/">
-  <section
-    id="hero"
-    class="border-b border-border-subtle bg-bg-primary py-24 sm:py-32 lg:py-40"
-  >
-    <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
-      <div class="reveal max-w-3xl">
-        <p class="mb-5 text-xs uppercase tracking-[0.22em] text-text-muted">
-          {SITE_CONFIG.regionMeta}
-        </p>
-        <h1 class="text-4xl font-normal leading-[1.1] tracking-tight text-text-primary sm:text-5xl lg:text-6xl">
-          Один договор. Одна смета.{' '}
-          <span class="font-serif text-[1.12em] font-medium italic text-text-primary">
-            Никаких нервов.
-          </span>
-        </h1>
-        <p class="mt-6 max-w-xl text-base leading-relaxed text-text-secondary sm:text-lg">
-          Вы занимаетесь своей жизнью. Ремонтом и дизайн-проектом займемся мы.
-        </p>
-      </div>
-    </div>
-  </section>
+  <Hero />
+  <Services />
 </Layout>

@@ -113,6 +113,28 @@
   transition-delay: 400ms;
 }
 
+.reveal-delay-500 {
+  transition-delay: 500ms;
+}
+
+.reveal-delay-600 {
+  transition-delay: 600ms;
+}
+
+/* Медленный деликатный зум фонового фото главного экрана (1 -> 1.03 за 1200ms) */
+@keyframes hero-bg-zoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.03);
+  }
+}
+
+.hero-bg-zoom {
+  animation: hero-bg-zoom 1200ms var(--ease-editorial) forwards;
+}
+
 /* Плавное раскрытие аккордеона FAQ через CSS Grid */
 .accordion-panel {
   display: grid;
@@ -148,8 +170,13 @@
   }
 
   .animate-fade-in,
-  .animate-fade-in-up {
+  .animate-fade-in-up,
+  .hero-bg-zoom {
     animation: none !important;
+  }
+
+  .hero-bg-zoom {
+    transform: scale(1) !important;
   }
 
   .accordion-panel {
