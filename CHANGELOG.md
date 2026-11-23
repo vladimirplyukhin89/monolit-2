@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.11](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.10...v0.0.11) (2026-11-23)
+
+
+### Features
+
+* **navigation:** добавить хлебные крошки, блок переходов между разделами и уточнить подсветку активного пути в шапке ([164d440](https://github.com/vladimirplyukhin89/monolit-2/commit/164d4400034d9e286643352e853b98cf0bcc0fba))
+
 ### [0.0.10](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.9...v0.0.10) (2026-11-23)
 
 
