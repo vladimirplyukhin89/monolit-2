@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.22](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.21...v0.0.22) (2026-11-24)
+
+
+### Features
+
+* добавление светлой темы на сайт ([1310c28](https://github.com/vladimirplyukhin89/monolit-2/commit/1310c28bd633ff16737b4d6bea8a8702c9506a09))
+
 ### [0.0.21](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.20...v0.0.21) (2026-11-24)
 
 
