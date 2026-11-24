@@ -188,7 +188,7 @@ export default function ConsultationSection({
                 className="cursor-default text-3xl font-normal leading-[1.12] tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
               >
                 {titlePrefix}
-                <span className="font-serif text-[1.12em] font-medium italic text-text-primary">
+                <span className="font-serif text-[1.15em] font-medium italic leading-none text-accent md:text-[1.12em] md:leading-[1.15]">
                   {titleAccent}
                 </span>
               </h2>
@@ -206,7 +206,7 @@ export default function ConsultationSection({
                   >
                     <span
                       aria-hidden="true"
-                      className="mt-0.5 shrink-0 font-serif text-base italic leading-none text-text-muted"
+                      className="mt-0.5 shrink-0 font-serif text-base italic leading-none text-accent"
                     >
                       {step.number}
                     </span>
@@ -287,7 +287,10 @@ export default function ConsultationSection({
                   <fieldset className="m-0 border-0 p-0">
                     <div className="flex flex-wrap items-baseline justify-between gap-2">
                       <legend className="cursor-default text-xs uppercase tracking-[0.18em] text-text-muted">
-                        01 · Тема обращения
+                        <span className="font-serif text-sm italic normal-case tracking-normal text-accent">
+                          01
+                        </span>
+                        {' · Тема обращения'}
                       </legend>
                       <span className="cursor-default text-xs text-text-muted">
                         Можно выбрать несколько
@@ -317,11 +320,7 @@ export default function ConsultationSection({
                             <span className="flex min-w-0 items-start gap-3">
                               <span
                                 aria-hidden="true"
-                                className={`mt-0.5 shrink-0 font-serif text-sm italic leading-none transition-colors duration-[300ms] ease-[var(--ease-editorial)] ${
-                                  isChecked
-                                    ? 'text-accent'
-                                    : 'text-text-muted group-hover:text-accent'
-                                }`}
+                                className="mt-0.5 shrink-0 font-serif text-sm italic leading-none text-accent"
                               >
                                 {topic.number}
                               </span>
@@ -367,7 +366,10 @@ export default function ConsultationSection({
                   <div className="border-t border-border-subtle pt-6">
                     <fieldset className="m-0 border-0 p-0">
                       <legend className="cursor-default text-xs uppercase tracking-[0.18em] text-text-muted">
-                        02 · Удобный способ связи
+                        <span className="font-serif text-sm italic normal-case tracking-normal text-accent">
+                          02
+                        </span>
+                        {' · Удобный способ связи'}
                       </legend>
 
                       <div
@@ -416,7 +418,10 @@ export default function ConsultationSection({
                   {/* 03. Контактные данные */}
                   <div className="border-t border-border-subtle pt-6">
                     <p className="cursor-default text-xs uppercase tracking-[0.18em] text-text-muted">
-                      03 · Ваши контакты
+                      <span className="font-serif text-sm italic normal-case tracking-normal text-accent">
+                        03
+                      </span>
+                      {' · Ваши контакты'}
                     </p>
 
                     <div className="mt-3.5 grid grid-cols-1 gap-4 sm:grid-cols-2">

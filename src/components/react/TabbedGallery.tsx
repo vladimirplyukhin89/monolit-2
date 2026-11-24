@@ -133,9 +133,7 @@ export default function TabbedGallery({
                   }`}
                 >
                   <span
-                    className={`font-serif text-sm italic leading-none ${
-                      isSelected ? 'text-accent' : 'text-text-muted'
-                    }`}
+                    className="font-serif text-sm italic leading-none text-accent"
                     aria-hidden="true"
                   >
                     {tab.number}

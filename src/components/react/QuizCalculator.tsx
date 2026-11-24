@@ -98,11 +98,7 @@ function OptionGrid<T extends string>({
             <span className="flex min-w-0 items-start gap-4">
               <span
                 aria-hidden="true"
-                className={`mt-0.5 shrink-0 font-serif text-base italic leading-none transition-colors duration-[300ms] ease-[var(--ease-editorial)] ${
-                  isSelected
-                    ? 'text-accent'
-                    : 'text-text-muted group-hover:text-accent'
-                }`}
+                className="mt-0.5 shrink-0 font-serif text-base italic leading-none text-accent"
               >
                 {option.code}
               </span>
@@ -484,11 +480,7 @@ export default function QuizCalculator() {
                     isCurrent ? 'font-medium text-text-primary' : 'text-text-muted'
                   }`}
                 >
-                  <span
-                    className={`font-serif italic ${
-                      isCurrent ? 'text-accent' : 'text-text-muted'
-                    }`}
-                  >
+                  <span className="font-serif italic text-accent">
                     {formatStepNumber(index)}
                   </span>
                   <span>{step.shortLabel}</span>
@@ -508,7 +500,7 @@ export default function QuizCalculator() {
               <div>
                 <h3 className="cursor-default text-2xl font-normal leading-[1.18] tracking-tight text-text-primary sm:text-3xl">
                   {currentStep.title}
-                  <span className="font-serif text-[1.12em] font-medium italic text-text-primary">
+                  <span className="font-serif text-[1.15em] font-medium italic leading-none text-accent md:text-[1.12em] md:leading-[1.15]">
                     {currentStep.titleAccent}
                   </span>
                 </h3>
@@ -677,9 +669,9 @@ export default function QuizCalculator() {
                       <p className="text-[11px] uppercase tracking-[0.18em] text-text-muted">
                         Ориентировочная ставка
                       </p>
-                      <p className="mt-2 text-3xl font-normal tabular-nums tracking-tight text-text-primary sm:text-4xl">
+                      <p className="mt-2 text-3xl font-normal tabular-nums tracking-tight text-accent sm:text-4xl">
                         от {formatRubles(estimate.ratePerSqm)}
-                        <span className="font-serif text-xl italic text-text-secondary">
+                        <span className="font-serif text-xl italic text-accent">
                           {' '}
                           / м²
                         </span>
@@ -991,7 +983,7 @@ export default function QuizCalculator() {
                     <dt className="text-[11px] uppercase tracking-[0.16em] text-text-muted">
                       Ориентир ставки
                     </dt>
-                    <dd className="mt-1 text-base font-medium tabular-nums text-text-primary">
+                    <dd className="mt-1 text-base font-medium tabular-nums text-accent">
                       от {formatRubles(estimate.ratePerSqm)}/м²
                     </dd>
                   </div>
@@ -1094,11 +1086,7 @@ export default function QuizCalculator() {
                   className="flex items-baseline justify-between gap-4 text-xs"
                 >
                   <dt className="flex shrink-0 items-center gap-2 text-text-muted">
-                    <span
-                      className={`font-serif italic ${
-                        row.isActive || row.value ? 'text-accent' : 'text-text-muted'
-                      }`}
-                    >
+                    <span className="font-serif italic text-accent">
                       {row.number}
                     </span>
                     <span>{row.label}</span>
@@ -1121,9 +1109,9 @@ export default function QuizCalculator() {
               </p>
               {answers.service ? (
                 <div className="mt-2">
-                  <p className="text-xl font-medium tabular-nums text-text-primary">
+                  <p className="text-xl font-medium tabular-nums text-accent">
                     от {formatRubles(estimate.ratePerSqm)}
-                    <span className="font-serif text-base italic text-text-secondary">
+                    <span className="font-serif text-base italic text-accent">
                       {' '}
                       / м²
                     </span>

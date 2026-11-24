@@ -432,7 +432,7 @@ export default function LeadModal() {
                 className="cursor-default text-2xl font-normal leading-[1.18] tracking-tight text-text-primary sm:text-[1.8rem]"
               >
                 {preset.titlePrefix}
-                <span className="font-serif text-[1.12em] font-medium italic text-text-primary">
+                <span className="font-serif text-[1.15em] font-medium italic leading-none text-accent md:text-[1.12em] md:leading-[1.15]">
                   {preset.titleAccent}
                 </span>
               </h2>

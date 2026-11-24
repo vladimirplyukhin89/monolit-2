@@ -60,7 +60,7 @@ const resolvedCards = HUB_CONFIG.cards.map((card) => ({
             <span class="inline-flex items-center gap-2.5 text-xs uppercase tracking-[0.22em] text-text-secondary transition-colors duration-300 group-hover:text-text-primary">
               <span
                 aria-hidden="true"
-                class="h-1.5 w-1.5 rounded-full bg-border-subtle transition-colors duration-300 group-hover:bg-accent group-focus-visible:bg-accent"
+                class="h-1.5 w-1.5 rounded-full bg-accent"
               />
               <span>{card.eyebrow}</span>
             </span>
@@ -88,7 +88,7 @@ const resolvedCards = HUB_CONFIG.cards.map((card) => ({
           <div class="relative z-10 mt-16 max-w-xl sm:mt-20 lg:mt-auto">
             <h2 class="text-3xl font-normal leading-[1.1] tracking-tight text-text-primary sm:text-4xl lg:text-[2.65rem] xl:text-5xl">
               {card.titlePrefix}
-              <span class="font-serif text-[1.12em] font-medium italic text-text-primary">
+              <span class="font-serif text-[1.15em] font-medium italic leading-none text-accent md:text-[1.12em] md:leading-[1.15]">
                 {card.titleAccent}
               </span>
             </h2>

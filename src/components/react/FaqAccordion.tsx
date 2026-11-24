@@ -166,11 +166,7 @@ export default function FaqAccordion({
                   >
                     <span className="flex min-w-0 items-start gap-4 sm:gap-6">
                       <span
-                        className={`mt-0.5 shrink-0 font-serif text-lg italic leading-none transition-colors duration-[300ms] ease-[var(--ease-editorial)] ${
-                          isOpen
-                            ? 'text-accent'
-                            : 'text-text-muted group-hover:text-accent'
-                        }`}
+                        className="mt-0.5 shrink-0 font-serif text-lg italic leading-none text-accent"
                         aria-hidden="true"
                       >
                         {item.number}

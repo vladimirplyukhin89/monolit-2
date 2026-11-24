@@ -96,7 +96,7 @@ const showBreadcrumbs =
 
       <h1 class="animate-fade-in-up [animation-delay:120ms] max-w-full cursor-default overflow-visible text-balance font-sans text-[1.875rem] font-medium leading-[1.24] tracking-tight text-text-primary min-[400px]:text-4xl min-[400px]:leading-[1.2] sm:text-5xl sm:leading-[1.14] lg:text-[3.75rem] lg:leading-[1.1]">
         {titlePrefix}{' '}
-        <span class="font-serif text-[1.08em] italic leading-[1.2] text-accent [padding-inline:0.04em]">{titleAccent}</span>
+        <span class="font-serif text-[1.15em] italic leading-none text-accent md:text-[1.08em] md:leading-[1.2] [padding-inline:0.04em]">{titleAccent}</span>
         {
           titleSuffix && (
             <>
@@ -154,7 +154,7 @@ const showBreadcrumbs =
             {tags.map((tag, index) => (
               <li class="inline-flex h-8 max-w-full shrink-0 cursor-default select-none items-center gap-2 whitespace-nowrap border border-border-subtle bg-bg-secondary/85 px-3.5 text-xs font-normal leading-8 tracking-wide text-text-secondary">
                 <span
-                  class="font-serif text-[13px] italic leading-8 text-text-muted"
+                  class="font-serif text-[13px] italic leading-8 text-accent"
                   aria-hidden="true"
                 >
                   {String(index + 1).padStart(2, '0')}
