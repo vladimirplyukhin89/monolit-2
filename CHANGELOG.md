@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.16](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.15...v0.0.16) (2026-11-24)
+
+
+### Features
+
+* **ui:** усилить оранжевые акценты для чтения с телефона ([fb07f3f](https://github.com/vladimirplyukhin89/monolit-2/commit/fb07f3f64e49ace66b6f2335c28cd6349c8fd281))
+
 ### [0.0.15](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.14...v0.0.15) (2026-11-23)
 
 
