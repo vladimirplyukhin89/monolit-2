@@ -1,24 +1,30 @@
 @import "tailwindcss";
 
 @theme {
-  /* Фоны (Dark & Warm Orange Editorial) */
-  --color-bg-primary: #0D0D0E;
-  --color-bg-secondary: #161618;
+  /* Вариант 1 (спокойный редакционный — можно раскомментировать для сравнения) */
+  /* --color-bg-primary: #0D0D0E; */
+  /* --color-bg-secondary: #161618; */
+  /* --color-bg-elevated: #1F1F23; */
+  /* --color-accent: #E85D2A; */
+  /* --color-accent-hover: #F26D3D; */
+  /* --color-accent-muted: rgba(232, 93, 42, 0.12); */
+  /* --color-text-primary: #F5F5F7; */
+  /* --color-border-accent: rgba(232, 93, 42, 0.4); */
+
+  /* Вариант 2 (насыщенный черный и оранжевый — активный) */
+  --color-bg-primary: #09090B;
+  --color-bg-secondary: #121215;
   --color-bg-elevated: #1F1F23;
+  --color-accent: #FF5E1A;
+  --color-accent-hover: #FF7338;
+  --color-accent-muted: rgba(255, 94, 26, 0.12);
+  --color-text-primary: #FFFFFF;
+  --color-border-accent: rgba(255, 94, 26, 0.4);
 
-  /* Оранжевые акценты (спокойный благородный терракотово-оранжевый) */
-  --color-accent: #E85D2A;
-  --color-accent-hover: #F26D3D;
-  --color-accent-muted: rgba(232, 93, 42, 0.12);
-
-  /* Текст */
-  --color-text-primary: #F5F5F7;
+  /* Текст и нейтральные границы — общие для обоих вариантов */
   --color-text-secondary: #A1A1AA;
   --color-text-muted: #6E6E77;
-
-  /* Границы */
   --color-border-subtle: #27272A;
-  --color-border-accent: rgba(232, 93, 42, 0.4);
 
   /* Шрифтовая пара: Manrope + Cormorant Garamond */
   --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, sans-serif;

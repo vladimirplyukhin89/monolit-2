@@ -308,7 +308,7 @@ export default function CookieBanner() {
             onClick={() =>
               dismissWithPreferences(analyticsEnabled, preferencesEnabled)
             }
-            className="inline-flex min-h-11 flex-1 cursor-pointer items-center justify-center rounded-sm bg-accent px-4 py-2.5 text-xs font-medium text-text-primary transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-secondary"
+            className="inline-flex min-h-11 flex-1 cursor-pointer items-center justify-center rounded-sm bg-accent px-4 py-2.5 text-xs font-semibold text-white transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-secondary"
           >
             Сохранить выбор
           </button>
@@ -316,7 +316,7 @@ export default function CookieBanner() {
           <button
             type="button"
             onClick={() => dismissWithPreferences(true, true)}
-            className="inline-flex min-h-11 flex-1 cursor-pointer items-center justify-center rounded-sm bg-accent px-4 py-2.5 text-xs font-medium text-text-primary transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-secondary"
+            className="inline-flex min-h-11 flex-1 cursor-pointer items-center justify-center rounded-sm bg-accent px-4 py-2.5 text-xs font-semibold text-white transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-secondary"
           >
             Принять все
           </button>

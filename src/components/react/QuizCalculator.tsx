@@ -138,7 +138,7 @@ function OptionGrid<T extends string>({
             >
               {isSelected && (
                 <svg
-                  className="h-3 w-3 text-text-primary"
+                  className="h-3 w-3 text-white"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -933,7 +933,7 @@ export default function QuizCalculator() {
 
                     <button
                       type="submit"
-                      className="inline-flex min-h-11 w-full cursor-pointer items-center justify-center gap-2.5 rounded-sm bg-accent px-7 py-3.5 text-sm font-medium text-text-primary transition-colors duration-[350ms] ease-[var(--ease-editorial)] hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-secondary sm:w-auto"
+                      className="inline-flex min-h-11 w-full cursor-pointer items-center justify-center gap-2.5 rounded-sm bg-accent px-7 py-3.5 text-sm font-semibold text-white transition-colors duration-[350ms] ease-[var(--ease-editorial)] hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-secondary sm:w-auto"
                     >
                       <span>Получить точную смету</span>
                       <svg
@@ -1046,7 +1046,7 @@ export default function QuizCalculator() {
                 onClick={handleNext}
                 className={
                   canProceed
-                    ? 'inline-flex cursor-pointer items-center justify-center gap-2.5 rounded-sm bg-accent px-7 py-3.5 text-sm font-medium text-text-primary transition-colors duration-[350ms] ease-[var(--ease-editorial)] hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-secondary'
+                    ? 'inline-flex cursor-pointer items-center justify-center gap-2.5 rounded-sm bg-accent px-7 py-3.5 text-sm font-semibold text-white transition-colors duration-[350ms] ease-[var(--ease-editorial)] hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-secondary'
                     : 'inline-flex cursor-not-allowed items-center justify-center gap-2.5 rounded-sm border border-border-subtle bg-bg-elevated px-7 py-3.5 text-sm font-medium text-text-muted opacity-60'
                 }
               >

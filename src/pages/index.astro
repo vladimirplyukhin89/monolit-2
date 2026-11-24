@@ -20,9 +20,7 @@ const resolvedCards = HUB_CONFIG.cards.map((card) => ({
     aria-label="Выбор направления компании МОНОЛИТ"
     class="relative flex flex-1 flex-col bg-bg-primary"
   >
-    <h1 class="sr-only">
-      МОНОЛИТ — Ремонт квартир под ключ и благоустройство участков в Тюмени
-    </h1>
+    <h1 class="sr-only">МОНОЛИТ — выбор направления работ в Тюмени</h1>
 
     <div class="grid flex-1 grid-cols-1 divide-y divide-border-subtle lg:grid-cols-2 lg:divide-x lg:divide-y-0">
       {resolvedCards.map((card, index) => (
@@ -96,6 +94,18 @@ const resolvedCards = HUB_CONFIG.cards.map((card) => ({
             <p class="mt-4 max-w-md text-sm leading-relaxed text-text-secondary sm:text-base">
               {card.subtitle}
             </p>
+
+            <ul class="mt-5 max-w-md space-y-2">
+              {card.works.map((work) => (
+                <li class="flex items-start gap-2.5 text-sm leading-snug text-text-primary">
+                  <span
+                    aria-hidden="true"
+                    class="mt-[0.45em] h-1 w-1 shrink-0 bg-accent"
+                  />
+                  <span>{work}</span>
+                </li>
+              ))}
+            </ul>
 
             <div class="mt-7 inline-flex items-center gap-3 border-b border-border-subtle pb-2 text-sm font-medium text-text-primary transition-colors duration-300 group-hover:border-accent group-hover:text-accent group-focus-visible:border-accent group-focus-visible:text-accent">
               <span>{card.actionLabel}</span>

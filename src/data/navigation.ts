@@ -86,6 +86,7 @@ export interface HubDirectionCard {
   readonly titlePrefix: string;
   readonly titleAccent: string;
   readonly subtitle: string;
+  readonly works: readonly string[];
   readonly actionLabel: string;
   readonly imagePath: string;
   readonly imageAlt: string;
@@ -192,9 +193,9 @@ export const COMPANY_CONTACTS: CompanyContacts = {
 } as const;
 
 export const HUB_CONFIG: HubConfig = {
-  title: 'МОНОЛИТ — Ремонт квартир под ключ и благоустройство участков в Тюмени',
+  title: 'МОНОЛИТ — выбор направления в Тюмени: ремонт квартир или благоустройство участков',
   description:
-    'Два ключевых направления компании МОНОЛИТ в Тюмени с 2021 года: комплексный ремонт квартир с дизайн-проектом и благоустройство загородных участков под ключ.',
+    'Два отдельных направления компании МОНОЛИТ в Тюмени с 2021 года. Ремонт квартир: дизайн-проект, черновые и чистовые работы, инженерия. Благоустройство участков: асфальтирование, брусчатка, водоотведение, отмостки.',
   subtitle: 'Тюмень · С 2021 года',
   phoneDisplay: COMPANY_CONTACTS.phoneDisplay,
   phoneHref: COMPANY_CONTACTS.phoneHref,
@@ -217,6 +218,7 @@ export const HUB_CONFIG: HubConfig = {
       titleAccent: 'под\u00A0ключ',
       subtitle:
         'Дизайн-проект, инженерия и чистовая отделка с фиксированной сметой.',
+      works: ['Дизайн-проект', 'Черновые и чистовые работы', 'Инженерия'],
       actionLabel: 'Перейти к ремонту',
       imagePath: 'hub/remont-card',
       imageAlt:
@@ -230,6 +232,7 @@ export const HUB_CONFIG: HubConfig = {
       titleAccent: 'участков',
       subtitle:
         'Брусчатка, асфальтирование, отмостки и дренаж от прямых производителей.',
+      works: ['Асфальтирование', 'Брусчатка', 'Водоотведение', 'Отмостки'],
       actionLabel: 'Перейти к благоустройству',
       imagePath: 'hub/landscaping-card',
       imageAlt:

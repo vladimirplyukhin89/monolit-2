@@ -320,7 +320,7 @@ export default function ConsultationSection({
                               aria-hidden="true"
                               className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-xs border transition-colors duration-[300ms] ease-[var(--ease-editorial)] ${
                                 isChecked
-                                  ? 'border-accent bg-accent text-text-primary'
+                                  ? 'border-accent bg-accent text-white'
                                   : 'border-border-subtle bg-bg-secondary group-hover:border-border-accent'
                               }`}
                             >
@@ -572,7 +572,7 @@ export default function ConsultationSection({
                   <div className="flex flex-col items-start justify-between gap-4 pt-1 sm:flex-row sm:items-center">
                     <button
                       type="submit"
-                      className="inline-flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-sm bg-accent px-7 py-4 text-sm font-medium text-text-primary transition-colors duration-[350ms] ease-[var(--ease-editorial)] hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-secondary sm:w-auto"
+                      className="inline-flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-sm bg-accent px-7 py-4 text-sm font-semibold text-white transition-colors duration-[350ms] ease-[var(--ease-editorial)] hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-secondary sm:w-auto"
                     >
                       <span>Отправить заявку</span>
                       <svg
