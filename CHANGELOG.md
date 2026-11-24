@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.21](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.20...v0.0.21) (2026-11-24)
+
+
+### Features
+
+* **services:** свернуть описания карточек и подставлять услугу в заявку ([fef0eae](https://github.com/vladimirplyukhin89/monolit-2/commit/fef0eae4e073b12a6c6d9c30c416f041720a0996))
+
 ### [0.0.20](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.19...v0.0.20) (2026-11-24)
 
 
