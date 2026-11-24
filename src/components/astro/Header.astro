@@ -1,5 +1,5 @@
 ---
-import BrandLogo from './BrandLogo.astro';
+import LogoAlt from '../../assets/images/common/logo-alt.svg';
 import SocialLinks from './SocialLinks.astro';
 import {
   COMPANY_CONTACTS,
@@ -38,9 +38,6 @@ const activePageId: PageSwitchId | null = isLandscaping
       : null;
 
 const navItems = isLandscaping ? LANDSCAPING_NAV_ITEMS : MAIN_NAV_ITEMS;
-const brandSubtitle = isLandscaping
-  ? LANDSCAPING_CONTACTS.brandSubtitle
-  : SITE_CONFIG.brandSubtitle;
 const regionMeta = isLandscaping
   ? LANDSCAPING_CONTACTS.regionMeta
   : SITE_CONFIG.regionMeta;
@@ -68,7 +65,7 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
             aria-label={`${SITE_CONFIG.brandName} — главная страница`}
             class="group inline-flex shrink-0 items-center rounded-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
           >
-            <BrandLogo size="lg" />
+            <LogoAlt class="block h-7 w-auto md:h-8" aria-hidden="true" />
           </a>
 
           <span
@@ -237,7 +234,7 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
             class="group inline-flex shrink-0 items-center rounded-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             aria-label={`${SITE_CONFIG.brandName} — на главную`}
           >
-            <BrandLogo size="lg" subtitle={brandSubtitle} />
+            <LogoAlt class="block h-7 w-auto md:h-8" aria-hidden="true" />
           </a>
 
           <!-- Переключатель разделов: Главная / Ремонт квартир / Благоустройство (десктоп) -->

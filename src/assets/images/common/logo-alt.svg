@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 88" width="460" height="88" fill="none">
+  <!-- Левая часть буквы M -->
+  <path d="M8 8H28L46 34V62L28 36V80H8V8Z" fill="#FF5E1A"/>
+  <!-- Правая часть буквы M -->
+  <path d="M84 8H64L46 34V62L64 36V80H84V8Z" fill="#FF5E1A"/>
+  <!-- Вертикальный разделитель -->
+  <rect x="104" y="6" width="3" height="76" fill="#FF5E1A"/>
+  <!-- Надпись MONOLIT -->
+  <text
+    x="126"
+    y="66"
+    fill="#FF5E1A"
+    font-family="Manrope, Inter, Arial, sans-serif"
+    font-weight="800"
+    font-size="62"
+    letter-spacing="3"
+  >MONOLIT</text>
+</svg>
