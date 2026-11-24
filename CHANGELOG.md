@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.25](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.24...v0.0.25) (2026-11-24)
+
+
+### Bug Fixes
+
+* смена фонового фото для Hero на странице благоустройства ([f4d68aa](https://github.com/vladimirplyukhin89/monolit-2/commit/f4d68aa64caac8746af80d9d590dd7b2dd7a6b4b))
+
 ### [0.0.24](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.23...v0.0.24) (2026-11-24)
 
 
