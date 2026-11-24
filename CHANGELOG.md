@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.26](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.25...v0.0.26) (2026-11-24)
+
+
+### Bug Fixes
+
+* добавление картинок в Hero на дет. страницы ([95e4897](https://github.com/vladimirplyukhin89/monolit-2/commit/95e4897878dc398cc084d716bbadb8e19f96f7e6))
+
 ### [0.0.25](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.24...v0.0.25) (2026-11-24)
 
 
