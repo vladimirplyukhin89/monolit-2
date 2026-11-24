@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.18](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.17...v0.0.18) (2026-11-24)
+
+
+### Features
+
+* **ui:** насытить палитру и развести тексты двух ниш ([b9fa474](https://github.com/vladimirplyukhin89/monolit-2/commit/b9fa4749a2bf56a04cf75b7f6b91f24650fb83b8))
+
 ### [0.0.17](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.16...v0.0.17) (2026-11-24)
 
 
