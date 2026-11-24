@@ -1,8 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img">
-  <title>Монолит</title>
-  <rect width="96" height="96" fill="#09090B"/>
-  <g transform="translate(2 4)">
-    <path d="M8 8H28L46 34V62L28 36V80H8V8Z" fill="#FF5E1A"/>
-    <path d="M84 8H64L46 34V62L64 36V80H84V8Z" fill="#FF5E1A"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <rect width="64" height="64" rx="14" fill="#09090B"/>
+  <path d="M12 14H23L32 27.5V43L23 29.5V50H12V14Z" fill="#FF5E1A"/>
+  <path d="M52 14H41L32 27.5V43L41 29.5V50H52V14Z" fill="#FF5E1A"/>
 </svg>
