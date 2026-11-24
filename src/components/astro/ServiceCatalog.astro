@@ -1,0 +1,277 @@
+---
+interface ServiceCatalogItem {
+  readonly number: string;
+  readonly category: string;
+  readonly title: string;
+  readonly description: string;
+  readonly deliverables: readonly string[];
+  readonly priceLabel: string;
+  readonly timelineLabel: string;
+  readonly isFeatured?: boolean;
+}
+
+interface Props {
+  readonly items: readonly ServiceCatalogItem[];
+  readonly leadSource: string;
+  readonly priceClass?: string;
+}
+
+const { items, leadSource, priceClass = 'text-sm' } = Astro.props;
+
+const standardButtonClass =
+  'mt-5 inline-flex min-h-11 w-full cursor-pointer items-center justify-center rounded-sm border border-border-subtle bg-bg-primary px-4 text-sm text-white transition-colors duration-300 ease-[var(--ease-editorial)] hover:border-accent hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-secondary';
+
+const featuredButtonClass =
+  'mt-5 inline-flex min-h-11 w-full cursor-pointer items-center justify-center rounded-sm bg-accent px-4 text-sm font-semibold text-white transition-colors duration-300 ease-[var(--ease-editorial)] hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-secondary';
+---
+
+<div class="mt-12 grid grid-cols-1 gap-px border border-border-subtle bg-border-subtle md:grid-cols-2 lg:mt-14 lg:grid-cols-3">
+  {
+    items.map((service, index) => {
+      const delayClass =
+        index % 3 === 1
+          ? 'reveal-delay-100'
+          : index % 3 === 2
+            ? 'reveal-delay-200'
+            : '';
+      const descriptionId = `${leadSource}-description-${service.number}`;
+
+      return (
+        <article
+          data-service-card
+          class:list={[
+            'flex h-full cursor-default flex-col justify-between bg-bg-secondary p-7 sm:p-8',
+            service.isFeatured && 'ring-1 ring-inset ring-border-accent',
+          ]}
+        >
+          <div class:list={['reveal flex h-full flex-col justify-between', delayClass]}>
+            <div>
+              <div class="flex items-center justify-between gap-4">
+                <span class="font-serif text-lg italic leading-none text-accent">
+                  {service.number}
+                </span>
+
+                {service.isFeatured ? (
+                  <span class="inline-flex cursor-default items-center bg-accent-muted px-2.5 py-1 text-[11px] font-medium uppercase leading-none tracking-[0.16em] text-accent select-none">
+                    {service.category}
+                  </span>
+                ) : (
+                  <span class="cursor-default text-[11px] uppercase leading-none tracking-[0.18em] text-text-muted select-none">
+                    {service.category}
+                  </span>
+                )}
+              </div>
+
+              <h3 class="mt-6 text-xl font-normal leading-snug tracking-tight text-text-primary">
+                {service.title}
+              </h3>
+
+              <div class="service-description-clip mt-3" data-service-clip>
+                <p
+                  id={descriptionId}
+                  data-service-description
+                  class="line-clamp-3 text-sm leading-relaxed text-text-secondary"
+                >
+                  {service.description}
+                </p>
+              </div>
+
+              <button
+                type="button"
+                data-service-toggle
+                aria-expanded="false"
+                aria-controls={descriptionId}
+                class="mt-1 inline-flex min-h-11 cursor-pointer items-center gap-1.5 text-xs font-medium text-text-secondary transition-colors duration-300 ease-[var(--ease-editorial)] hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+              >
+                <span data-service-toggle-label>Подробнее</span>
+                <svg
+                  data-service-chevron
+                  class="h-3.5 w-3.5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </button>
+
+              <ul class="mt-5 space-y-2.5 border-t border-border-subtle pt-5">
+                {service.deliverables.map((point) => (
+                  <li class="flex items-start gap-2.5 text-xs leading-relaxed text-text-secondary">
+                    <span
+                      class="mt-[0.45em] h-1 w-1 shrink-0 bg-accent"
+                      aria-hidden="true"
+                    />
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div class="mt-8 border-t border-border-subtle pt-5">
+              <div class="flex items-baseline justify-between gap-4">
+                <span class:list={[priceClass, 'font-medium text-accent']}>
+                  {service.priceLabel}
+                </span>
+                <span class="text-xs text-text-muted">{service.timelineLabel}</span>
+              </div>
+
+              <button
+                type="button"
+                data-lead-trigger={leadSource}
+                data-lead-subject={service.title}
+                aria-label={`Выбрать услугу: ${service.title}`}
+                class={service.isFeatured ? featuredButtonClass : standardButtonClass}
+              >
+                Выбрать услугу
+              </button>
+            </div>
+          </div>
+        </article>
+      );
+    })
+  }
+</div>
+
+<script>
+  const COLLAPSE_FALLBACK_MS = 460;
+  const collapseTimers = new WeakMap<HTMLElement, number>();
+  const collapseControllers = new WeakMap<HTMLElement, AbortController>();
+  let resizeBound = false;
+
+  function prefersReducedMotion(): boolean {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  function cancelCollapse(clip: HTMLElement): void {
+    const timer = collapseTimers.get(clip);
+    if (timer !== undefined) {
+      window.clearTimeout(timer);
+      collapseTimers.delete(clip);
+    }
+    collapseControllers.get(clip)?.abort();
+    collapseControllers.delete(clip);
+  }
+
+  function descriptionOverflows(text: HTMLElement): boolean {
+    return text.scrollHeight - text.clientHeight > 1;
+  }
+
+  function syncToggle(card: HTMLElement): void {
+    const text = card.querySelector<HTMLElement>('[data-service-description]');
+    const toggle = card.querySelector<HTMLButtonElement>('[data-service-toggle]');
+    const clip = card.querySelector<HTMLElement>('[data-service-clip]');
+    if (!text || !toggle || !clip) {
+      return;
+    }
+
+    if (clip.dataset.open === 'true') {
+      text.classList.remove('line-clamp-3');
+      clip.style.setProperty('--service-copy-height', `${text.scrollHeight}px`);
+      return;
+    }
+
+    if (!text.classList.contains('line-clamp-3')) {
+      return;
+    }
+
+    toggle.hidden = !descriptionOverflows(text);
+  }
+
+  function setExpanded(card: HTMLElement, expanded: boolean): void {
+    const text = card.querySelector<HTMLElement>('[data-service-description]');
+    const toggle = card.querySelector<HTMLButtonElement>('[data-service-toggle]');
+    const label = card.querySelector<HTMLElement>('[data-service-toggle-label]');
+    const clip = card.querySelector<HTMLElement>('[data-service-clip]');
+    if (!text || !toggle || !label || !clip) {
+      return;
+    }
+
+    cancelCollapse(clip);
+
+    if (expanded) {
+      text.classList.remove('line-clamp-3');
+      clip.style.setProperty('--service-copy-height', `${text.scrollHeight}px`);
+      if (!prefersReducedMotion()) {
+        void clip.offsetHeight;
+      }
+      clip.dataset.open = 'true';
+      toggle.setAttribute('aria-expanded', 'true');
+      label.textContent = 'Свернуть';
+      toggle.hidden = false;
+      return;
+    }
+
+    clip.dataset.open = 'false';
+    toggle.setAttribute('aria-expanded', 'false');
+    label.textContent = 'Подробнее';
+
+    const finish = (): void => {
+      cancelCollapse(clip);
+      if (clip.dataset.open === 'true') {
+        return;
+      }
+      text.classList.add('line-clamp-3');
+      syncToggle(card);
+    };
+
+    if (prefersReducedMotion()) {
+      finish();
+      return;
+    }
+
+    const controller = new AbortController();
+    collapseControllers.set(clip, controller);
+    clip.addEventListener(
+      'transitionend',
+      (event: TransitionEvent) => {
+        if (event.propertyName !== 'max-height') {
+          return;
+        }
+        finish();
+      },
+      { signal: controller.signal },
+    );
+    collapseTimers.set(clip, window.setTimeout(finish, COLLAPSE_FALLBACK_MS));
+  }
+
+  function bindCard(card: HTMLElement): void {
+    if (card.dataset.serviceBound === 'true') {
+      syncToggle(card);
+      return;
+    }
+
+    const toggle = card.querySelector<HTMLButtonElement>('[data-service-toggle]');
+    if (!toggle) {
+      return;
+    }
+
+    card.dataset.serviceBound = 'true';
+    toggle.addEventListener('click', () => {
+      const clip = card.querySelector<HTMLElement>('[data-service-clip]');
+      setExpanded(card, clip?.dataset.open !== 'true');
+    });
+    syncToggle(card);
+  }
+
+  function initServiceCards(): void {
+    document.querySelectorAll<HTMLElement>('[data-service-card]').forEach(bindCard);
+
+    if (!resizeBound) {
+      resizeBound = true;
+      window.addEventListener('resize', () => {
+        document.querySelectorAll<HTMLElement>('[data-service-card]').forEach(syncToggle);
+      });
+    }
+  }
+
+  initServiceCards();
+  document.addEventListener('astro:page-load', initServiceCards);
+  document.fonts?.ready.then(() => {
+    document.querySelectorAll<HTMLElement>('[data-service-card]').forEach(syncToggle);
+  });
+</script>

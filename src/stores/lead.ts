@@ -7,6 +7,8 @@ export interface LeadRequestContext {
   readonly projectTitle?: string;
   readonly projectArea?: string;
   readonly topic?: ConsultationTopicId;
+  /** Название услуги, подставленное в тему заявки из карточки каталога */
+  readonly subject?: string;
 }
 
 export const selectedLeadContext = atom<LeadRequestContext | null>(null);

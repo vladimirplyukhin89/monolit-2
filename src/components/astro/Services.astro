@@ -1,5 +1,6 @@
 ---
 import { SERVICE_ITEMS, SERVICES_OFFER } from '../../data/home';
+import ServiceCatalog from './ServiceCatalog.astro';
 ---
 
 <section
@@ -27,70 +28,8 @@ import { SERVICE_ITEMS, SERVICES_OFFER } from '../../data/home';
       </p>
     </div>
 
-    <!-- Статичная сетка направлений/услуг: без hover-подсветки и имитации кликабельности -->
-    <div class="mt-12 grid grid-cols-1 gap-px border border-border-subtle bg-border-subtle md:grid-cols-2 lg:mt-14 lg:grid-cols-3">
-      {SERVICE_ITEMS.map((service, index) => {
-        const delayClass =
-          index % 3 === 1
-            ? 'reveal-delay-100'
-            : index % 3 === 2
-              ? 'reveal-delay-200'
-              : '';
-
-        return (
-          <article class="flex h-full cursor-default flex-col justify-between bg-bg-secondary p-7 sm:p-8">
-            <div class={`reveal ${delayClass} flex h-full flex-col justify-between`}>
-              <div>
-                <div class="flex items-center justify-between gap-4">
-                  <span class="font-serif text-lg italic leading-none text-accent">
-                    {service.number}
-                  </span>
-
-                  {service.isFeatured ? (
-                    <span class="inline-flex cursor-default items-center bg-accent-muted px-2.5 py-1 text-[11px] font-medium uppercase leading-none tracking-[0.16em] text-accent select-none">
-                      {service.category}
-                    </span>
-                  ) : (
-                    <span class="cursor-default text-[11px] uppercase leading-none tracking-[0.18em] text-text-muted select-none">
-                      {service.category}
-                    </span>
-                  )}
-                </div>
-
-                <h3 class="mt-6 text-xl font-normal leading-snug tracking-tight text-text-primary">
-                  {service.title}
-                </h3>
-
-                <p class="mt-3 text-sm leading-relaxed text-text-secondary">
-                  {service.description}
-                </p>
-
-                <ul class="mt-6 space-y-2.5 border-t border-border-subtle pt-5">
-                  {service.deliverables.map((point) => (
-                    <li class="flex items-start gap-2.5 text-xs leading-relaxed text-text-secondary">
-                      <span
-                        class="mt-[0.45em] h-1 w-1 shrink-0 bg-accent"
-                        aria-hidden="true"
-                      ></span>
-                      <span>{point}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div class="mt-8 flex items-baseline justify-between gap-4 border-t border-border-subtle pt-5">
-                <span class="text-sm font-medium text-accent">
-                  {service.priceLabel}
-                </span>
-                <span class="text-xs text-text-muted">
-                  {service.timelineLabel}
-                </span>
-              </div>
-            </div>
-          </article>
-        );
-      })}
-    </div>
+    <!-- Сетка услуг: карточка статична, кликабельны только «Подробнее» и «Выбрать услугу» -->
+    <ServiceCatalog items={SERVICE_ITEMS} leadSource="remont-service" />
 
     <!-- Спокойная акцентная плашка с оффером: сама плашка статична, кликабельна только кнопка (hover 350ms) -->
     <aside

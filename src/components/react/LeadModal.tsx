@@ -27,6 +27,7 @@ import {
 
 interface ModalFormState {
   readonly channel: PreferredContactChannelId;
+  readonly subject: string;
   readonly name: string;
   readonly phone: string;
   readonly acceptPrivacy: boolean;
@@ -36,6 +37,7 @@ interface ModalFormState {
 
 const INITIAL_MODAL_FORM: ModalFormState = {
   channel: 'phone',
+  subject: '',
   name: '',
   phone: '',
   acceptPrivacy: false,
@@ -116,6 +118,7 @@ export default function LeadModal() {
       const projectComplex = trigger.dataset.leadComplex ?? '';
       const projectTitle = trigger.dataset.leadTitle;
       const projectArea = trigger.dataset.leadArea;
+      const subject = trigger.dataset.leadSubject;
 
       event.preventDefault();
       restoreFocusRef.current = trigger;
@@ -125,6 +128,7 @@ export default function LeadModal() {
         projectComplex,
         projectTitle,
         projectArea,
+        ...(subject ? { subject } : {}),
       });
     };
 
@@ -164,7 +168,10 @@ export default function LeadModal() {
         restoreFocusRef.current = document.activeElement;
       }
 
-      setForm(INITIAL_MODAL_FORM);
+      setForm({
+        ...INITIAL_MODAL_FORM,
+        subject: selectedLeadContext.get()?.subject ?? '',
+      });
       setErrorMessage(null);
       setIsSubmitted(false);
       isMountedRef.current = true;
@@ -466,6 +473,25 @@ export default function LeadModal() {
                 noValidate
                 className="mt-6 space-y-5"
               >
+                {context?.subject !== undefined && (
+                  <div>
+                    <label
+                      htmlFor={`${modalId}-subject`}
+                      className="block cursor-default text-xs uppercase tracking-[0.16em] text-text-muted"
+                    >
+                      Тема заявки
+                    </label>
+                    <input
+                      id={`${modalId}-subject`}
+                      name="subject"
+                      type="text"
+                      readOnly
+                      value={form.subject}
+                      className="mt-2 w-full cursor-default rounded-sm border border-border-accent bg-bg-elevated px-4 py-3 text-base text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent sm:text-sm"
+                    />
+                  </div>
+                )}
+
                 {/* Выбор удобного способа связи */}
                 <div>
                   <span className="block cursor-default text-xs uppercase tracking-[0.16em] text-text-muted">
@@ -711,6 +737,13 @@ export default function LeadModal() {
               {hasProjectContext && projectLabel && (
                 <p className="mt-4 border-t border-border-subtle pt-3.5 text-xs text-text-muted">
                   Ориентир: <span className="text-text-primary">{projectLabel}</span>
+                </p>
+              )}
+
+              {form.subject.trim() && (
+                <p className="mt-4 border-t border-border-subtle pt-3.5 text-xs text-text-muted">
+                  Тема заявки:{' '}
+                  <span className="text-text-primary">{form.subject.trim()}</span>
                 </p>
               )}
 
