@@ -2,7 +2,7 @@
   "name": "monolit-2",
   "private": true,
   "type": "module",
-  "version": "0.0.23",
+  "version": "0.0.24",
   "engines": {
     "node": ">=22.23.4"
   },
