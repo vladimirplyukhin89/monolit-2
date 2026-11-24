@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.20](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.19...v0.0.20) (2026-11-24)
+
+
+### Features
+
+* **ui:** поставить фирменную «M» в фавикон и цвет темы браузера ([9daf82d](https://github.com/vladimirplyukhin89/monolit-2/commit/9daf82d59ff43396411a76c6004a06c354feed56))
+
 ### [0.0.19](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.18...v0.0.19) (2026-11-24)
 
 
