@@ -344,7 +344,7 @@ export default function BeforeAfterSlider({
             className={`pointer-events-none absolute flex h-11 w-11 items-center justify-center rounded-full border backdrop-blur-md transition-colors duration-[300ms] ease-[var(--ease-editorial)] group-focus-visible:ring-2 group-focus-visible:ring-accent group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-bg-primary ${
               isDragging
                 ? 'border-accent bg-accent text-white'
-                : 'border-border-accent bg-bg-primary/90 text-white group-hover:border-accent group-hover:bg-accent'
+                : 'border-border-accent bg-bg-primary/90 text-text-primary group-hover:border-accent group-hover:bg-accent group-hover:text-white'
             }`}
           >
             <svg

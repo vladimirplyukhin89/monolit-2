@@ -114,6 +114,10 @@ const {
   .office-map-frame {
     filter: invert(90%) hue-rotate(180deg) contrast(95%);
   }
+
+  :global(html[data-theme="light"]) .office-map-frame {
+    filter: none;
+  }
 </style>
 
 <script>

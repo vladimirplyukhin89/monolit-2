@@ -1,0 +1,144 @@
+---
+export interface Props {
+  class?: string;
+}
+
+const { class: className = 'inline-flex' } = Astro.props;
+---
+
+<button
+  type="button"
+  data-theme-toggle
+  aria-pressed="false"
+  aria-label="Включить светлую тему"
+  class:list={[
+    'h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-border-subtle bg-bg-secondary text-text-secondary transition-colors duration-300 hover:border-border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
+    className,
+  ]}
+>
+  <svg
+    data-theme-icon="sun"
+    class="h-[18px] w-[18px]"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.6"
+    stroke-linecap="round"
+    aria-hidden="true"
+  >
+    <circle cx="12" cy="12" r="4"></circle>
+    <path d="M12 3v1.5M12 19.5V21M4.9 4.9l1.1 1.1M18 18l1.1 1.1M3 12h1.5M19.5 12H21M4.9 19.1 6 18M18 6l1.1-1.1"></path>
+  </svg>
+  <svg
+    data-theme-icon="moon"
+    class="h-[18px] w-[18px]"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.6"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M21 14.5A8.5 8.5 0 1 1 9.5 3a7 7 0 0 0 11.5 11.5z"></path>
+  </svg>
+</button>
+
+<style>
+  [data-theme-icon='moon'] {
+    display: none;
+  }
+
+  :global(html[data-theme='light']) [data-theme-icon='sun'] {
+    display: none;
+  }
+
+  :global(html[data-theme='light']) [data-theme-icon='moon'] {
+    display: block;
+  }
+</style>
+
+<script>
+  type ThemeChoice = 'light' | 'dark';
+
+  const THEME_STORAGE_KEY = 'theme';
+  const THEME_COLOR: Record<ThemeChoice, string> = {
+    light: '#F4F5F7',
+    dark: '#09090B',
+  };
+
+  function readTheme(): ThemeChoice {
+    return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+  }
+
+  function setThemeColor(theme: ThemeChoice): void {
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta instanceof HTMLMetaElement) {
+      meta.content = THEME_COLOR[theme];
+    }
+  }
+
+  function syncThemeToggles(theme: ThemeChoice): void {
+    const isLight = theme === 'light';
+
+    document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((button) => {
+      button.setAttribute('aria-pressed', String(isLight));
+      button.setAttribute(
+        'aria-label',
+        isLight ? 'Включить тёмную тему' : 'Включить светлую тему',
+      );
+    });
+  }
+
+  function applyTheme(theme: ThemeChoice): void {
+    const root = document.documentElement;
+
+    if (theme === 'light') {
+      root.setAttribute('data-theme', 'light');
+    } else {
+      root.removeAttribute('data-theme');
+    }
+
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, theme);
+    } catch {
+      /* приватный режим без localStorage */
+    }
+
+    setThemeColor(theme);
+    syncThemeToggles(theme);
+  }
+
+  function initThemeToggle(): void {
+    syncThemeToggles(readTheme());
+
+    document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((button) => {
+      if (button.dataset.bound === 'true') {
+        return;
+      }
+      button.dataset.bound = 'true';
+
+      button.addEventListener('click', () => {
+        const next: ThemeChoice = readTheme() === 'light' ? 'dark' : 'light';
+        const root = document.documentElement;
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (!reduceMotion) {
+          root.classList.add('theme-transition');
+          void root.offsetWidth;
+        }
+
+        applyTheme(next);
+
+        if (!reduceMotion) {
+          window.setTimeout(() => {
+            root.classList.remove('theme-transition');
+          }, 320);
+        }
+      });
+    });
+  }
+
+  initThemeToggle();
+  document.addEventListener('astro:page-load', initThemeToggle);
+</script>

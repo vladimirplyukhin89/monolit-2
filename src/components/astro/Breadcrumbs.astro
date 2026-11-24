@@ -23,7 +23,7 @@ const {
   <ol
     itemscope
     itemtype="https://schema.org/BreadcrumbList"
-    class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs leading-none tracking-[0.06em] text-text-muted"
+    class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs leading-none tracking-[0.06em] text-white/85"
   >
     <li
       itemprop="itemListElement"
@@ -34,7 +34,7 @@ const {
       <a
         href={homeHref}
         itemprop="item"
-        class="rounded-xs py-0.5 text-text-muted transition-colors duration-[350ms] ease-[var(--ease-editorial)] hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+        class="rounded-xs py-0.5 text-white/85 transition-colors duration-[350ms] ease-[var(--ease-editorial)] hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
       >
         <span itemprop="name">{homeLabel}</span>
       </a>
@@ -49,14 +49,14 @@ const {
     >
       <span
         aria-hidden="true"
-        class="cursor-default select-none text-text-muted/60"
+        class="cursor-default select-none text-white/60"
       >
         {separator}
       </span>
       <span
         itemprop="name"
         aria-current="page"
-        class="cursor-default select-none text-text-muted"
+        class="cursor-default select-none text-white/85"
       >
         {currentLabel}
       </span>

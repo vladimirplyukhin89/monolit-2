@@ -48,6 +48,19 @@ const pageUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astr
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="theme-color" content="#09090B" />
+    <script is:inline>
+      (function () {
+        try {
+          if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            var themeMeta = document.querySelector('meta[name="theme-color"]');
+            if (themeMeta) themeMeta.setAttribute('content', '#F4F5F7');
+          }
+        } catch (error) {
+          /* localStorage может быть недоступен */
+        }
+      })();
+    </script>
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="ru_RU" />
     <meta property="og:site_name" content={SITE_CONFIG.brandName} />

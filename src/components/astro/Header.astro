@@ -1,6 +1,7 @@
 ---
 import LogoAlt from '../../assets/images/common/logo-alt.svg';
 import SocialLinks from './SocialLinks.astro';
+import ThemeToggle from './ThemeToggle.astro';
 import {
   COMPANY_CONTACTS,
   DIRECTION_PAGES,
@@ -94,6 +95,8 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
             />
           </div>
 
+          <ThemeToggle class="hidden lg:inline-flex" />
+
           <button
             type="button"
             data-lead-trigger="hub-header-cta"
@@ -154,6 +157,11 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
           <p class="mb-4 text-xs uppercase tracking-[0.2em] text-text-muted">
             {HUB_CONFIG.subtitle}
           </p>
+
+          <div class="mb-6 flex items-center justify-between gap-4 border-b border-border-subtle pb-5">
+            <p class="text-xs uppercase tracking-[0.2em] text-text-muted">Тема</p>
+            <ThemeToggle />
+          </div>
 
           <nav
             aria-label="Направления компании"
@@ -286,6 +294,8 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
             />
           </div>
 
+          <ThemeToggle />
+
           <a
             href={ctaHref}
             data-lead-trigger={ctaTrigger}
@@ -346,6 +356,11 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
           <p class="mb-4 text-xs uppercase tracking-[0.2em] text-text-muted">
             {regionMeta}
           </p>
+
+          <div class="mb-6 flex items-center justify-between gap-4 border-b border-border-subtle pb-5">
+            <p class="text-xs uppercase tracking-[0.2em] text-text-muted">Тема</p>
+            <ThemeToggle />
+          </div>
 
           <!-- Переключатель разделов в мобильном меню -->
           <div

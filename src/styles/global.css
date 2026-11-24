@@ -38,6 +38,74 @@
   --animate-fade-in-up: fade-in-up 800ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/* Светлая архитектурная тема. @theme выше публикует тёмные токены на :root —
+   этот блок только переопределяет их, не меняя тему по умолчанию. */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --color-bg-primary: #F4F5F7;
+  --color-bg-secondary: #FFFFFF;
+  --color-bg-elevated: #E9ECF0;
+  --color-text-primary: #141518;
+  --color-text-secondary: #525866;
+  --color-text-muted: #868E9C;
+  --color-border-subtle: #DFE3E8;
+  --color-accent: #FF5E1A;
+  --color-accent-hover: #E54D0E;
+  --color-accent-muted: rgba(255, 94, 26, 0.10);
+}
+
+/* Белые карточки отделяются от серого фона #F4F5F7.
+   Компактные контролы, вложенные поверхности и ячейки сетки с gap-px не поднимаем. */
+html[data-theme="light"] .bg-bg-secondary {
+  box-shadow: 0 4px 20px rgba(20, 21, 24, 0.04);
+}
+
+html[data-theme="light"] :is(button, input, textarea, select).bg-bg-secondary,
+html[data-theme="light"] .bg-bg-secondary .bg-bg-secondary,
+html[data-theme="light"] .gap-px > .bg-bg-secondary,
+html[data-theme="light"] dl > .bg-bg-secondary {
+  box-shadow: none;
+}
+
+/* Короткий переход цветов только в момент переключения темы */
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition-property: background-color, color, border-color, outline-color, fill, stroke, box-shadow !important;
+  transition-duration: 300ms !important;
+  transition-timing-function: var(--ease-editorial) !important;
+}
+
+:root[data-theme="light"] .editorial-modal-panel {
+  box-shadow: 0 24px 64px color-mix(in srgb, var(--color-text-primary) 14%, transparent);
+}
+
+:root[data-theme="light"] .editorial-cookie-banner {
+  box-shadow: 0 20px 52px color-mix(in srgb, var(--color-text-primary) 12%, transparent);
+}
+
+/* Фоновые фото хаба и главного экрана.
+   В тёмной теме opacity остаётся на самом <img>.
+   В светлой теме кадр плотный: светлый фон страницы не просвечивает и не выбеливает фото. */
+html[data-theme="light"] .editorial-bg-image {
+  opacity: 1;
+  filter: contrast(1.08) saturate(1.18) brightness(0.92);
+}
+
+/* В светлой теме сплошное затемнение скрыто: остаётся только направленный градиент под текстом. */
+.editorial-bg-scrim-light {
+  display: none;
+}
+
+html[data-theme="light"] .editorial-bg-scrim-dark {
+  display: none;
+}
+
+html[data-theme="light"] .editorial-bg-scrim-light {
+  display: block;
+}
+
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -446,6 +514,13 @@ html.menu-open body {
 
   .editorial-range::-webkit-slider-thumb,
   .editorial-range::-moz-range-thumb {
+    transition: none !important;
+  }
+
+  html.theme-transition,
+  html.theme-transition *,
+  html.theme-transition *::before,
+  html.theme-transition *::after {
     transition: none !important;
   }
 }
