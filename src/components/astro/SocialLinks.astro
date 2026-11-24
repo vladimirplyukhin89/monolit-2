@@ -4,27 +4,31 @@ import {
   type SocialLinkItem,
 } from '../../data/navigation';
 
+export type SocialLinksVariant = 'default' | 'compact';
+
 export interface Props {
+  variant?: SocialLinksVariant;
   phoneHref?: string | null;
   emailHref?: string | null;
   telegramHref?: string | null;
   maxHref?: string | null;
-  vkHref?: string | null;
   items?: readonly SocialLinkItem[];
   ariaLabel?: string;
   class?: string;
 }
 
 const {
+  variant = 'default',
   phoneHref = COMPANY_CONTACTS.socialLinks.phoneHref,
   emailHref = COMPANY_CONTACTS.socialLinks.emailHref,
   telegramHref = COMPANY_CONTACTS.socialLinks.telegramHref,
   maxHref = COMPANY_CONTACTS.socialLinks.maxHref ?? null,
-  vkHref = COMPANY_CONTACTS.socialLinks.vkHref ?? null,
   items,
   ariaLabel = 'Социальные сети и быстрая связь',
   class: className = '',
 } = Astro.props;
+
+const isCompact = variant === 'compact';
 
 const defaultItems: SocialLinkItem[] = [];
 
@@ -68,23 +72,21 @@ if (maxHref) {
   });
 }
 
-if (vkHref) {
-  defaultItems.push({
-    id: 'vk',
-    href: vkHref,
-    ariaLabel: 'ВКонтакте',
-    title: 'ВКонтакте',
-    external: true,
-  });
-}
-
 const resolvedItems: readonly SocialLinkItem[] = items ?? defaultItems;
+
+const buttonClass =
+  'inline-flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full bg-text-primary text-bg-primary transition-colors duration-300 ease-[var(--ease-editorial)] hover:bg-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary motion-reduce:transition-none';
+const iconClass = isCompact ? 'h-4 w-4' : 'h-5 w-5';
 ---
 
 {
   resolvedItems.length > 0 && (
     <div
-      class:list={['flex flex-wrap items-center gap-3', className]}
+      class:list={[
+        'flex flex-wrap items-center',
+        isCompact ? 'gap-2' : 'gap-3',
+        className,
+      ]}
       role="group"
       aria-label={ariaLabel}
     >
@@ -95,11 +97,11 @@ const resolvedItems: readonly SocialLinkItem[] = items ?? defaultItems;
           rel={item.external ? 'noopener noreferrer' : undefined}
           aria-label={item.ariaLabel}
           title={item.title ?? item.ariaLabel}
-          class="inline-flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full bg-text-primary text-bg-primary transition-colors duration-300 ease-[var(--ease-editorial)] hover:bg-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
+          class={buttonClass}
         >
           {item.id === 'phone' && (
             <svg
-              class="h-5 w-5"
+              class={iconClass}
               viewBox="0 0 24 24"
               fill="currentColor"
               aria-hidden="true"
@@ -110,7 +112,7 @@ const resolvedItems: readonly SocialLinkItem[] = items ?? defaultItems;
 
           {item.id === 'email' && (
             <svg
-              class="h-5 w-5"
+              class={iconClass}
               viewBox="0 0 24 24"
               fill="currentColor"
               aria-hidden="true"
@@ -121,7 +123,7 @@ const resolvedItems: readonly SocialLinkItem[] = items ?? defaultItems;
 
           {item.id === 'telegram' && (
             <svg
-              class="h-5 w-5 -translate-x-px"
+              class:list={[iconClass, '-translate-x-px']}
               viewBox="0 0 24 24"
               fill="currentColor"
               aria-hidden="true"
@@ -132,7 +134,7 @@ const resolvedItems: readonly SocialLinkItem[] = items ?? defaultItems;
 
           {item.id === 'max' && (
             <svg
-              class="h-5 w-5"
+              class={iconClass}
               viewBox="0 0 24 24"
               fill="currentColor"
               aria-hidden="true"
@@ -142,17 +144,6 @@ const resolvedItems: readonly SocialLinkItem[] = items ?? defaultItems;
                 clip-rule="evenodd"
                 d="M12.2 2.5C6.95 2.5 2.7 6.65 2.7 11.85c0 2.02.52 3.92 1.28 5.56.37.8.43 1.66.16 2.52-.24.75.43 1.45 1.2 1.24 1.38-.38 2.58-.36 3.74-.04 1.02.28 2.04.42 3.12.42 5.25 0 9.5-4.18 9.5-9.55 0-5.28-4.25-9.5-9.5-9.5Zm.15 13.85c-1.08 0-2.06-.35-2.85-.94-.32-.24-.75-.16-.96.18-.26.42-.68.78-1.15.96-.15.06-.3-.09-.24-.24.33-.86.44-1.78.22-2.76a4.68 4.68 0 0 1-.12-1.07c0-2.72 2.24-4.93 5.1-4.93 2.86 0 5.05 2.15 5.05 4.88 0 2.7-2.22 4.92-5.05 4.92Z"
               />
-            </svg>
-          )}
-
-          {item.id === 'vk' && (
-            <svg
-              class="h-5 w-5"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path d="M13.162 18.994c.609 0 .858-.406.851-.915-.031-1.917.714-2.949 2.059-1.604 1.488 1.488 1.796 2.519 3.603 2.519h3.2c.808 0 1.126-.26 1.126-.668 0-.863-1.421-2.386-2.625-3.504-1.686-1.565-1.765-1.602-.313-3.486 1.801-2.339 4.157-5.336 2.073-5.336h-3.981c-.772 0-.828.435-1.103 1.083-.995 2.347-2.886 5.387-3.604 4.922-.751-.485-.407-2.406-.35-5.261.015-.754.011-1.271-1.141-1.539-.629-.145-1.241-.205-1.809-.205-2.273 0-3.841.953-2.95 1.119 1.571.293 1.42 3.692 1.054 5.16-.638 2.556-3.036-2.024-4.035-4.305-.241-.548-.315-.974-1.175-.974h-3.255c-.492 0-.787.16-.787.516 0 .602 2.96 6.72 5.786 9.77 2.756 2.975 5.48 2.708 7.376 2.708Z" />
             </svg>
           )}
         </a>

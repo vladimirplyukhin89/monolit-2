@@ -9,6 +9,7 @@ import BeforeAfterSlider from '../components/react/BeforeAfterSlider';
 import TabbedGallery, { type GalleryTab } from '../components/react/TabbedGallery';
 import FaqAccordion from '../components/react/FaqAccordion';
 import ConsultationSection from '../components/react/ConsultationSection';
+import SocialLinks from '../components/astro/SocialLinks.astro';
 import { getFirstImageInDir, getImageAsset } from '../utils/images';
 
 import {
@@ -139,7 +140,6 @@ const landscapingConsultationContactInfo = {
   address: LANDSCAPING_CONTACTS.address,
   scheduleNote: LANDSCAPING_CONTACTS.scheduleNote,
   requisites: LANDSCAPING_CONTACTS.requisites,
-  messengers: LANDSCAPING_CONTACTS.messengers,
 } as const;
 ---
 
@@ -761,7 +761,9 @@ const landscapingConsultationContactInfo = {
     newsletterLabel="Получать сезонные предложения по благоустройству (необязательно)"
     contactInfo={landscapingConsultationContactInfo}
     leadSource="landscaping-footer-cta"
-  />
+  >
+    <SocialLinks ariaLabel="Быстрая связь и мессенджеры" />
+  </ConsultationSection>
 
   <!-- 11. НАВИГАЦИОННЫЙ БЛОК ПЕРЕХОДОВ В ДРУГИЕ РАЗДЕЛЫ -->
   <PageNavigation currentSection="blagoustrojstvo" />

@@ -51,7 +51,6 @@ const email = COMPANY_CONTACTS.email;
 const emailHref = COMPANY_CONTACTS.emailHref;
 const address = COMPANY_CONTACTS.address;
 const requisites = COMPANY_CONTACTS.requisites;
-const messengers = COMPANY_CONTACTS.messengers;
 ---
 
 {
@@ -178,7 +177,7 @@ const messengers = COMPANY_CONTACTS.messengers;
         <!-- Основная сетка: бренд и навигация слева, контакты с картой офиса справа -->
         <div class="grid grid-cols-1 gap-12 border-b border-border-subtle py-14 md:grid-cols-2 md:items-start lg:gap-14 lg:py-16">
           <div class="flex flex-col gap-12">
-          <!-- Колонка 1: Бренд и мессенджеры -->
+          <!-- Колонка 1: Бренд -->
           <div class="reveal">
             <a
               href="/"
@@ -193,20 +192,6 @@ const messengers = COMPANY_CONTACTS.messengers;
                 ? 'Благоустройство участков, асфальтирование, укладка брусчатки, отмостка и дренаж под ключ в Тюмени и области. Свой парк техники и прямые поставки материалов.'
                 : 'Один договор, одна смета и одна команда для комплексного ремонта и дизайн-проектов квартир и домов под ключ. Спокойный процесс с личным контролем качества.'}
             </p>
-
-            <div class="mt-6 flex flex-wrap items-center gap-2.5" aria-label="Мессенджеры">
-              {messengers.map((messenger) => (
-                <a
-                  href={messenger.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={messenger.label}
-                  class="inline-flex h-10 items-center justify-center rounded-sm border border-border-subtle bg-bg-secondary px-4 text-xs font-medium text-text-secondary transition-colors duration-300 hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-                >
-                  {messenger.shortLabel}
-                </a>
-              ))}
-            </div>
           </div>
 
           <div class="grid gap-12 sm:grid-cols-2">

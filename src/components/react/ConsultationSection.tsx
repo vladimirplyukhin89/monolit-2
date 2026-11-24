@@ -1,4 +1,4 @@
-import { useId, useRef, useState, type FormEvent } from 'react';
+import { useId, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import {
   CONSULTATION_STEPS,
   CONSULTATION_TOPICS,
@@ -11,7 +11,7 @@ import {
   type PreferredContactChannelId,
   type PreferredContactChannelOption,
 } from '../../data/lead';
-import { SITE_CONFIG, type MessengerLink } from '../../data/navigation';
+import { SITE_CONFIG } from '../../data/navigation';
 import { selectedLeadContext } from '../../stores/lead';
 
 export interface ConsultationStepItem {
@@ -27,7 +27,6 @@ export interface ConsultationContactInfo {
   readonly address: string;
   readonly scheduleNote: string;
   readonly requisites?: string;
-  readonly messengers?: readonly MessengerLink[];
 }
 
 export interface ConsultationSectionProps {
@@ -43,6 +42,7 @@ export interface ConsultationSectionProps {
   readonly newsletterLabel?: string;
   readonly contactInfo?: ConsultationContactInfo;
   readonly leadSource?: string;
+  readonly children?: ReactNode;
 }
 
 interface ConsultationFormState {
@@ -64,7 +64,6 @@ const DEFAULT_CONTACT_INFO: ConsultationContactInfo = {
   address: SITE_CONFIG.address,
   scheduleNote: SITE_CONFIG.scheduleNote,
   requisites: SITE_CONFIG.requisites,
-  messengers: SITE_CONFIG.messengers,
 };
 
 function createInitialForm(
@@ -95,6 +94,7 @@ export default function ConsultationSection({
   newsletterLabel = 'Хочу получать полезные материалы по ремонту и сезонные предложения (необязательно)',
   contactInfo = DEFAULT_CONTACT_INFO,
   leadSource = 'consultation-section',
+  children,
 }: ConsultationSectionProps) {
   const formId = useId();
   const formCardRef = useRef<HTMLDivElement | null>(null);
@@ -237,25 +237,7 @@ export default function ConsultationSection({
                 >
                   {contactInfo.email}
                 </a>
-                <div
-                  className="mt-2.5 flex flex-wrap items-center gap-2"
-                  aria-label="Мессенджеры"
-                >
-                  {(contactInfo.messengers ?? SITE_CONFIG.messengers).map(
-                    (messenger) => (
-                      <a
-                        key={messenger.id}
-                        href={messenger.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={messenger.label}
-                        className="inline-flex min-h-11 items-center justify-center rounded-sm border border-border-subtle bg-bg-primary px-3 text-xs font-medium text-text-secondary transition-colors duration-[300ms] ease-[var(--ease-editorial)] hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-                      >
-                        {messenger.shortLabel}
-                      </a>
-                    ),
-                  )}
-                </div>
+                {children != null && <div className="mt-4">{children}</div>}
               </div>
 
               <div className="mt-5 border-t border-border-subtle pt-4 text-xs leading-relaxed text-text-muted">

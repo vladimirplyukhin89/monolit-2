@@ -48,7 +48,6 @@ const phoneDisplay = COMPANY_CONTACTS.phoneDisplay;
 const phoneHref = COMPANY_CONTACTS.phoneHref;
 const email = COMPANY_CONTACTS.email;
 const emailHref = COMPANY_CONTACTS.emailHref;
-const messengers = COMPANY_CONTACTS.messengers;
 const ctaTrigger = isLandscaping ? 'landscaping-header-cta' : 'header-cta';
 const mobileCtaTrigger = isLandscaping ? 'landscaping-header-cta' : 'mobile-cta';
 const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
@@ -91,21 +90,11 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
             {HUB_CONFIG.phoneDisplay}
           </a>
 
-          <div
-            class="hidden items-center gap-1.5 lg:flex"
-            aria-label="Мессенджеры"
-          >
-            {HUB_CONFIG.messengers.map((messenger) => (
-              <a
-                href={messenger.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={messenger.label}
-                class="inline-flex h-9 items-center justify-center rounded-sm border border-border-subtle bg-bg-secondary px-3 text-xs font-medium text-text-secondary transition-colors duration-300 hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-              >
-                {messenger.shortLabel}
-              </a>
-            ))}
+          <div class="hidden lg:block">
+            <SocialLinks
+              variant="compact"
+              ariaLabel="Быстрая связь и мессенджеры"
+            />
           </div>
 
           <button
@@ -217,6 +206,7 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
               </address>
 
               <SocialLinks
+                variant="compact"
                 class="pt-2"
                 ariaLabel="Быстрая связь и мессенджеры"
               />
@@ -239,9 +229,9 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
       id="site-header"
       class="sticky top-0 z-40 w-full overflow-x-clip border-b border-border-subtle bg-bg-primary/90 backdrop-blur-md"
     >
-      <div class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-2 px-4 sm:h-20 sm:gap-3 sm:px-8 lg:gap-3 lg:px-6 xl:gap-4 xl:px-10">
+      <div class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-2 px-4 sm:h-20 sm:gap-3 sm:px-8 lg:gap-3 lg:px-6">
         <!-- Левая группа: логотип (ссылка на главную /) + переключатель страниц (десктоп lg и выше) -->
-        <div class="flex min-w-0 shrink-0 items-center gap-3 xl:gap-5">
+        <div class="flex min-w-0 shrink-0 items-center gap-3">
           <a
             href="/"
             class="group inline-flex shrink-0 items-center rounded-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
@@ -262,14 +252,13 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
                   href={page.href}
                   aria-current={isActive ? 'page' : undefined}
                   class:list={[
-                    'whitespace-nowrap rounded-xs px-2.5 py-1.5 text-xs font-medium leading-none transition-colors duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent xl:px-3',
+                    'whitespace-nowrap rounded-xs px-2.5 py-1.5 text-xs font-medium leading-none transition-colors duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent',
                     isActive
                       ? 'border border-border-accent bg-accent-muted text-accent'
                       : 'border border-transparent text-text-secondary hover:text-text-primary',
                   ]}
                 >
-                  <span class="xl:hidden">{page.shortLabel}</span>
-                  <span class="hidden xl:inline">{page.label}</span>
+                  {page.shortLabel}
                 </a>
               );
             })}
@@ -279,12 +268,12 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
         <!-- Классическая горизонтальная навигация по секциям (строго десктоп lg и выше) -->
         <nav
           aria-label="Основная навигация"
-          class="hidden lg:flex lg:items-center lg:gap-3 xl:gap-5"
+          class="hidden lg:flex lg:items-center lg:gap-3"
         >
           {navItems.map((item) => (
             <a
               href={item.href}
-              class="whitespace-nowrap py-2 text-[13px] font-normal text-text-secondary transition-colors duration-300 hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent xl:text-sm"
+              class="whitespace-nowrap py-2 text-[13px] font-normal text-text-secondary transition-colors duration-300 hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
             >
               {item.label}
             </a>
@@ -292,28 +281,18 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
         </nav>
 
         <!-- Правая группа (десктоп lg и выше): мессенджеры + кнопка связи -->
-        <div class="hidden shrink-0 lg:flex lg:items-center lg:gap-3">
-          <div
-            class="hidden items-center gap-1.5 xl:flex"
-            aria-label="Мессенджеры"
-          >
-            {messengers.map((messenger) => (
-              <a
-                href={messenger.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={messenger.label}
-                class="inline-flex h-9 items-center justify-center rounded-sm border border-border-subtle bg-bg-secondary px-2.5 text-xs font-medium text-text-secondary transition-colors duration-300 hover:border-border-accent hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-              >
-                {messenger.shortLabel}
-              </a>
-            ))}
+        <div class="hidden shrink-0 lg:flex lg:items-center lg:gap-2">
+          <div class="hidden xl:block">
+            <SocialLinks
+              variant="compact"
+              ariaLabel="Быстрая связь и мессенджеры"
+            />
           </div>
 
           <a
             href={ctaHref}
             data-lead-trigger={ctaTrigger}
-            class="inline-flex items-center justify-center whitespace-nowrap rounded-sm bg-accent px-4 py-2.5 text-sm font-medium text-text-primary transition-colors duration-300 hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary xl:px-5"
+            class="inline-flex items-center justify-center whitespace-nowrap rounded-sm bg-accent px-4 py-2.5 text-sm font-medium text-text-primary transition-colors duration-300 hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
           >
             Связаться
           </a>
@@ -432,6 +411,7 @@ const ctaHref = isLandscaping ? '#contact-form' : '/remont#contact-form';
               </a>
 
               <SocialLinks
+                variant="compact"
                 class="pt-2"
                 ariaLabel="Быстрая связь и мессенджеры"
               />

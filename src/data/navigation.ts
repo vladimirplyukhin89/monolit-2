@@ -18,7 +18,7 @@ export interface MessengerLink {
   readonly href: string;
 }
 
-export type SocialChannelId = 'phone' | 'email' | 'telegram' | 'max' | 'vk';
+export type SocialChannelId = 'phone' | 'email' | 'telegram' | 'max';
 
 export interface SocialLinkItem {
   readonly id: SocialChannelId;
@@ -32,8 +32,7 @@ export interface CompanySocialLinksConfig {
   readonly phoneHref: string;
   readonly emailHref: string;
   readonly telegramHref: string;
-  readonly maxHref?: string;
-  readonly vkHref?: string;
+  readonly maxHref: string;
 }
 
 export interface ScheduleRow {
@@ -149,28 +148,27 @@ export const SECONDARY_NAV_ITEMS: readonly SecondaryNavItem[] = [
   { label: 'Обсудить проект', href: '/remont#contact-form' },
 ] as const;
 
-export const MESSENGER_LINKS: readonly MessengerLink[] = [
-  {
-    id: 'telegram',
-    label: 'Написать в Telegram',
-    shortLabel: 'Telegram',
-    href: 'https://t.me/+79199507722',
-  },
-  {
-    id: 'max',
-    label: 'Написать в Max',
-    shortLabel: 'Max',
-    href: 'https://max.ru',
-  },
-] as const;
-
 export const COMPANY_SOCIAL_LINKS: CompanySocialLinksConfig = {
   phoneHref: 'tel:+79199507722',
   emailHref: 'mailto:monolittmn@mail.ru',
   telegramHref: 'https://t.me/+79199507722',
   maxHref: 'https://max.ru',
-  vkHref: undefined,
 } as const;
+
+export const MESSENGER_LINKS: readonly MessengerLink[] = [
+  {
+    id: 'telegram',
+    label: 'Написать в Telegram',
+    shortLabel: 'Telegram',
+    href: COMPANY_SOCIAL_LINKS.telegramHref,
+  },
+  {
+    id: 'max',
+    label: 'Написать в Max',
+    shortLabel: 'Max',
+    href: COMPANY_SOCIAL_LINKS.maxHref,
+  },
+] as const;
 
 export const COMPANY_CONTACTS: CompanyContacts = {
   brandName: 'МОНОЛИТ',

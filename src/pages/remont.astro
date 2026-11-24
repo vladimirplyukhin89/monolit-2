@@ -7,6 +7,7 @@ import PageNavigation from '../components/astro/PageNavigation.astro';
 import FaqAccordion from '../components/react/FaqAccordion';
 import QuizCalculator from '../components/react/QuizCalculator';
 import ConsultationSection from '../components/react/ConsultationSection';
+import SocialLinks from '../components/astro/SocialLinks.astro';
 ---
 
 <Layout currentPath="/remont">
@@ -94,7 +95,9 @@ import ConsultationSection from '../components/react/ConsultationSection';
   </section>
 
   <!-- Блок спокойной формы обратной связи («Начнём с разговора» — React client:visible) -->
-  <ConsultationSection client:visible />
+  <ConsultationSection client:visible>
+    <SocialLinks ariaLabel="Быстрая связь и мессенджеры" />
+  </ConsultationSection>
 
   <!-- Навигационный блок переходов в другие разделы -->
   <PageNavigation currentSection="remont" />
