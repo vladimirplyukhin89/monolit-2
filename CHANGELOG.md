@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.17](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.16...v0.0.17) (2026-11-24)
+
+
+### Features
+
+* **contacts:** привести ссылки на связь к единому SocialLinks ([65950fb](https://github.com/vladimirplyukhin89/monolit-2/commit/65950fb61c2c8116af9d2b5d5570ddd35060eee7))
+
 ### [0.0.16](https://github.com/vladimirplyukhin89/monolit-2/compare/v0.0.15...v0.0.16) (2026-11-24)
 
 
